@@ -6,52 +6,52 @@ namespace WhgVedit.Video;
 
 class VideoEngine
 {
-    const int OutlineWidth = 6;
+	const int OutlineWidth = 6;
 
-    private static VideoEngine _instance = new();
+	private static VideoEngine _instance = new();
 
-    private readonly List<ShapeCall> _drawCalls = [];
+	private readonly List<ShapeCall> _drawCalls = [];
 
-    public static void QueueDraw(ShapeCall drawCall)
-    {
-        _instance._drawCalls.Add(drawCall);
-    }
+	public static void QueueDraw(ShapeCall drawCall)
+	{
+		_instance._drawCalls.Add(drawCall);
+	}
 
-    public static void Render()
-    {
-        foreach (ShapeCall shapeCall in _instance._drawCalls.OrderBy(o => o.ZIndex))
-            shapeCall.Execute();
+	public static void Render()
+	{
+		foreach (ShapeCall shapeCall in _instance._drawCalls.OrderBy(o => o.ZIndex))
+			shapeCall.Execute();
 
-        _instance._drawCalls.Clear();
-    }
-
-
-    // Utility draw functions.
+		_instance._drawCalls.Clear();
+	}
 
 
-    public static void DrawOutlinedRectangle(Rect2i dimensions, Color outlineColor, Color fillColor)
-    {
-        Rect2i inner = new(
-            dimensions.Position + Wall.OutlineWidth,
-            dimensions.Size - Wall.OutlineWidth * 2
-        );
+	// Utility draw functions.
 
-        // If the fill color takes up zero area, just draw the outline.
-        if (inner.Size.X <= 0 || inner.Size.Y <= 0)
-            DrawRect2i(dimensions, outlineColor);
 
-        // If fill color is completely opaque, there's no point in drawing a ring-like outline.
-        else if (fillColor.A == 255)
-        {
-            DrawRect2i(dimensions, outlineColor);
-            DrawRect2i(inner, fillColor);
-        }
-        else // This case is where things get fancy.
-        {
-            DrawOutline(dimensions, outlineColor, inner);
-            DrawRect2i(inner, fillColor);
-        }
-    }
+	public static void DrawOutlinedRectangle(Rect2i dimensions, Color outlineColor, Color fillColor)
+	{
+		Rect2i inner = new(
+		    dimensions.Position + Wall.OutlineWidth,
+		    dimensions.Size - Wall.OutlineWidth * 2
+		);
+
+		// If the fill color takes up zero area, just draw the outline.
+		if (inner.Size.X <= 0 || inner.Size.Y <= 0)
+			DrawRect2i(dimensions, outlineColor);
+
+		// If fill color is completely opaque, there's no point in drawing a ring-like outline.
+		else if (fillColor.A == 255)
+		{
+			DrawRect2i(dimensions, outlineColor);
+			DrawRect2i(inner, fillColor);
+		}
+		else // This case is where things get fancy.
+		{
+			DrawOutline(dimensions, outlineColor, inner);
+			DrawRect2i(inner, fillColor);
+		}
+	}
 
 	public static void DrawOutline(Rect2i outer, Color color)
 	{

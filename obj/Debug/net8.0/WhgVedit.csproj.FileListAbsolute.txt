@@ -20,3 +20,4 @@ c:\Users\User\Documents\VS Code Things\WhgVedit\obj\Debug\net8.0\refint\WhgVedit
 c:\Users\User\Documents\VS Code Things\WhgVedit\obj\Debug\net8.0\WhgVedit.pdb
 c:\Users\User\Documents\VS Code Things\WhgVedit\obj\Debug\net8.0\WhgVedit.genruntimeconfig.cache
 c:\Users\User\Documents\VS Code Things\WhgVedit\obj\Debug\net8.0\ref\WhgVedit.dll
+c:\Users\User\Documents\VS Code Things\WhgVedit\obj\Debug\net8.0\WhgVedit.sourcelink.json

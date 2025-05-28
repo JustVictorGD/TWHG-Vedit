@@ -14,16 +14,16 @@ game.Ready();
 
 while (!Raylib.WindowShouldClose())
 {
-    game.Process();
+	game.Process();
 
-    Raylib.BeginDrawing();
-    Raylib.ClearBackground(Color.Black);
-    Raylib.BeginMode2D(game.mainCamera);
+	Raylib.BeginDrawing();
+	Raylib.ClearBackground(Color.Black);
+	Raylib.BeginMode2D(game.mainCamera);
 
-    game.Draw();
+	game.Draw();
 
-    Raylib.EndMode2D();
-    Raylib.EndDrawing();
+	Raylib.EndMode2D();
+	Raylib.EndDrawing();
 }
 
 Raylib.CloseWindow();

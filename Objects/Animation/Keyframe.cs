@@ -6,10 +6,10 @@ namespace WhgVedit.Objects.Animation;
 
 struct Keyframe
 {
-    public float Duration = 1;
-    public Vector2i Position = new();
-    //public float Rotation = 0;
-    //public Vector2 Scale = new();
+	public float Duration = 1;
+	public Vector2i Position = new();
+	//public float Rotation = 0;
+	//public Vector2 Scale = new();
 
-    public Keyframe() { }
+	public Keyframe() { }
 }

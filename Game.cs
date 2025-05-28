@@ -16,11 +16,11 @@ class Game
 	public Dictionary<string, List<GameObject>> Groups { get; set; } = [];
 
 	Vector2 camera_pos = new();
-    readonly Vector2i areaSize = new(32, 20); // Original: 32, 20
+	readonly Vector2i areaSize = new(32, 20); // Original: 32, 20
 	Color tile1 = new(0xDD, 0xDD, 0xFF);
 	Color tile2 = new(0xF7, 0xF7, 0xFF);
 
-    readonly Player player = new() { Position = new(480, 384), Speed = 8 };
+	readonly Player player = new() { Position = new(480, 384), Speed = 8 };
 
 	readonly List<Wall> walls = [
 		new(525, 525, 246, 54),
@@ -48,10 +48,7 @@ class Game
 		];
 
 		foreach (Subpixel subpixel in subpixels)
-		{
 			Console.WriteLine($"{subpixel.Steps}, {subpixel.Rounded}, {subpixel.Fraction}");
-		}
-
 
 		for (int i = 0; i < 24; i++)
 			Console.WriteLine($"{i * 0.5f} -> {Utils.PingPongF(i * 0.5f, 2.5f)}");

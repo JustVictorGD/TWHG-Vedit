@@ -1,0 +1,9 @@
+root = true
+
+[*.cs]
+indent_style = tab
+indent_size = 6
+
+[*.{json,js,ts,html,css}]
+indent_style = space
+indent_size = 2
