@@ -48,7 +48,7 @@ class Game
 			new Enemy(252, 252),
 			new Enemy(276, 252),
 			new Enemy(252, 276),
-			new Enemy(276, 276),
+			new Enemy(276, 276), ..Walls
 		]);
 
 		Scene.Main.Ready();
@@ -90,20 +90,6 @@ class Game
 					tileColor
 				);
 			}
-		}
-
-		// TODO: Give Walls a Draw() function.
-
-		foreach (Wall wall in Walls)
-			VideoEngine.DrawRect2i(wall.Body, wall.OutlineColor);
-
-		foreach (Wall wall in Walls)
-		{
-			Rect2i inner = new(
-				wall.Body.Position + Wall.OutlineWidth,
-				wall.Body.Size - Wall.OutlineWidth * 2
-			);
-			VideoEngine.DrawRect2i(inner, wall.FillColor);
 		}
 
 		thiccEnemy.Radius = Utils.PingPong(time, 24) * 2 + 13;

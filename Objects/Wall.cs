@@ -1,4 +1,6 @@
 using Raylib_cs;
+using WhgVedit.Engine.Video;
+using WhgVedit.Engine.Video.Shapes;
 
 namespace WhgVedit.Objects;
 
@@ -34,5 +36,16 @@ class Wall : Object2D
 	{
 		Position = position;
 		Size = size;
+	}
+
+	public override void Draw()
+	{
+		VideoEngine.QueueDraw(new OutlineCall(ZIndex, Body, OutlineColor));
+		
+		Rect2i inner = new(
+			Body.Position + Wall.OutlineWidth,
+			Body.Size - Wall.OutlineWidth * 2);
+		VideoEngine.QueueDraw(new RectCall(ZIndex + 1, inner, FillColor));
+		
 	}
 }
