@@ -19,6 +19,19 @@ class GameObject
 	public virtual void Update() { }
 	public virtual void Draw() { }
 
+	public void AddToScene(Scene scene)
+	{
+		scene.AddObject(this);
+		this.Scene = scene;
+	}
+
+	public void RemoveFromScene()
+	{
+		if (Scene is null) return;
+		Scene.RemoveObject(this);
+		Scene = null;
+	}
+	
 	public void AddToGroup(string groupName)
 	{
 		Groups.Add(groupName);
