@@ -37,5 +37,5 @@ readonly struct Rect2i
 		throw new NotImplementedException();
 	}
 
-	public override string ToString() => string.Format($"{{ Position: {Position}, Size: {Size} }}");
+	public override string ToString() => $"{{ Position: {Position}, Size: {Size} }}";
 }

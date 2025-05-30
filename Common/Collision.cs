@@ -10,8 +10,8 @@ static class Collision
 {
 	public static Vector2i SuggestSinglePush(Rect2i player, Wall wall)
 	{
-		int top_overlap = wall.Position.Y - player.End.Y;
-		int left_overlap = wall.Position.X - player.End.X;
+		int top_overlap = wall.Start.Y - player.End.Y;
+		int left_overlap = wall.Start.X - player.End.X;
 		int bottom_overlap = wall.End.Y - player.Position.Y;
 		int right_overlap = wall.End.X - player.Position.X;
 
