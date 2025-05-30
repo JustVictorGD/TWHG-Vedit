@@ -15,14 +15,20 @@ class Scene(List<GameObject> objects)
 
 	public void AddObject(GameObject @object)
 	{
-		if (@object.Scene != null)
-		{
+		if (@object.Scene is null) return;
+		gameObjects.Add(@object);
 
+		foreach (string groupName in @object.Groups)
+		{
+			groups[groupName].Add(@object);
+			@object.AddToGroup(groupName);
 		}
 	}
 
 	public void RemoveObject(GameObject @object)
 	{
+		gameObjects.Remove(@object);
+		@object.Groups = [];
 		foreach (string item in @object.Groups)
 		{
 			groups[item].Remove(@object);

@@ -21,11 +21,11 @@ class GameObject
 
 	public void AddToGroup(string groupName)
 	{
-		throw new NotImplementedException();
+		Groups.Add(groupName);
 	}
 
 	public void RemoveFromGroup(string groupName)
 	{
-		throw new NotImplementedException();
+		Groups.Remove(groupName);
 	}
 }
