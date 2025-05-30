@@ -1,6 +1,6 @@
-namespace WhgVedit.Objects.Player;
-
 using WhgVedit.Types;
+
+namespace WhgVedit.Objects.Player;
 
 // This is not an Object2D because the player's position uses subpixels, and it would be
 // weird to override the Position property to Subpixel2 when it's expected to be Vector2i.

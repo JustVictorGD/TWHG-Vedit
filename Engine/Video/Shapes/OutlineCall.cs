@@ -1,12 +1,11 @@
 using Raylib_cs;
 using WhgVedit.Types;
 
-namespace WhgVedit.Video;
+namespace WhgVedit.Engine.Video.Shapes;
 
 class OutlineCall : ShapeCall
 {
 	public Rect2i Body { get; set; }
-	public Color Color { get; set; }
 
 	public OutlineCall(int zIndex, Rect2i body, Color color)
 	{

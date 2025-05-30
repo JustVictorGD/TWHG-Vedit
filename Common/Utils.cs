@@ -1,7 +1,7 @@
+namespace WhgVedit.Common;
+
 using Raylib_cs;
 using WhgVedit.Types;
-
-namespace WhgVedit;
 
 static class Utils
 {
@@ -19,6 +19,19 @@ static class Utils
 			return a < b ? a : b;
 
 		return Math.Abs(interest - a) < Math.Abs(interest - b) ? a : b;
+	}
+
+	public static double PushToZero(double value, double amount)
+	{
+		if (value == 0)
+			return 0;
+
+		bool negative = value < 0;
+
+		if (Math.Abs(value) <= amount && amount > 0)
+			return 0;
+
+		return negative ? value + amount : value - amount;
 	}
 
 	// Basically budget animation.

@@ -1,13 +1,15 @@
-using Raylib_cs;
-using WhgVedit.Objects;
-using WhgVedit.Types;
+namespace WhgVedit.Engine.Video;
 
-namespace WhgVedit.Video;
+using Raylib_cs;
+
+using Engine.Video.Shapes;
+using Objects;
+using Types;
+
+// Class description.
 
 class VideoEngine
 {
-	const int OutlineWidth = 6;
-
 	private static VideoEngine _instance = new();
 
 	private readonly List<ShapeCall> _drawCalls = [];

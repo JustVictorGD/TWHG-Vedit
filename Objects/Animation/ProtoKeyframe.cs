@@ -1,8 +1,10 @@
-using WhgVedit.Types;
-
 namespace WhgVedit.Objects.Animation;
 
+using Common;
+using Types;
+
 // Placeholder implementation of cycles. Replace with Godot-like animations later.
+// Refer to Keyframe.cs for the TODO on animation.
 
 struct ProtoKeyframe(Vector2i pos1, Vector2i pos2, float length)
 {

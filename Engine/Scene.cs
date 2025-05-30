@@ -1,6 +1,6 @@
-using WhgVedit.Objects;
+namespace WhgVedit.Engine;
 
-namespace WhgVedit.System;
+using Objects;
 
 class Scene
 {

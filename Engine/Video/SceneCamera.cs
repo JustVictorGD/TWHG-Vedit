@@ -1,8 +1,11 @@
+namespace WhgVedit.Engine.Video;
+
 using System.Numerics;
 using Raylib_cs;
-using WhgVedit.Objects;
 
-namespace WhgVedit.System.Video;
+using Objects;
+
+// Description.
 
 class SceneCamera : GameObject
 {

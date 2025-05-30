@@ -32,5 +32,10 @@ readonly struct Rect2i
 
 	public readonly Rect2i Resize(Vector2i amount) => new(Position, Size + amount);
 
-	public override string ToString() => string.Format("{{ Position: {0}, Size: {1} }}", Position, Size);
+	public bool Touches(Rect2i other, bool includeEdges = false)
+	{
+		throw new NotImplementedException();
+	}
+
+	public override string ToString() => string.Format($"{{ Position: {Position}, Size: {Size} }}");
 }

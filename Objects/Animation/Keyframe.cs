@@ -1,8 +1,11 @@
-using WhgVedit.Types;
-
 namespace WhgVedit.Objects.Animation;
 
-// Critically unfinished.
+// Unfinished to an unusable point.
+
+// TODO: Make animations resemble those from Godot. Instead of always expecting position,
+// rotation and scale value, property tracks should be optional and allow more types such as color.
+
+using Types;
 
 struct Keyframe
 {

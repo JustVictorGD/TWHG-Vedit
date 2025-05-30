@@ -1,4 +1,4 @@
-namespace WhgVedit.Objects.Player;
+namespace WhgVedit.Common;
 
 using WhgVedit.Objects;
 using WhgVedit.Types;
@@ -6,7 +6,7 @@ using WhgVedit.Types;
 // These functions are usable for basic "push out of wall" logic. When a Vector2i
 // is "suggested," you should offset the player's position by that value.
 
-static class WallCollision
+static class Collision
 {
 	public static Vector2i SuggestSinglePush(Rect2i player, Wall wall)
 	{

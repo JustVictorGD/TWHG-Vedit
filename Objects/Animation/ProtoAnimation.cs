@@ -1,13 +1,12 @@
-
-using System.Numerics;
-using WhgVedit.Types;
-
 namespace WhgVedit.Objects.Animation;
 
-// Unfinished to an unusable point.
+// External namespaces.
+using System.Numerics;
 
-// TODO: Make animations resemble those from Godot. Instead of always expecting position,
-// rotation and scale value, property tracks should be optional and allow more types such as color.
+using Types;
+
+// Unfinished to an unusable point.
+// Refer to Keyframe.cs for the TODO on animation.
 
 class ProtoAnimation : GameObject
 {
