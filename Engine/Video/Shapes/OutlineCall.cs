@@ -1,21 +1,29 @@
-using Raylib_cs;
-using WhgVedit.Types;
-
 namespace WhgVedit.Engine.Video.Shapes;
+
+using Raylib_cs;
+
+using Types;
 
 class OutlineCall : ShapeCall
 {
 	public Rect2i Body { get; set; }
 
-	public OutlineCall(int zIndex, Rect2i body, Color color)
+	// Manual inner used to prevent just a bit of repeated logic.
+	public Rect2i? Inner { get; set; }
+
+	public OutlineCall(int zIndex, Rect2i body, Color color, Rect2i? inner = null)
 	{
 		ZIndex = zIndex;
 		Body = body;
 		Color = color;
+		Inner = inner;
 	}
 
 	public override void Execute()
 	{
-		VideoEngine.DrawOutline(Body, Color);
+		if (Inner == null)
+			VideoEngine.DrawOutline(Body, Color);
+		else
+			VideoEngine.DrawOutline(Body, Color, (Rect2i)Inner);
 	}
 }

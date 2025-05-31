@@ -8,7 +8,6 @@ using Raylib_cs;
 
 using Common;
 using Engine.Video;
-using Engine.Video.Shapes;
 using Types;
 
 class Player : Object2D
@@ -41,23 +40,6 @@ class Player : Object2D
 
 	public override void Draw()
 	{
-		// I gotta make a helper function for these checks... With Z-index support.
-		if (Size.X <= Wall.OutlineWidth * 2 || Size.Y <= Wall.OutlineWidth * 2)
-		{
-			VideoEngine.QueueDraw(new RectCall(
-				ZIndex, Body, OutlineColor
-			));
-			return;
-		}
-
-		VideoEngine.QueueDraw(new OutlineCall(
-			ZIndex, Body, OutlineColor
-		));
-		VideoEngine.QueueDraw(new RectCall(
-			ZIndex - 1, new(
-				(Vector2i)Position - HalfSize + Wall.OutlineWidth,
-				Size - Wall.OutlineWidth * 2
-			), FillColor
-		));
+		VideoEngine.QueueOutlinedRect(ZIndex, ZIndex + 1, Body, OutlineColor, FillColor);
 	}
 }

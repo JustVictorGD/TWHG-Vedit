@@ -1,7 +1,8 @@
-using Raylib_cs;
-using WhgVedit.Types;
-
 namespace WhgVedit.Engine.Video.Shapes;
+
+using Raylib_cs;
+
+using Types;
 
 class RectCall : ShapeCall
 {

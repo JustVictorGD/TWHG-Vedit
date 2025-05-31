@@ -1,25 +1,27 @@
-using Raylib_cs;
-using WhgVedit.Engine.Video;
-using WhgVedit.Engine.Video.Shapes;
-
 namespace WhgVedit.Objects;
 
-using WhgVedit.Types;
+using Raylib_cs;
+
+using Engine.Video;
+using Types;
 
 class Wall : Object2D
 {
 	public const int OutlineWidth = 6;
 	public const int HalfWidth = OutlineWidth / 2;
 
-	// TODO: Cache.
-	private readonly List<Rect2i> _outlineRects = [];
+	// TODO: Cache the individual rects that make up the outline IF the fill
+	// is completely opaque, to avoid recomputing them every frame. They
+	// should only be recomputed when resizing the wall, not moving it.
+	private readonly List<Rect2i> outlineRects = [];
 
 
-	public Color OutlineColor { get; set; } = new(72, 72, 102, 255);
-	public Color FillColor { get; set; } = new(179, 179, 255, 255);
+	public Color OutlineColor { get; set; } = new(72, 72, 102);
+	public Color FillColor { get; set; } = new(179, 179, 255);
 
 	public Vector2i Size { get; set; }
 
+	// QoL getters.
 	public Vector2i Start => (Vector2i)Position;
 	public Vector2i End => Start + Size;
 	public Rect2i Body => new(Start, Size);
@@ -40,12 +42,6 @@ class Wall : Object2D
 
 	public override void Draw()
 	{
-		VideoEngine.QueueDraw(new OutlineCall(ZIndex, Body, OutlineColor));
-		
-		Rect2i inner = new(
-			Body.Position + Wall.OutlineWidth,
-			Body.Size - Wall.OutlineWidth * 2);
-		VideoEngine.QueueDraw(new RectCall(ZIndex + 1, inner, FillColor));
-		
+		VideoEngine.QueueOutlinedRect(ZIndex, ZIndex + 1, Body, OutlineColor, FillColor);
 	}
 }

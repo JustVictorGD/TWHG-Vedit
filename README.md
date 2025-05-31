@@ -27,3 +27,5 @@ Project design guide:
     - Class/struct keyword.
 
 - If a feature is unstable or unfinished, make it clear by adding a descriptive description.
+
+- Shorten all instances of "Rectangle" to "Rect" in properties and methods.

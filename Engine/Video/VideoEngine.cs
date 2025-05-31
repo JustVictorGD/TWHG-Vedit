@@ -8,35 +8,61 @@ using Types;
 
 // Class description.
 
-class VideoEngine
+static class VideoEngine
 {
-	private static VideoEngine _instance = new();
-
-	private readonly List<ShapeCall> _drawCalls = [];
-
-	public static void QueueDraw(ShapeCall drawCall)
-	{
-		_instance._drawCalls.Add(drawCall);
-	}
+	private static readonly List<ShapeCall> drawCalls = [];
 
 	public static void Render()
 	{
-		foreach (ShapeCall shapeCall in _instance._drawCalls.OrderBy(o => o.ZIndex))
+		foreach (ShapeCall shapeCall in drawCalls.OrderBy(o => o.ZIndex))
 			shapeCall.Execute();
 
-		_instance._drawCalls.Clear();
+		drawCalls.Clear();
 	}
 
+	public static void QueueDraw(ShapeCall drawCall)
+	{
+		drawCalls.Add(drawCall);
+	}
+
+	public static int QueueOutlinedRect(int outlineZ, int fillZ, Rect2i outer, Color outlineColor, Color fillColor)
+	{
+		Rect2i inner = GetInner(outer);
+
+		if (fillColor.A >= 255 && fillZ >= outlineZ)
+		{
+			QueueDraw(new RectCall(fillZ, inner, fillColor));
+			QueueDraw(new RectCall(outlineZ, outer, outlineColor));
+
+			// You can print the return values to debug which case gets chosen.
+			return 0;
+		}
+		else if (inner.Size.X <= 0 || inner.Size.Y <= 0)
+		{
+			QueueDraw(new RectCall(outlineZ, outer, outlineColor));
+
+			return 1;
+		}
+		else
+		{
+			QueueDraw(new OutlineCall(outlineZ, outer, outlineColor, inner));
+			QueueDraw(new RectCall(fillZ, inner, fillColor));
+
+			return 2;
+		}
+	}
+
+	// Utility function for a frequent action throughout drawing.
+	// Negative size may occur, but in drawing it's not a problem.
+	public static Rect2i GetInner(Rect2i outer) => new(
+		outer.Position + Wall.OutlineWidth,
+		outer.Size - Wall.OutlineWidth * 2
+	);
 
 	// Utility draw functions.
-
-
-	public static void DrawOutlinedRectangle(Rect2i dimensions, Color outlineColor, Color fillColor)
+	public static void DrawOutlinedRect(Rect2i dimensions, Color outlineColor, Color fillColor)
 	{
-		Rect2i inner = new(
-		    dimensions.Position + Wall.OutlineWidth,
-		    dimensions.Size - Wall.OutlineWidth * 2
-		);
+		Rect2i inner = GetInner(dimensions);
 
 		// If the fill color takes up zero area, just draw the outline.
 		if (inner.Size.X <= 0 || inner.Size.Y <= 0)
