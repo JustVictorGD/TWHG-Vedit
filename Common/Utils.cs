@@ -60,6 +60,11 @@ static class Utils
 	{
 		return (int)Math.Round(start * (1 - ratio) + end * ratio, MidpointRounding.ToPositiveInfinity);
 	}
+	
+	public static int LerpIDouble(int start, int end, double ratio)
+	{
+		return (int)Math.Round(start * (1 - ratio) + end * ratio, MidpointRounding.ToPositiveInfinity);
+	}
 
 	public static float LerpF(float start, float end, float ratio)
 	{
@@ -74,6 +79,11 @@ static class Utils
 	public static Vector2i Lerp2i(Vector2i start, Vector2i end, float ratio) => new(
 		LerpI(start.X, end.X, ratio),
 		LerpI(start.Y, end.Y, ratio)
+	);
+	
+	public static Vector2i Lerp2iDouble(Vector2i start, Vector2i end, double ratio) => new(
+		LerpIDouble(start.X, end.X, ratio),
+		LerpIDouble(start.Y, end.Y, ratio)
 	);
 
 	public static Color LerpColor(Color start, Color end, float ratio) => new(
