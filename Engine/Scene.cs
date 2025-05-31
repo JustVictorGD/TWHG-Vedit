@@ -46,16 +46,25 @@ class Scene(List<GameObject> objects)
 	{
 		return groups.TryGetValue(groupName, out List<GameObject>? list) ? list : [];
 	}
-
-	public void AddObjectToGroup(GameObject @object, string groupName)
+	
+	public void AddObjectsToGroups(IEnumerable<GameObject> objects, params string[] groupNames)
 	{
-		if (!groups.ContainsKey(groupName))
-			groups.Add(groupName, []);
+		foreach (GameObject @object in objects)
+		{
+			if (@object.Scene != this)
+				AddObject(@object);
+			
+			foreach (string groupName in groupNames)
+			{
+				if (!groups.ContainsKey(groupName))
+					groups.Add(groupName, []);
 
-		List<GameObject> list = groups[groupName];
+				List<GameObject> list = groups[groupName];
 
-		if (!list.Contains(@object))
-			list.Add(@object);
+				if (!list.Contains(@object))
+					list.Add(@object);
+			}
+		}
 	}
 
 	public void RemoveObjectFromGroup(GameObject @object, string groupName)

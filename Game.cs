@@ -51,13 +51,10 @@ class Game
 
 	public void Ready()
 	{
-		Scene.Main = new([
-			player,
-			thiccEnemy
-		]);
+		Scene.Main = new([player]);
 
-		Scene.Main.AddObjects(new(Enemies));
-		Scene.Main.AddObjects(new(Walls));
+		Scene.Main.AddObjectsToGroups([..Enemies, thiccEnemy], "Enemies");
+		Scene.Main.AddObjectsToGroups([..Walls], "Walls");
 		
 		Scene.Main.Ready();
 	}
@@ -71,7 +68,15 @@ class Game
 
 		Walls[0].SetY(525 + wallOffset);
 		Walls[1].SetY(621 + wallOffset);
-
+		
+		// Used this to test groups.
+		/*if (Scene.Main is not null)
+			foreach (Object2D wall in Scene.Main.GetObjectsInGroup("Walls"))
+			{
+				wall.SetX(wall.Position.X + 1);
+			}
+		*/
+		
 		Scene.Main?.Update();
 	}
 
