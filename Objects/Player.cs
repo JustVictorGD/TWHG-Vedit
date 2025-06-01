@@ -12,6 +12,8 @@ using Types;
 
 class Player : Object2D
 {
+	public new int ZIndex { get; set; } = 32;
+
 	public Vector2i Size { get; set; } = new(42, 42);
 	public int Speed { get; set; } = 4;
 	public Color OutlineColor { get; set; } = new(102, 0, 0);

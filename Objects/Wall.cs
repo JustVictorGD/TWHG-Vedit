@@ -7,6 +7,8 @@ using Types;
 
 class Wall : Object2D
 {
+	public new int ZIndex { get; set; } = 16;
+
 	public const int OutlineWidth = 6;
 	public const int HalfWidth = OutlineWidth / 2;
 

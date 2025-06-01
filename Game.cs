@@ -30,9 +30,9 @@ class Game
 	public static readonly List<Wall> Walls = [
 		new(525, 525, 246, 54),
 		new(525, 621, 246, 54),
-		new(537, 549, 30, 102),// { OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
-		new(730, 549, 30, 102),// { OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
-		new(634, 645, 30, 102),// { OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
+		new(537, 549, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
+		new(730, 549, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
+		new(634, 645, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
 		new(189, 93, 54, 54),
 	];
 
