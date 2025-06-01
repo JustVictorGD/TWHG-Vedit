@@ -32,7 +32,8 @@ class Game
 		new(525, 621, 246, 54),
 		new(537, 549, 30, 102),// { OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
 		new(730, 549, 30, 102),// { OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
-		new(634, 645, 30, 102)// { OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
+		new(634, 645, 30, 102),// { OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
+		new(189, 93, 54, 54),
 	];
 
 	public static readonly List<Enemy> Enemies =
@@ -40,7 +41,10 @@ class Game
 		new(252, 252),
 		new(276, 252),
 		new(252, 276),
-		new(276, 276)
+		new(276, 276),
+
+		new(168, 140),
+		new(168, 196),
 	];
 
 	public Camera2D mainCamera = new() { Zoom = 1 };
@@ -79,10 +83,6 @@ class Game
 			Console.WriteLine($"Keyframe {index}: Duration: {keyframe.Duration}");
 		}
 
-		Console.WriteLine(Basis.FromDeg(0));
-		Console.WriteLine(Basis.FromDeg(30));
-		Console.WriteLine(Basis.FromDeg(45));
-
 		// Lots of debugging code here.
 
 		/*Console.WriteLine("get length to index 0: " + protoAnimation.GetLengthTo(0)); // 0
@@ -119,6 +119,12 @@ class Game
 		keyframeEnemyTest.Position = protoAnimation.GetPosition(time / 60.0);
 
 		Scene.Main?.Update();
+
+		if (Scene.Main == null) return;
+
+		foreach (GameObject @object in Scene.Main.GetObjectsInGroup("Enemies"))
+			if (@object is Enemy enemy && player.TouchesEnemy(enemy))
+				player.Position = new(336, 240);
 	}
 
 	// Draw calls in this function comply with the camera.

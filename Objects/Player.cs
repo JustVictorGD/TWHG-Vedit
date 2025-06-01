@@ -42,4 +42,18 @@ class Player : Object2D
 	{
 		VideoEngine.QueueOutlinedRect(ZIndex, ZIndex + 1, Body, OutlineColor, FillColor);
 	}
+
+	public bool TouchesEnemy(Enemy enemy)
+	{
+		Circle circle = enemy.Body;
+
+		Vector2i nearestPoint = circle.Position.Clamp(Body);
+
+		int squaredDictance = (int)(
+			Math.Pow(nearestPoint.X - circle.Position.X, 2) +
+			Math.Pow(nearestPoint.Y - circle.Position.Y, 2)
+		);
+
+		return squaredDictance < Math.Pow(circle.Radius, 2);
+	}
 }

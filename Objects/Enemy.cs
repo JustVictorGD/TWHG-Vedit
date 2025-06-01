@@ -12,6 +12,8 @@ class Enemy : Object2D
 	public Color OutlineColor { get; set; } = new(0, 0, 66);
 	public Color FillColor { get; set; } = new(0, 0, 255);
 
+	public Circle Body => new((Vector2i)Position, Radius - Wall.OutlineWidth);
+
 	public Enemy(int posX, int posY)
 	{
 		Position = new(posX, posY);
