@@ -1,6 +1,8 @@
+
 namespace WhgVedit.Objects.Animation;
 
 using System.Numerics;
+using WhgVedit.Common;
 
 // Unfinished to an unusable point.
 
@@ -15,11 +17,15 @@ struct Keyframe
 	public Vector2i Position = new();
 	public float Rotation = 0;
 	public Vector2 Scale = new();
-	public Func<double, double> EasingFunc = f => f; // Easing between the previous keyframe's and this one's value, ranging from 0 to 1.
+	public Func<double, double> EasingFunc = Easings.Linear; // Easing between the previous keyframe's and this one's value, ranging from 0 to 1.
 	// Easing is Linear by default. See list of built-in easings in Common/... (WIP)
 
 	public Keyframe(float duration)
 	{
+		if (duration < 0)
+			throw new ArgumentOutOfRangeException(nameof(duration), 
+				"Keyframe duration cannot be negative.");
+		
 		Duration = duration;
 	}
 	

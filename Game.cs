@@ -54,9 +54,9 @@ class Game
 	private ProtoAnimation protoAnimation = new();
 	private Enemy keyframeEnemyTest = new(480, 336);
 
-	public Keyframe Keyframe1 = new Keyframe(0) { Position = new Vector2i(480, 336) };
-	public Keyframe Keyframe2 = new Keyframe(2) { Position = new Vector2i(528, 336) };
-	public Keyframe Keyframe3 = new Keyframe(3) { Position = new Vector2i(528, 336) };
+	public Keyframe Keyframe1 = new Keyframe(0) { Position = new Vector2i(480, 336), EasingFunc = Easings.SineInOut };
+	public Keyframe Keyframe2 = new Keyframe(0.5f) { Position = new Vector2i(960, 336), EasingFunc = Easings.SineInOut };
+	public Keyframe Keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), EasingFunc = Easings.SineInOut };
 
 	public void Ready()
 	{
