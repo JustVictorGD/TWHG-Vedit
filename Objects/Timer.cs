@@ -4,24 +4,27 @@ namespace WhgVedit.Objects;
 
 public class Timer(int durationTicks = 1) : GameObject
 {
-	private double time = durationTicks;
-	private bool isActive = false;
+	public double Time { get; private set; } = durationTicks;
+
+	public double TimeLeft => durationTicks - Time;
+	
+	public bool IsActive { get; private set; } = false;
 	public event Action? Timeout;
 
-	public double Duration { get; set; } = durationTicks;
+	public double Duration { get; } = durationTicks;
 	public bool Debug { get; set; } = false;
 
 	public override void Update()
 	{
-		if (Debug) Console.WriteLine($"Time: {time}/{Duration}. Active: {isActive}");
+		if (Debug) Console.WriteLine($"Time: {Time}/{Duration}. Active: {IsActive}");
 
-		if (!isActive) return;
+		if (!IsActive) return;
 
-		time--;
+		Time--;
 
-		if (time <= 0)
+		if (Time <= 0)
 		{
-			isActive = false;
+			IsActive = false;
 			Timeout?.Invoke();
 
 			if (Debug) Console.WriteLine("Timeout.");
@@ -30,7 +33,7 @@ public class Timer(int durationTicks = 1) : GameObject
 
 	public void Start()
 	{
-		time = Duration;
-		isActive = true;
+		Time = Duration;
+		IsActive = true;
 	}
 }

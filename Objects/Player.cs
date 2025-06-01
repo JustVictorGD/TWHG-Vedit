@@ -18,18 +18,34 @@ public class Player : Object2D
 	public int Speed { get; set; } = 4;
 	public Color OutlineColor { get; set; } = new(102, 0, 0);
 	public Color FillColor { get; set; } = new(255, 0, 0);
+	public float OutlineOpacity { get; set; } = 1;
+	public float FillOpacity { get; set; } = 1;
+	public bool CanMove { get; set; } = true;
+	public bool IsDead { get; set; }
+
 
 	public Vector2i HalfSize => Size / 2;
 
 	public Rect2i Body => new((Vector2i)Position - Size / 2, Size);
 
-
+	private const int FadeOutTicks = 15;
+	private const int RespawnTicks = 35;
+	private const int FadeInTicks = 10;
+	private Timer fadeOutTimer = new(FadeOutTicks);
+	private Timer respawnTimer = new(RespawnTicks);
+	private Timer fadeInTimer = new(FadeInTicks);
+	
 	public override void Update()
 	{
-		Position += new Vector2i(
-			Speed * Utils.GetInputAxis(KeyboardKey.Left, KeyboardKey.Right),
-			Speed * Utils.GetInputAxis(KeyboardKey.Up, KeyboardKey.Down)
-		);
+		fadeOutTimer.Update();
+		respawnTimer.Update();
+		fadeInTimer.Update();
+		
+		if (CanMove && !IsDead)
+			Position += new Vector2i(
+				Speed * Utils.GetInputAxis(KeyboardKey.Left, KeyboardKey.Right),
+				Speed * Utils.GetInputAxis(KeyboardKey.Up, KeyboardKey.Down)
+			);
 
 		// TODO: Make walls set subpixels to min and max values just like the world border.
 		Position += Collision.SuggestWallPushes(Body, Game.Walls);
@@ -38,11 +54,27 @@ public class Player : Object2D
 
 		// Un-comment to see subpixels change between 0, -128 and 127.
 		//Console.WriteLine(Position.Fraction);
+
+		if (IsDead)
+		{
+			FillOpacity = (float)fadeOutTimer.Time / FadeOutTicks;
+			OutlineOpacity = (float)fadeOutTimer.Time / FadeOutTicks;
+		}
+
+		if (fadeInTimer.IsActive)
+		{
+			FillOpacity = (float)fadeInTimer.TimeLeft / FadeInTicks;
+			OutlineOpacity = (float)fadeInTimer.TimeLeft / FadeInTicks;
+			Console.WriteLine("Fading in. Time: " + fadeInTimer.TimeLeft);
+		}
 	}
+
 
 	public override void Draw()
 	{
-		VideoEngine.QueueOutlinedRect(ZIndex, ZIndex + 1, Body, OutlineColor, FillColor);
+		Color finalOutlineColor = new Color(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, OutlineColor.A / 255f * OutlineOpacity);
+		Color finalFillColor = new Color(FillColor.R / 255f, FillColor.G / 255f, FillColor.B / 255f, FillColor.A / 255f * FillOpacity);
+		VideoEngine.QueueOutlinedRect(ZIndex, ZIndex + 1, Body, finalOutlineColor, finalFillColor);
 	}
 
 	public bool TouchesEnemy(Enemy enemy)
@@ -57,5 +89,31 @@ public class Player : Object2D
 		);
 
 		return squaredDictance < Math.Pow(circle.Radius, 2);
+	}
+
+	public void Die()
+	{
+		if (IsDead) return;
+		fadeOutTimer.Start();
+		respawnTimer.Start();
+
+		IsDead = true;
+		respawnTimer.Timeout += Respawn;
+	}
+
+	public void Respawn()
+	{
+		fadeInTimer.Start();
+		// This is for if the opacity doesn't get set to 1 when the timer ends.
+		fadeInTimer.Timeout += () =>
+		{
+			FillOpacity = 1;
+			OutlineOpacity = 1;
+		};
+		// Position = GetCurrentCheckpoint().Position;
+		Position = new(336, 240);
+		IsDead = false;
+		FillOpacity = 1;
+		OutlineOpacity = 1;
 	}
 }

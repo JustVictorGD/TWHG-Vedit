@@ -129,7 +129,7 @@ public class Game
 
 		foreach (GameObject @object in Scene.Main.GetObjectsInGroup("Enemies"))
 			if (@object is Enemy enemy && player.TouchesEnemy(enemy))
-				player.Position = new(336, 240);
+				player.Die();
 	}
 
 	// Draw calls in this function comply with the camera.
