@@ -12,7 +12,7 @@ using Types;
 using WhgVedit.Engine;
 using WhgVedit.Engine.UI;
 
-class Game
+public class Game
 {
 	public const int TileSize = 48;
 	public static int CircleQuality = 5;

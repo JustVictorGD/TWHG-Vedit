@@ -2,7 +2,7 @@ namespace WhgVedit.Objects;
 
 // This class measures time in frames, not seconds.
 
-class Timer(int durationTicks = 1) : GameObject
+public class Timer(int durationTicks = 1) : GameObject
 {
 	private double time = durationTicks;
 	private bool isActive = false;

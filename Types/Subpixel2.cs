@@ -2,11 +2,11 @@ using System.Numerics;
 
 namespace WhgVedit.Types;
 
-struct Subpixel2
+public readonly struct Subpixel2
 {
 	// The values each struct stores.
-	public Subpixel X;
-	public Subpixel Y;
+	public readonly Subpixel X;
+	public readonly Subpixel Y;
 
 	// QoL getters.
 	public readonly Vector2i Fraction => new(X.Fraction, Y.Fraction);

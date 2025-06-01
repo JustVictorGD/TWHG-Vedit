@@ -3,7 +3,7 @@ namespace WhgVedit.Common;
 using Raylib_cs;
 using WhgVedit.Types;
 
-static class Utils
+public static class Utils
 {
 	// Rounding function that favors positive infinity when met with a perfect tie.
 	public static int Round(double value) => (int)Math.Floor(value + 0.5);

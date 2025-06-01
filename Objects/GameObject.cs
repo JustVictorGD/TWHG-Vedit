@@ -2,7 +2,7 @@ using WhgVedit.Engine;
 
 namespace WhgVedit.Objects;
 
-class GameObject
+public class GameObject
 {
 	public Scene? Scene { get; set; } = null;
 

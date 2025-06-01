@@ -1,6 +1,6 @@
 namespace WhgVedit.Objects;
 
-class Anchor
+public class Anchor
 {
 	public List<Object2D> objects = [];
 }

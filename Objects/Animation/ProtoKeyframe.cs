@@ -6,7 +6,7 @@ using Types;
 // Placeholder implementation of cycles. Replace with Godot-like animations later.
 // Refer to Keyframe.cs for the TODO on animation.
 
-struct ProtoKeyframe(Vector2i pos1, Vector2i pos2, float length)
+public struct ProtoKeyframe(Vector2i pos1, Vector2i pos2, float length)
 {
 	public float Length = length;
 	public Vector2i Pos1 = pos1;

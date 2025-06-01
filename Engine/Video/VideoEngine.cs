@@ -8,7 +8,7 @@ using Types;
 
 // Class description.
 
-static class VideoEngine
+public static class VideoEngine
 {
 	private static readonly List<ShapeCall> drawCalls = [];
 

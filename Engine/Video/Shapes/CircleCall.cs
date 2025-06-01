@@ -4,7 +4,7 @@ using Raylib_cs;
 
 using Types;
 
-class CircleCall : ShapeCall
+public class CircleCall : ShapeCall
 {
 	public Vector2i Position { get; set; }
 	public float Radius { get; set; }

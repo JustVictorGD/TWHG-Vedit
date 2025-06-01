@@ -11,7 +11,7 @@ using WhgVedit.Common;
 
 using Types;
 
-struct Keyframe
+public struct Keyframe
 {
 	public float Duration = 1; // Time after the previous keyframe, in seconds.
 	public Vector2i Position = new();

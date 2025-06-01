@@ -2,7 +2,7 @@ namespace WhgVedit.Objects;
 
 using WhgVedit.Types;
 
-class Object2D : GameObject
+public class Object2D : GameObject
 {
 	public int ZIndex { get; set; } = 0;
 	public Subpixel2 Position { get; set; } = new();

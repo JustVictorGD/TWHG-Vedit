@@ -2,7 +2,7 @@ namespace WhgVedit.Engine;
 
 using Objects;
 
-class Scene(List<GameObject> objects)
+public class Scene(List<GameObject> objects)
 {
 	private readonly List<GameObject> gameObjects = objects;
 	private readonly Dictionary<string, List<GameObject>> groups = [];

@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace WhgVedit.Types;
 
-readonly struct Vector2i
+public readonly struct Vector2i
 {
 	public readonly int X;
 	public readonly int Y;

@@ -8,7 +8,7 @@ using Common;
 // Unfinished to an almost unusable point.
 // Refer to Keyframe.cs for the TODO on animation.
 
-class ProtoAnimation : GameObject
+public class ProtoAnimation : GameObject
 {
 	// Preventing unnecessary loops by caching which keyframes are worth caring about.
 

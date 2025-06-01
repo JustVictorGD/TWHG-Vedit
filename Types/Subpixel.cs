@@ -1,6 +1,6 @@
 namespace WhgVedit.Types;
 
-readonly struct Subpixel
+public readonly struct Subpixel
 {
 	// Main data. 256 steps equal one pixel.
 	public readonly int Steps;

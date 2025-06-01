@@ -10,7 +10,7 @@ using Common;
 using Engine.Video;
 using Types;
 
-class Player : Object2D
+public class Player : Object2D
 {
 	public new int ZIndex { get; set; } = 32;
 

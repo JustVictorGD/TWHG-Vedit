@@ -7,7 +7,7 @@ namespace WhgVedit.Engine.UI;
 
 using Types;
 
-class Button(int x, int y, int width, int height)
+public class Button(int x, int y, int width, int height)
 {
       public Rect2i Body = new(x, y, width, height);
 }

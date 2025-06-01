@@ -4,7 +4,7 @@ using Raylib_cs;
 
 using Types;
 
-class OutlineCall : ShapeCall
+public class OutlineCall : ShapeCall
 {
 	public Rect2i Body { get; set; }
 

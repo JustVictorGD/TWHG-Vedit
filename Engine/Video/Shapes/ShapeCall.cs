@@ -2,7 +2,7 @@ namespace WhgVedit.Engine.Video.Shapes;
 
 using Raylib_cs;
 
-abstract class ShapeCall
+public abstract class ShapeCall
 {
 	public int ZIndex { get; set; }
 	public Color Color { get; set; }

@@ -1,6 +1,6 @@
 namespace WhgVedit.Types;
 
-readonly struct Rect2i
+public readonly struct Rect2i
 {
 	// Main data.
 	public readonly Vector2i Position;
