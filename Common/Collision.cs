@@ -45,13 +45,17 @@ public static class Collision
 		return player.Position - original_position;
 	}
 
-	public static bool PointInRect(Vector2 point, Rect2i rect)
-	{
-		return PointInRect((Vector2i)point, rect);
-	}
-
+	// Important: This uses asymmetrical edge handling.
+	// The case "point = rect.Position" returns true.
+	// The case "point = rect.End" returns false.
+	// rect.Size.X * rect.Size.Y equals the amount of valid spots.
 	public static bool PointInRect(Vector2i point, Rect2i rect)
 	{
 		return point >= rect.Start && point < rect.End;
+	}
+	
+	public static bool PointInRect(Vector2 point, Rect2i rect)
+	{
+		return PointInRect((Vector2i)point, rect);
 	}
 }

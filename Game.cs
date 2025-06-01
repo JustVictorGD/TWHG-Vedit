@@ -15,7 +15,7 @@ using WhgVedit.Engine.UI;
 public class Game
 {
 	public const int TileSize = 48;
-	public static int CircleQuality = 5;
+	public static int CircleQuality { get; set; } = 5;
 	public static readonly Vector2i AreaSize = new(32, 20); // WHG 4 standard: 32, 20.
 
 
@@ -63,9 +63,13 @@ public class Game
 	public Keyframe Keyframe2 = new Keyframe(0.5f) { Position = new Vector2i(960, 336), EasingFunc = Easings.SineInOut };
 	public Keyframe Keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), EasingFunc = Easings.SineInOut };
 
-	List<Button> buttons = [
-		new(64, 64, 256, 128),
-		new(64, 256, 128, 64)
+	readonly List<Button> buttons = [
+		new(80, 80, 64, 64),
+		new(80, 160, 64, 64),
+		new(160, 80, 64, 64),
+		new(160, 160, 64, 64),
+		new(240, 80, 64, 64),
+		new(320, 80, 64, 64),
 	];
 
 	public void Ready()
@@ -74,6 +78,7 @@ public class Game
 
 		Scene.Main.AddObjectsToGroups([.. Enemies, thiccEnemy, keyframeEnemyTest], "Enemies");
 		Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
+		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");
 
 		protoAnimation.Keyframes.AddRange([Keyframe1, Keyframe2, Keyframe3]);
 
@@ -163,18 +168,26 @@ public class Game
 	// Draw calls in this function ignore the camera.
 	public void DrawUi()
 	{
-		Vector2 mouse = Raylib.GetMousePosition();
-
 		foreach (Button button in buttons)
 		{
-			if (!Collision.PointInRect(mouse, button.Body))
-				VideoEngine.DrawOutlinedRect(button.Body, new(0, 64, 255), new(0, 64, 255, 128));
+			switch (button.GetState)
+			{
+				case Button.State.Up:
+					VideoEngine.DrawOutlinedRect(button.Body, new(192, 192, 192), new(255, 255, 255, 128));
+					break;
 
-			else if (!Raylib.IsMouseButtonDown(MouseButton.Left))
-				VideoEngine.DrawOutlinedRect(button.Body, new(0, 192, 0), new(0, 192, 0, 128));
-
-			else
-				VideoEngine.DrawOutlinedRect(button.Body, new(255, 0, 0), new(255, 0, 0, 128));
+				case Button.State.Focused:
+					VideoEngine.DrawOutlinedRect(button.Body, new(144, 144, 192), new(192, 192, 255, 128));
+					break;
+				
+				case Button.State.Aborted:
+					VideoEngine.DrawOutlinedRect(button.Body, new(192, 144, 144), new(255, 192, 192, 128));
+					break;
+				
+				case Button.State.Down:
+					VideoEngine.DrawOutlinedRect(button.Body, new(192, 0, 192), new(255, 0, 255, 128));
+					break;
+			}
 		}
 	}
 }
