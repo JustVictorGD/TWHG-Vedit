@@ -1,5 +1,6 @@
 namespace WhgVedit.Common;
 
+using System.Numerics;
 using WhgVedit.Objects;
 using WhgVedit.Types;
 
@@ -42,5 +43,15 @@ static class Collision
 			);
 
 		return player.Position - original_position;
+	}
+
+	public static bool PointInRect(Vector2 point, Rect2i rect)
+	{
+		return PointInRect((Vector2i)point, rect);
+	}
+
+	public static bool PointInRect(Vector2i point, Rect2i rect)
+	{
+		return point >= rect.Start && point < rect.End;
 	}
 }

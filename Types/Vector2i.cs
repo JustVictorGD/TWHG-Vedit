@@ -21,7 +21,7 @@ readonly struct Vector2i
 		Math.Clamp(X, left, right),
 		Math.Clamp(Y, top, bottom)
 	);
-	
+
 	public readonly Vector2i Clamp(Vector2i min, Vector2i max) => Clamp(min.X, min.Y, max.X, max.Y);
 	public readonly Vector2i Clamp(Rect2i area) => Clamp(area.Start, area.End);
 
@@ -29,7 +29,7 @@ readonly struct Vector2i
 	public readonly Vector2i Move(Vector2i amount) => Move(amount.X, amount.Y);
 
 	public readonly Vector2i Lerp(Vector2i other, float time) => new(
-		
+
 	);
 
 	// Warning: Make sure to preserve the original copy. Constantly rounding
@@ -42,7 +42,7 @@ readonly struct Vector2i
 	public override string ToString() => $"{{ X: {X}, Y: {Y} }}";
 
 	// Conversion operators.
-	
+
 	public static implicit operator Vector2(Vector2i a) => new(a.X, a.Y);
 
 	public static explicit operator Vector2i(Vector2 a) => new(
@@ -63,4 +63,12 @@ readonly struct Vector2i
 	public static Vector2i operator -(Vector2i a, Vector2i b) => new(a.X - b.X, a.Y - b.Y);
 	public static Vector2i operator *(Vector2i a, Vector2i b) => new(a.X * b.X, a.Y * b.Y);
 	public static Vector2i operator /(Vector2i a, Vector2i b) => new(a.X / b.X, a.Y / b.Y);
+
+	// Comparison operators.
+
+	public static bool operator <(Vector2i a, Vector2i b) => a.X < b.X && a.Y < b.Y;
+	public static bool operator >(Vector2i a, Vector2i b) => a.X > b.X && a.Y > b.Y;
+
+	public static bool operator <=(Vector2i a, Vector2i b) => a.X <= b.X && a.Y <= b.Y;
+	public static bool operator >=(Vector2i a, Vector2i b) => a.X >= b.X && a.Y >= b.Y;
 }

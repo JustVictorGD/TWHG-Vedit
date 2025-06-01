@@ -20,9 +20,14 @@ while (!Raylib.WindowShouldClose())
 	Raylib.ClearBackground(Color.Black);
 	Raylib.BeginMode2D(game.mainCamera);
 
+	// Complies with the camera.
 	game.Draw();
 
 	Raylib.EndMode2D();
+
+	// Ignores the camera.
+	game.DrawUi();
+
 	Raylib.EndDrawing();
 }
 

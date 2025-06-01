@@ -10,6 +10,7 @@ using Engine.Video;
 using Objects;
 using Types;
 using WhgVedit.Engine;
+using WhgVedit.Engine.UI;
 
 class Game
 {
@@ -19,7 +20,7 @@ class Game
 
 
 	Vector2 camera_pos = new();
-	
+
 	Color tile1 = new(0xDD, 0xDD, 0xFF);
 	Color tile2 = new(0xF7, 0xF7, 0xFF);
 
@@ -58,13 +59,18 @@ class Game
 	public Keyframe Keyframe2 = new Keyframe(0.5f) { Position = new Vector2i(960, 336), EasingFunc = Easings.SineInOut };
 	public Keyframe Keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), EasingFunc = Easings.SineInOut };
 
+	List<Button> buttons = [
+		new(64, 64, 256, 128),
+		new(64, 256, 128, 64)
+	];
+
 	public void Ready()
 	{
 		Scene.Main = new([player]);
 
-		Scene.Main.AddObjectsToGroups([..Enemies, thiccEnemy, keyframeEnemyTest], "Enemies");
-		Scene.Main.AddObjectsToGroups([..Walls], "Walls");
-		
+		Scene.Main.AddObjectsToGroups([.. Enemies, thiccEnemy, keyframeEnemyTest], "Enemies");
+		Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
+
 		protoAnimation.Keyframes.AddRange([Keyframe1, Keyframe2, Keyframe3]);
 
 		for (var index = 0; index < protoAnimation.Keyframes.Count; index++)
@@ -73,8 +79,12 @@ class Game
 			Console.WriteLine($"Keyframe {index}: Duration: {keyframe.Duration}");
 		}
 
+		Console.WriteLine(Basis.FromDeg(0));
+		Console.WriteLine(Basis.FromDeg(30));
+		Console.WriteLine(Basis.FromDeg(45));
+
 		// Lots of debugging code here.
-		
+
 		/*Console.WriteLine("get length to index 0: " + protoAnimation.GetLengthTo(0)); // 0
 		Console.WriteLine("get length to index 1: " + protoAnimation.GetLengthTo(1)); // 2
 		Console.WriteLine("get length to index 1: " + protoAnimation.GetLengthTo(2)); // 5
@@ -92,7 +102,7 @@ class Game
 		Console.WriteLine("Position at t = 2:" + protoAnimation.GetPosition(2)); // 528, 336
 		Console.WriteLine("Position at t = 4:" + protoAnimation.GetPosition(4)); // 528, 336
 		Console.WriteLine("Position at t = 5:" + protoAnimation.GetPosition(5)); // 528, 336*/
-		
+
 		Scene.Main.Ready();
 	}
 
@@ -107,10 +117,11 @@ class Game
 		Walls[1].SetY(621 + wallOffset);
 
 		keyframeEnemyTest.Position = protoAnimation.GetPosition(time / 60.0);
-		
+
 		Scene.Main?.Update();
 	}
 
+	// Draw calls in this function comply with the camera.
 	public void Draw()
 	{
 		// Camera. Not too proud of the messy looking math.
@@ -141,5 +152,23 @@ class Game
 		Scene.Main?.Draw();
 
 		VideoEngine.Render();
+	}
+
+	// Draw calls in this function ignore the camera.
+	public void DrawUi()
+	{
+		Vector2 mouse = Raylib.GetMousePosition();
+
+		foreach (Button button in buttons)
+		{
+			if (!Collision.PointInRect(mouse, button.Body))
+				VideoEngine.DrawOutlinedRect(button.Body, new(0, 64, 255), new(0, 64, 255, 128));
+
+			else if (!Raylib.IsMouseButtonDown(MouseButton.Left))
+				VideoEngine.DrawOutlinedRect(button.Body, new(0, 192, 0), new(0, 192, 0, 128));
+
+			else
+				VideoEngine.DrawOutlinedRect(button.Body, new(255, 0, 0), new(255, 0, 0, 128));
+		}
 	}
 }
