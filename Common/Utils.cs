@@ -5,6 +5,9 @@ using WhgVedit.Types;
 
 static class Utils
 {
+	// Rounding function that favors positive infinity when met with a perfect tie.
+	public static int Round(double value) => (int)Math.Floor(value + 0.5);
+
 	public static int GetInputAxis(KeyboardKey negativeAction, KeyboardKey positiveAction)
 	{
 		return (int)Raylib.IsKeyDown(positiveAction) - (int)Raylib.IsKeyDown(negativeAction);
@@ -56,14 +59,9 @@ static class Utils
 	}
 
 	// Linear interpolation.
-	public static int LerpI(int start, int end, float ratio)
+	public static int LerpI(int start, int end, double ratio)
 	{
-		return (int)Math.Round(start * (1 - ratio) + end * ratio, MidpointRounding.ToPositiveInfinity);
-	}
-	
-	public static int LerpIDouble(int start, int end, double ratio)
-	{
-		return (int)Math.Round(start * (1 - ratio) + end * ratio, MidpointRounding.ToPositiveInfinity);
+		return Round(Lerp(start, end, ratio));
 	}
 
 	public static float LerpF(float start, float end, float ratio)
@@ -71,22 +69,17 @@ static class Utils
 		return start * (1 - ratio) + end * ratio;
 	}
 
-	public static double LerpD(double start, double end, float ratio)
+	public static double Lerp(double start, double end, double ratio)
 	{
 		return start * (1 - ratio) + end * ratio;
 	}
 
-	public static Vector2i Lerp2i(Vector2i start, Vector2i end, float ratio) => new(
-		LerpI(start.X, end.X, ratio),
-		LerpI(start.Y, end.Y, ratio)
-	);
-	
-	public static Vector2i Lerp2iDouble(Vector2i start, Vector2i end, double ratio) => new(
-		LerpIDouble(start.X, end.X, ratio),
-		LerpIDouble(start.Y, end.Y, ratio)
+	public static Vector2i Lerp2i(Vector2i start, Vector2i end, double ratio) => new(
+		Round(Lerp(start.X, end.X, ratio)),
+		Round(Lerp(start.Y, end.Y, ratio))
 	);
 
-	public static Color LerpColor(Color start, Color end, float ratio) => new(
+	public static Color LerpColor(Color start, Color end, double ratio) => new(
 		LerpI(start.R, end.R, ratio),
 		LerpI(start.G, end.G, ratio),
 		LerpI(start.B, end.B, ratio),
@@ -99,4 +92,17 @@ static class Utils
 		LerpF(start.YX, end.YX, ratio),
 		LerpF(start.YY, end.YY, ratio)
 	);
+
+	// To save resources (or out of my laziness), you're responsible for keeping lengths not negative.
+	public static int FindRange(double position, List<double> rangeLengths)
+	{
+		for (int i = 0; i < rangeLengths.Count; i++)
+		{
+			position -= rangeLengths[i];
+
+			if (position < 0) return i;
+		}
+
+		return -1; // When greater (or equal to) all ranges combined.
+	}
 }

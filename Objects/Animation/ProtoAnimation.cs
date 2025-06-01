@@ -1,13 +1,11 @@
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace WhgVedit.Objects.Animation;
 
-// External namespaces.
 using System.Numerics;
 
 using Types;
 using Common;
-// Unfinished to an unusable point.
+
+// Unfinished to an almost unusable point.
 // Refer to Keyframe.cs for the TODO on animation.
 
 class ProtoAnimation : GameObject
@@ -41,7 +39,7 @@ class ProtoAnimation : GameObject
 		if (index == Keyframes.Count - 1) return previous.Position; // Only true if time == length
 		Keyframe next = Keyframes[index + 1];
 		
-		return Utils.Lerp2iDouble(previous.Position, next.Position, 
+		return Utils.Lerp2i(previous.Position, next.Position, 
 			next.EasingFunc((time - GetLengthTo(index)) / next.Duration));
 	}
 
