@@ -16,6 +16,7 @@ public class Scene(List<GameObject> objects)
 	public void AddObject(GameObject @object)
 	{
 		gameObjects.Add(@object);
+		@object.Scene = this;
 
 		foreach (string groupName in @object.Groups)
 		{

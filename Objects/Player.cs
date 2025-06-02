@@ -25,6 +25,7 @@ public class Player : Object2D
 	public bool CanMove { get; set; } = true;
 	public bool IsDead { get; set; }
 
+	public Checkpoint? CurrentCheckpoint { get; set; }
 
 	public Vector2i HalfSize => Size / 2;
 
@@ -59,14 +60,14 @@ public class Player : Object2D
 
 		if (IsDead)
 		{
-			FillOpacity = (float)fadeOutTimer.Time / FadeOutTicks;
-			OutlineOpacity = (float)fadeOutTimer.Time / FadeOutTicks;
+			FillOpacity = (float)fadeOutTimer.TimeLeft / FadeOutTicks;
+			OutlineOpacity = (float)fadeOutTimer.TimeLeft / FadeOutTicks;
 		}
 
 		if (fadeInTimer.IsActive)
 		{
-			FillOpacity = (float)fadeInTimer.TimeLeft / FadeInTicks;
-			OutlineOpacity = (float)fadeInTimer.TimeLeft / FadeInTicks;
+			FillOpacity = (float)fadeInTimer.Time / FadeInTicks;
+			OutlineOpacity = (float)fadeInTimer.Time / FadeInTicks;
 		}
 	}
 
@@ -112,9 +113,16 @@ public class Player : Object2D
 			OutlineOpacity = 1;
 		};
 		// Position = GetCurrentCheckpoint().Position;
-		Position = new(336, 240);
+		if (CurrentCheckpoint != null) Position = CurrentCheckpoint.Center;
+		else Position = new(480, 384);
 		IsDead = false;
 		FillOpacity = 1;
 		OutlineOpacity = 1;
+	}
+
+	public void SetCheckpoint(Checkpoint checkpoint)
+	{
+		CurrentCheckpoint = checkpoint;
+		
 	}
 }

@@ -77,13 +77,18 @@ public class Game
 		new SceneSwitcher(64, 500, 128, 64)
 	];
 
+	private Checkpoint checkpoint = new(new Subpixel2(480, 96)) { Size = new Vector2i(96, 96) };
+	private Checkpoint checkpoint2 = new(new Subpixel2(672, 96)) { Size = new Vector2i(96, 96) };
+	
 	public void Ready()
 	{
-		Scene.Main = new([player]);
+		Scene.Main = new([]);
 
+		Scene.Main.AddObjectsToGroups([player], "Player");
 		Scene.Main.AddObjectsToGroups([.. Enemies, thiccEnemy, keyframeEnemyTest], "Enemies");
 		Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
 		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");
+		Scene.Main.AddObjectsToGroups([checkpoint, checkpoint2], "Checkpoints");
 
 		protoAnimation.Keyframes.AddRange([Keyframe1, Keyframe2, Keyframe3]);
 
