@@ -23,6 +23,27 @@ public readonly struct Rect2i
 		Size = new(width, height);
 	}
 
+	// Collision.
+	public bool Intersects(Rect2i other)
+	{
+		bool overlapOnX = Position.X < other.End.X && other.Position.X < End.X;
+		bool overlapOnY = Position.Y < other.End.Y && other.Position.Y < End.Y;
+
+		return overlapOnX && overlapOnY;
+	}
+
+	public bool Intersects(Circle circle)
+	{
+		Vector2i nearestPoint = circle.Position.Clamp(this);
+
+		int squaredDictance = (int)(
+			Math.Pow(nearestPoint.X - circle.Position.X, 2) +
+			Math.Pow(nearestPoint.Y - circle.Position.Y, 2)
+		);
+
+		return squaredDictance < Math.Pow(circle.Radius, 2);
+	}
+
 	// Editing.
 	public readonly Rect2i Move(int x, int y) => new(new(Position.X + x, Position.Y + y), Size);
 	public readonly Rect2i Move(Vector2i amount) => Move(amount.X, amount.Y);
@@ -31,11 +52,6 @@ public readonly struct Rect2i
 	public readonly Rect2i MoveTo(Vector2i pos) => MoveTo(pos.X, pos.Y);
 
 	public readonly Rect2i Resize(Vector2i amount) => new(Position, Size + amount);
-
-	public bool Touches(Rect2i other, bool includeEdges = false)
-	{
-		throw new NotImplementedException();
-	}
 
 	public override string ToString() => $"{{ Position: {Position}, Size: {Size} }}";
 }

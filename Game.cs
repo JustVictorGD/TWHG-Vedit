@@ -137,7 +137,7 @@ public class Game
 		if (Scene.Main == null) return;
 
 		foreach (GameObject @object in Scene.Main.GetObjectsInGroup("Enemies"))
-			if (@object is Enemy enemy && player.TouchesEnemy(enemy))
+			if (@object is Enemy enemy && player.Body.Intersects(enemy.Body))
 				player.Die();
 	}
 

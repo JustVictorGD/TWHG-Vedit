@@ -7,6 +7,8 @@ public static class Utils
 {
 	// Rounding function that favors positive infinity when met with a perfect tie.
 	public static int Round(double value) => (int)Math.Floor(value + 0.5);
+	public static int Square(int value) => value * value;
+	public static double Square(double value) => value * value;
 
 	public static int GetInputAxis(KeyboardKey negativeAction, KeyboardKey positiveAction)
 	{
