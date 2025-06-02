@@ -70,6 +70,9 @@ public class Game
 		new(160, 160, 64, 64),
 		new(240, 80, 64, 64),
 		new(320, 80, 64, 64),
+
+		new Slider(500, 500, 96, 96),
+		new SceneSwitcher(64, 500, 128, 64)
 	];
 
 	public void Ready()
@@ -166,28 +169,8 @@ public class Game
 	}
 
 	// Draw calls in this function ignore the camera.
-	public void DrawUi()
+	public void DrawUI()
 	{
-		foreach (Button button in buttons)
-		{
-			switch (button.GetState)
-			{
-				case Button.State.Up:
-					VideoEngine.DrawOutlinedRect(button.Body, new(192, 192, 192), new(255, 255, 255, 128));
-					break;
-
-				case Button.State.Focused:
-					VideoEngine.DrawOutlinedRect(button.Body, new(144, 144, 192), new(192, 192, 255, 128));
-					break;
-				
-				case Button.State.Aborted:
-					VideoEngine.DrawOutlinedRect(button.Body, new(192, 144, 144), new(255, 192, 192, 128));
-					break;
-				
-				case Button.State.Down:
-					VideoEngine.DrawOutlinedRect(button.Body, new(192, 0, 192), new(255, 0, 255, 128));
-					break;
-			}
-		}
+		Scene.Main?.DrawUI();
 	}
 }

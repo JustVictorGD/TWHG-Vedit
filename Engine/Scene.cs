@@ -46,14 +46,14 @@ public class Scene(List<GameObject> objects)
 	{
 		return groups.TryGetValue(groupName, out List<GameObject>? list) ? list : [];
 	}
-	
+
 	public void AddObjectsToGroups(IEnumerable<GameObject> objects, params string[] groupNames)
 	{
 		foreach (GameObject @object in objects)
 		{
 			if (@object.Scene != this)
 				AddObject(@object);
-			
+
 			foreach (string groupName in groupNames)
 			{
 				if (!groups.ContainsKey(groupName))
@@ -94,6 +94,14 @@ public class Scene(List<GameObject> objects)
 		if (!Visible) return;
 
 		foreach (GameObject gameObject in gameObjects)
-			gameObject.Draw();
+			if (gameObject is Object2D object2D) object2D.Draw();
+	}
+	
+	public void DrawUI()
+	{
+		if (!Visible) return;
+
+		foreach (GameObject gameObject in gameObjects)
+			if (gameObject is Object2D object2D) object2D.DrawUI();
 	}
 }

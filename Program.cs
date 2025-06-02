@@ -26,7 +26,7 @@ while (!Raylib.WindowShouldClose())
 	Raylib.EndMode2D();
 
 	// Ignores the camera.
-	game.DrawUi();
+	game.DrawUI();
 
 	Raylib.EndDrawing();
 }

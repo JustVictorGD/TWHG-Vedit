@@ -23,4 +23,7 @@ public class Object2D : GameObject
 
 		Position = new(Position.X, value);
 	}
+
+	public virtual void Draw() { }
+	public virtual void DrawUI() { }
 }

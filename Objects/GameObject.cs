@@ -16,7 +16,6 @@ public class GameObject
 
 	public virtual void Ready() { }
 	public virtual void Update() { }
-	public virtual void Draw() { }
 
 	public void AddToScene(Scene scene)
 	{
