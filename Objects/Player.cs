@@ -1,3 +1,5 @@
+using WhgVedit.Engine;
+
 namespace WhgVedit.Objects;
 
 // You may see that the position sometimes ends in one half.
@@ -43,8 +45,8 @@ public class Player : Object2D
 		
 		if (CanMove && !IsDead)
 			Position += new Vector2i(
-				Speed * Utils.GetInputAxis(KeyboardKey.Left, KeyboardKey.Right),
-				Speed * Utils.GetInputAxis(KeyboardKey.Up, KeyboardKey.Down)
+				Speed * InputEngine.GetInputAxis("Left", "Right"),
+				Speed * InputEngine.GetInputAxis("Up", "Down")
 			);
 
 		// TODO: Make walls set subpixels to min and max values just like the world border.
@@ -65,7 +67,6 @@ public class Player : Object2D
 		{
 			FillOpacity = (float)fadeInTimer.TimeLeft / FadeInTicks;
 			OutlineOpacity = (float)fadeInTimer.TimeLeft / FadeInTicks;
-			Console.WriteLine("Fading in. Time: " + fadeInTimer.TimeLeft);
 		}
 	}
 

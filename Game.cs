@@ -109,25 +109,12 @@ public class Game
 		// in the corner of the screen are from this.
 		Scene.Main.AddObjectsToGroups([.. rectangles], "Rectangles");
 
-		// Lots of debugging code here.
-
-		/*Console.WriteLine("get length to index 0: " + protoAnimation.GetLengthTo(0)); // 0
-		Console.WriteLine("get length to index 1: " + protoAnimation.GetLengthTo(1)); // 2
-		Console.WriteLine("get length to index 1: " + protoAnimation.GetLengthTo(2)); // 5
-
-		Console.WriteLine("get last keyframe index at t = 0: " + protoAnimation.GetLastKeyframeIndexAt(0)); //  0
-		Console.WriteLine("get last keyframe index at t = 0.5: " + protoAnimation.GetLastKeyframeIndexAt(0.5)); // 0
-		Console.WriteLine("get last keyframe index at t = 1: " + protoAnimation.GetLastKeyframeIndexAt(1)); // 0
-		Console.WriteLine("get last keyframe index at t = 2: " + protoAnimation.GetLastKeyframeIndexAt(2)); // 1
-		Console.WriteLine("get last keyframe index at t = 4: " + protoAnimation.GetLastKeyframeIndexAt(4)); // 1
-		Console.WriteLine("get last keyframe index at t = 5: " + protoAnimation.GetLastKeyframeIndexAt(5)); // 2
+		InputAction leftAction = new("Left", [KeyboardKey.A, KeyboardKey.Left]);
+		InputAction rightAction = new("Right", [KeyboardKey.D, KeyboardKey.Right]);
+		InputAction upAction = new("Up", [KeyboardKey.W, KeyboardKey.Up]);
+		InputAction downAction = new("Down", [KeyboardKey.S, KeyboardKey.Down]);
 		
-		Console.WriteLine("Position at t = 0:" + protoAnimation.GetPosition(0)); // 480, 336
-		Console.WriteLine("Position at t = 0.5:" + protoAnimation.GetPosition(0.5));
-		Console.WriteLine("Position at t = 1:" + protoAnimation.GetPosition(1));
-		Console.WriteLine("Position at t = 2:" + protoAnimation.GetPosition(2)); // 528, 336
-		Console.WriteLine("Position at t = 4:" + protoAnimation.GetPosition(4)); // 528, 336
-		Console.WriteLine("Position at t = 5:" + protoAnimation.GetPosition(5)); // 528, 336*/
+		InputEngine.AddActions([leftAction, rightAction, upAction, downAction]);
 
 		Scene.Main.Ready();
 	}
@@ -144,6 +131,7 @@ public class Game
 
 		keyframeEnemyTest.Position = protoAnimation.GetPosition(time / 60.0);
 
+		InputEngine.CheckInputs();
 		Scene.Main?.Update();
 
 		if (Scene.Main == null) return;
