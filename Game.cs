@@ -2,15 +2,17 @@ using WhgVedit.Objects.Animation;
 
 namespace WhgVedit;
 
-using System.Numerics;
+using Newtonsoft.Json;
 using Raylib_cs;
+using System.Numerics;
 
 using Common;
+using Engine;
+using Engine.UI;
 using Engine.Video;
 using Objects;
+using Objects.Shapes;
 using Types;
-using WhgVedit.Engine;
-using WhgVedit.Engine.UI;
 
 public class Game
 {
@@ -90,6 +92,22 @@ public class Game
 			var keyframe = protoAnimation.Keyframes[index];
 			Console.WriteLine($"Keyframe {index}: Duration: {keyframe.Duration}");
 		}
+
+		// JSON to Runtime test.
+		string json = File.ReadAllText("Json/Rectangles.json");
+
+		List<ColorRect>? rects = JsonConvert.DeserializeObject<List<ColorRect>>(json);
+		List<SolidRect> rectangles = [];
+
+		if (rects != null)
+			foreach (ColorRect rect in rects)
+			{
+				rectangles.Add(new(rect.GetRect(), rect.GetColor(), true));
+			}
+		
+		// The red, green, blue and white rectangles
+		// in the corner of the screen are from this.
+		Scene.Main.AddObjectsToGroups([.. rectangles], "Rectangles");
 
 		// Lots of debugging code here.
 
@@ -172,5 +190,7 @@ public class Game
 	public void DrawUI()
 	{
 		Scene.Main?.DrawUI();
+
+		VideoEngine.Render();
 	}
 }

@@ -84,7 +84,7 @@ public class Button : Object2D
 				break;
 
 			case State.Down:
-				VideoEngine.DrawOutlinedRect(Body, new(192, 0, 192), new(255, 0, 255, 128));
+				VideoEngine.DrawOutlinedRect(Body, new(192, 0, 192), new(255, 0, 255));
 				break;
 		}
 	}
