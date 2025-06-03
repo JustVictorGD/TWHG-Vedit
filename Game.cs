@@ -61,9 +61,9 @@ public class Game
 	private ProtoAnimation protoAnimation = new();
 	private Enemy keyframeEnemyTest = new(480, 336);
 
-	public Keyframe Keyframe1 = new Keyframe(0) { Position = new Vector2i(480, 336), EasingFunc = Easings.SineInOut };
-	public Keyframe Keyframe2 = new Keyframe(0.5f) { Position = new Vector2i(960, 336), EasingFunc = Easings.SineInOut };
-	public Keyframe Keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), EasingFunc = Easings.SineInOut };
+	public Keyframe Keyframe1 = new Keyframe(0) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
+	public Keyframe Keyframe2 = new Keyframe(0.5f) { Position = new Vector2i(960, 336), Scale = 10 * Vector2.One, EasingFunc = Easings.SineInOut };
+	public Keyframe Keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
 
 	readonly List<Button> buttons = [
 		new(80, 80, 64, 64),
@@ -138,6 +138,7 @@ public class Game
 		Walls[1].SetY(621 + wallOffset);
 
 		keyframeEnemyTest.Position = protoAnimation.GetPosition(time / 60.0);
+		keyframeEnemyTest.Radius = Utils.Round(13 * (protoAnimation.GetScale(time / 60.0).X + 1));
 
 		InputEngine.CheckInputs();
 		Scene.Main?.Update();

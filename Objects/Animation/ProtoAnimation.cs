@@ -31,16 +31,66 @@ public class ProtoAnimation : GameObject
 		if (time > Length)
 			time %= Length;
 		
-		int index = GetLastKeyframeIndexAt(time);
-		
-		if (index < 0 || index > Keyframes.Count - 1) return Vector2i.Zero;
-		Keyframe previous = Keyframes[index];
+		int[] indicesInBetween = GetKeyframeIndicesInBetween(time);
+		if (indicesInBetween.Length == 0) return new Vector2i(0, 0);
 
-		if (index == Keyframes.Count - 1) return previous.Position; // Only true if time == length
-		Keyframe next = Keyframes[index + 1];
+		Keyframe previous = Keyframes[indicesInBetween[0]];
+		if (indicesInBetween.Length == 1) return previous.Position;
+
+		Keyframe next = Keyframes[indicesInBetween[1]];
 		
 		return Utils.Lerp2i(previous.Position, next.Position, 
-			next.EasingFunc((time - GetLengthTo(index)) / next.Duration));
+			next.EasingFunc((time - GetLengthTo(indicesInBetween[0])) / next.Duration));
+	}
+	
+	public float GetRotation(double time)
+	{
+		if (time > Length)
+			time %= Length;
+		
+		int[] indicesInBetween = GetKeyframeIndicesInBetween(time);
+		if (indicesInBetween.Length == 0) return 0;
+		
+		Keyframe previous = Keyframes[indicesInBetween[0]];
+		if (indicesInBetween.Length == 1) return previous.Rotation;
+
+		Keyframe next = Keyframes[indicesInBetween[1]];
+		
+		return Utils.LerpF(previous.Rotation, next.Rotation, 
+			(float)next.EasingFunc((time - GetLengthTo(indicesInBetween[0])) / next.Duration));
+	}
+	
+	public Vector2 GetScale(double time)
+	{
+		if (time > Length)
+			time %= Length;
+		
+		int[] indicesInBetween = GetKeyframeIndicesInBetween(time);
+		if (indicesInBetween.Length == 0) return Vector2.Zero;
+		
+		Keyframe previous = Keyframes[indicesInBetween[0]];
+		if (indicesInBetween.Length == 1) return previous.Scale;
+
+		Keyframe next = Keyframes[indicesInBetween[1]];
+		
+		return Vector2.Lerp(previous.Scale, next.Scale, 
+			(float)next.EasingFunc((time - GetLengthTo(indicesInBetween[0])) / next.Duration));
+	}
+
+	public int[] GetKeyframeIndicesInBetween(double time)
+	{
+		int index = GetLastKeyframeIndexAt(time);
+		
+		// If array.Length == 0 then the index is out of bounds (it's not between any keyframes)
+		if (index < 0 || index > Keyframes.Count - 1) return [];
+		Keyframe previous = Keyframes[index];
+
+		// If array.Length == 1 then the index is the last one (there's no next one)
+		if (index == Keyframes.Count - 1) return [index];
+		Keyframe next = Keyframes[index + 1];
+
+		// If array.Length == 2 then proceed normally.
+		return [index, index + 1];
 	}
 
 	public double GetLengthTo(int index)
