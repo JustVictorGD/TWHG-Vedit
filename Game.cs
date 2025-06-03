@@ -79,7 +79,7 @@ public class Game
 
 	private Checkpoint checkpoint = new(new Subpixel2(480, 96)) { Size = new Vector2i(96, 96) };
 	private Checkpoint checkpoint2 = new(new Subpixel2(672, 96)) { Size = new Vector2i(96, 96) };
-	
+
 	public void Ready()
 	{
 		Scene.Main = new([]);
@@ -104,12 +104,15 @@ public class Game
 		List<ColorRect>? rects = JsonConvert.DeserializeObject<List<ColorRect>>(json);
 		List<SolidRect> rectangles = [];
 
+		// Showcasing the "Parent" property and position stacking on UI elements.
+		Object2D randomOffset = new() {Position = new(128, 16)};
+
 		if (rects != null)
 			foreach (ColorRect rect in rects)
 			{
-				rectangles.Add(new(rect.GetRect(), rect.GetColor(), true));
+				rectangles.Add(new(rect.GetRect(), rect.GetColor(), 0, randomOffset, true));
 			}
-		
+
 		// The red, green, blue and white rectangles
 		// in the corner of the screen are from this.
 		Scene.Main.AddObjectsToGroups([.. rectangles], "Rectangles");
@@ -118,7 +121,7 @@ public class Game
 		InputAction rightAction = new("Right", [KeyboardKey.D, KeyboardKey.Right]);
 		InputAction upAction = new("Up", [KeyboardKey.W, KeyboardKey.Up]);
 		InputAction downAction = new("Down", [KeyboardKey.S, KeyboardKey.Down]);
-		
+
 		InputEngine.AddActions([leftAction, rightAction, upAction, downAction]);
 
 		Scene.Main.Ready();

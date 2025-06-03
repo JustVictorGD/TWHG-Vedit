@@ -9,41 +9,52 @@ namespace WhgVedit.Objects;
 using Raylib_cs;
 
 using Common;
-using Engine.Video;
+using Objects.Shapes;
 using Types;
 
 public class Player : Object2D
 {
-	public new int ZIndex { get; set; } = 32;
+	// Components. Set in Ready().
+	public OutlinedRect? Sprite { get; set; }
 
-	public Vector2i Size { get; set; } = new(42, 42);
+	// Spacial properties.
 	public int Speed { get; set; } = 4;
+	public Vector2i Size { get; set; } = new(42, 42);
+	public Vector2i HalfSize => Size / 2;
+	public Rect2i Body => new((Vector2i)Position - Size / 2, Size);
+	
+	// Color.
 	public Color OutlineColor { get; set; } = new(102, 0, 0);
 	public Color FillColor { get; set; } = new(255, 0, 0);
+	// Death transparency.
 	public float OutlineOpacity { get; set; } = 1;
 	public float FillOpacity { get; set; } = 1;
+
+	// State.
 	public bool CanMove { get; set; } = true;
 	public bool IsDead { get; set; }
 
 	public Checkpoint? CurrentCheckpoint { get; set; }
 
-	public Vector2i HalfSize => Size / 2;
-
-	public Rect2i Body => new((Vector2i)Position - Size / 2, Size);
-
+	// Death and respawn animations.
 	private const int FadeOutTicks = 15;
 	private const int RespawnTicks = 35;
 	private const int FadeInTicks = 10;
 	private Timer fadeOutTimer = new(FadeOutTicks);
 	private Timer respawnTimer = new(RespawnTicks);
 	private Timer fadeInTimer = new(FadeInTicks);
-	
+
+	public Player()
+	{
+		Sprite = new(Body, OutlineColor, FillColor, 32, this);
+	}
+
 	public override void Update()
 	{
 		fadeOutTimer.Update();
 		respawnTimer.Update();
 		fadeInTimer.Update();
-		
+
 		if (CanMove && !IsDead)
 			Position += new Vector2i(
 				Speed * InputEngine.GetInputAxis("Left", "Right"),
@@ -74,9 +85,14 @@ public class Player : Object2D
 
 	public override void Draw()
 	{
-		Color finalOutlineColor = new Color(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, OutlineColor.A / 255f * OutlineOpacity);
-		Color finalFillColor = new Color(FillColor.R / 255f, FillColor.G / 255f, FillColor.B / 255f, FillColor.A / 255f * FillOpacity);
-		VideoEngine.QueueOutlinedRect(ZIndex, ZIndex + 1, Body, finalOutlineColor, finalFillColor);
+		if (Sprite != null)
+		{
+			Sprite.OutlineColor = new Color(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, OutlineColor.A / 255f * OutlineOpacity);
+			Sprite.FillColor = new Color(FillColor.R / 255f, FillColor.G / 255f, FillColor.B / 255f, FillColor.A / 255f * FillOpacity);
+
+			Sprite.Draw();
+		}
+		
 	}
 
 	public bool TouchesEnemy(Enemy enemy)
