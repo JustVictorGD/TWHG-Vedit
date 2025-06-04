@@ -1,5 +1,3 @@
-using WhgVedit.Objects.Animation;
-
 namespace WhgVedit;
 
 using Newtonsoft.Json;
@@ -11,20 +9,26 @@ using Engine;
 using Engine.UI;
 using Engine.Video;
 using Objects;
+using Objects.Animation;
 using Objects.Shapes;
 using Types;
 
 public class Game
 {
+	int time = 0;
+
 	public const int TileSize = 48;
-	public static int CircleQuality { get; set; } = 5;
 	public static readonly Vector2i AreaSize = new(32, 20); // WHG 4 standard: 32, 20.
-
-
+	
+	// Rendering.
+	public static int CircleQuality { get; set; } = 5;
+	Vector2 windowMargins = new();
 	Vector2 camera_pos = new();
-
+	public static Camera2D WorldCamera { get; set; } = new() { Zoom = 1 };
+	public static Camera2D UICamera { get; set; } = new() { Zoom = 1, Target = new(640, 360) };
 	Color tile1 = new(0xDD, 0xDD, 0xFF);
 	Color tile2 = new(0xF7, 0xF7, 0xFF);
+	// Rendering end.
 
 	readonly Player player = new() { Position = new(480, 384) };
 
@@ -49,10 +53,6 @@ public class Game
 		new(168, 196),
 	];
 
-	public Camera2D mainCamera = new() { Zoom = 1 };
-
-	int time = 0;
-
 	//bool zoomedOut = false;
 	//ProtoKeyframe keyframe = new(new(72, 72), new(72 + 384, 72), 0.5f);
 
@@ -69,16 +69,23 @@ public class Game
 		new(80, 80, 64, 64),
 		new(80, 160, 64, 64),
 		new(160, 80, 64, 64),
-		new(160, 160, 64, 64),
-		new(240, 80, 64, 64),
-		new(320, 80, 64, 64),
+		new(160, 160, 64, 64, false),
+		new(240, 80, 64, 64, false),
+		new(320, 80, 64, 64, false),
 
-		new Slider(500, 500, 96, 96),
+		new Slider(500, 500, 96, 96, false),
 		new SceneSwitcher(64, 500, 128, 64)
 	];
 
 	private Checkpoint checkpoint = new(new Subpixel2(480, 96)) { Size = new Vector2i(96, 96) };
 	private Checkpoint checkpoint2 = new(new Subpixel2(672, 96)) { Size = new Vector2i(96, 96) };
+
+
+	public static Vector2 GetMouseWorldPosition() =>
+		Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), WorldCamera);
+
+	public static Vector2 GetMouseUIPosition() =>
+		Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), UICamera);
 
 	public void Ready()
 	{
@@ -127,7 +134,7 @@ public class Game
 		Scene.Main.Ready();
 	}
 
-	public void Process()
+	public void Update()
 	{
 		time++;
 
@@ -159,7 +166,12 @@ public class Game
 		Vector2 screenSize = new(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
 
 		camera_pos = camera_pos * (1 - Drag) + (Vector2)player.Position * Drag;
-		mainCamera.Offset = -camera_pos * mainCamera.Zoom + screenSize / 2;
+
+		WorldCamera = new()
+		{
+			Offset = -camera_pos * WorldCamera.Zoom + screenSize / 2,
+			Zoom = WorldCamera.Zoom
+		};
 
 		// Floor.
 		for (int x = 0; x < AreaSize.X; x++)
@@ -189,5 +201,70 @@ public class Game
 		Scene.Main?.DrawUI();
 
 		VideoEngine.Render();
+	}
+
+	public void HandleWindowSize(Vector2 screenSize, float goalRatio)
+	{
+		double screenRatio = screenSize.X / screenSize.Y / goalRatio;
+
+		windowMargins = new Vector2(
+			screenSize.X - screenSize.Y * goalRatio,
+			screenSize.Y - screenSize.X / goalRatio
+		) / 2;
+
+		float zoom;
+		Vector2 largerMargin = new();
+		Vector2 goalScreenSize = new(1280, 720);
+
+		if (screenRatio > 1) // More horizontal than usual
+		{
+			zoom = screenSize.Y / goalScreenSize.Y;
+			largerMargin.X = windowMargins.X;
+		}
+		else // More vertical than usual
+		{
+			zoom = screenSize.X / goalScreenSize.X;
+			largerMargin.Y = windowMargins.Y;
+		}
+
+		WorldCamera = new()
+		{
+			Offset = WorldCamera.Offset,
+			Zoom = zoom
+		};
+
+		UICamera = new()
+		{
+			Zoom = zoom,
+			Offset = largerMargin
+		};
+	}
+
+	public void DrawScreenMargins(Vector2 screenSize, float goalRatio)
+	{
+		if (screenSize.X > screenSize.Y * goalRatio) // Case: The window is too wide.
+		{
+			Raylib.DrawRectangle(
+				0, 0,
+				(int)windowMargins.X, (int)screenSize.Y,
+			Color.Black);
+
+			Raylib.DrawRectangle(
+				(int)(screenSize.X - windowMargins.X), 0,
+				(int)windowMargins.X + 1, (int)screenSize.Y + 1,
+			Color.Black);
+		}
+		else // Case: The window is too tall.
+		{
+			Raylib.DrawRectangle(
+				0, 0,
+				(int)screenSize.X, (int)windowMargins.Y,
+			Color.Black);
+
+			Raylib.DrawRectangle(
+				0, (int)(screenSize.Y - windowMargins.Y),
+				(int)screenSize.X + 1, (int)windowMargins.Y + 1,
+			Color.Black);
+		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Raylib_cs;
+﻿using System.Numerics;
+using Raylib_cs;
 using WhgVedit;
 
 Game game = new();
@@ -14,20 +15,26 @@ game.Ready();
 
 while (!Raylib.WindowShouldClose())
 {
-	game.Process();
+	const float GoalRatio = 16 / 9f;
+
+	Vector2 screenSize = new(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+
+	game.HandleWindowSize(screenSize, GoalRatio);
+	game.Update();
 
 	Raylib.BeginDrawing();
-	Raylib.ClearBackground(Color.Black);
-	Raylib.BeginMode2D(game.mainCamera);
+	Raylib.ClearBackground(new(0, 0, 64));
 
 	// Complies with the camera.
+	Raylib.BeginMode2D(Game.WorldCamera);
 	game.Draw();
 
-	Raylib.EndMode2D();
-
 	// Ignores the camera.
+	Raylib.BeginMode2D(Game.UICamera);
 	game.DrawUI();
 
+	Raylib.EndMode2D();
+	game.DrawScreenMargins(screenSize, GoalRatio);
 	Raylib.EndDrawing();
 }
 

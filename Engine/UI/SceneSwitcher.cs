@@ -5,7 +5,7 @@ namespace WhgVedit.Engine.UI;
 
 using Engine.Video;
 
-public class SceneSwitcher(int x, int y, int width, int height) : Button(x, y, width, height)
+public class SceneSwitcher(int x, int y, int width, int height, bool isUI = true) : Button(x, y, width, height, isUI)
 {
 	public Scene? TargetScene { get; set; }
 
@@ -14,7 +14,7 @@ public class SceneSwitcher(int x, int y, int width, int height) : Button(x, y, w
 		Scene.Main = TargetScene;
 	}
 
-	public override void DrawUI()
+	public override void PrivateDraw()
 	{
 		if (!IsDown)
 			VideoEngine.DrawOutlinedRect(Body, new(102, 0, 0), new(102, 0, 0, 128));

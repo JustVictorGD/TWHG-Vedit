@@ -8,6 +8,8 @@ using WhgVedit.Engine.Video;
 
 public class Button : Object2D
 {
+	public bool IsUI { get; set; }
+
 	// Currently unused.
 	public event Action? Pressed;
 	public event Action? Released;
@@ -24,13 +26,16 @@ public class Button : Object2D
 	public Rect2i Body => new((Vector2i)Position, Size);
 
 	public bool IsDown = false;
-	public bool Focused => Collision.PointInRect(Raylib.GetMousePosition(), Body);
+	public bool Focused => IsUI ?
+		Collision.PointInRect(Game.GetMouseUIPosition(), Body) :
+		Collision.PointInRect(Game.GetMouseWorldPosition(), Body);
 
 
-	public Button(int x, int y, int width, int height)
+	public Button(int x, int y, int width, int height, bool isUI = true)
 	{
 		Position = new(x, y);
 		Size = new(width, height);
+		IsUI = isUI;
 	}
 
 	public override void Update()
@@ -67,7 +72,20 @@ public class Button : Object2D
 		};
 	}
 
+	// Not recommended to override these 2. Override PrivateDraw() instead.
+	public override void Draw()
+	{
+		if (!IsUI)
+			PrivateDraw();
+	}
+
 	public override void DrawUI()
+	{
+		if (IsUI)
+			PrivateDraw();
+	}
+
+	public virtual void PrivateDraw()
 	{
 		switch (GetState)
 		{
