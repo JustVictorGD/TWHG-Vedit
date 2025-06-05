@@ -14,9 +14,12 @@ public class GameObject
 	// the stored references in Scene.instance.groups match.
 	public List<string> Groups { get; set; } = [];
 
+	public List<GameObject> Children { get; set; } = [];
+	public GameObject? Parent = null;
+
 	public virtual void Ready() { }
 	public virtual void Update() { }
-
+	
 	public void AddToScene(Scene scene)
 	{
 		scene.AddObject(this);

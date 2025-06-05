@@ -1,4 +1,6 @@
+using System.Numerics;
 using Raylib_cs;
+using WhgVedit.Common;
 using WhgVedit.Engine.Video;
 using WhgVedit.Engine.Video.Shapes;
 using WhgVedit.Types;
@@ -7,7 +9,9 @@ namespace WhgVedit.Objects;
 
 public class Enemy : Object2D
 {
-	public int Radius { get; set; } = 13;
+	public const int DefaultRadius = 13;
+
+	public int Radius => Utils.Round(13 * Scale.X);
 
 	public Color OutlineColor { get; set; } = new(0, 0, 66);
 	public Color FillColor { get; set; } = new(0, 0, 255);

@@ -56,15 +56,23 @@ public class Game
 	//bool zoomedOut = false;
 	//ProtoKeyframe keyframe = new(new(72, 72), new(72 + 384, 72), 0.5f);
 
+	private static Animation thiccEnemyAnimation = new();
+	private AnimationPlayer thiccEnemyAnimationPlayer = new(thiccEnemyAnimation);
 	readonly Enemy thiccEnemy = new(336, 336);
 
-	private ProtoAnimation protoAnimation = new();
+	public Keyframe keyframe4 = new Keyframe(0) { Position = new(336, 336), Scale = Vector2.One };
+	public Keyframe keyframe5 = new Keyframe(1) { Position = new(336, 336), Scale = 5 * Vector2.One };
+		
+	private static Animation keyframeEnemyAnimation = new();
+	private AnimationPlayer keyframeEnemyAnimationPlayer = new(keyframeEnemyAnimation);
 	private Enemy keyframeEnemyTest = new(480, 336);
 
-	public Keyframe Keyframe1 = new Keyframe(0) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
-	public Keyframe Keyframe2 = new Keyframe(0.5f) { Position = new Vector2i(960, 336), Scale = 10 * Vector2.One, EasingFunc = Easings.SineInOut };
-	public Keyframe Keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
+	private Keyframe keyframe1 = new Keyframe(0) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
+	private Keyframe keyframe2 = new Keyframe(0.5f) { Position = new Vector2i(960, 336), Scale = 10 * Vector2.One, EasingFunc = Easings.SineInOut };
+	private Keyframe keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
+	
 
+	
 	readonly List<Button> buttons = [
 		new(80, 80, 64, 64),
 		new(80, 160, 64, 64),
@@ -96,12 +104,18 @@ public class Game
 		Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
 		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");
 		Scene.Main.AddObjectsToGroups([checkpoint, checkpoint2], "Checkpoints");
+		
+		keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
+		Scene.Main.AddObject(keyframeEnemyAnimationPlayer);
+		keyframeEnemyAnimationPlayer.Parent = keyframeEnemyTest;
+		
+		thiccEnemyAnimation.Keyframes.AddRange([keyframe4, keyframe5]);
+		Scene.Main.AddObject(thiccEnemyAnimationPlayer);
+		thiccEnemyAnimationPlayer.Parent = thiccEnemy;
 
-		protoAnimation.Keyframes.AddRange([Keyframe1, Keyframe2, Keyframe3]);
-
-		for (var index = 0; index < protoAnimation.Keyframes.Count; index++)
+		for (var index = 0; index < keyframeEnemyAnimation.Keyframes.Count; index++)
 		{
-			var keyframe = protoAnimation.Keyframes[index];
+			var keyframe = keyframeEnemyAnimation.Keyframes[index];
 			Console.WriteLine($"Keyframe {index}: Duration: {keyframe.Duration}");
 		}
 
@@ -144,8 +158,8 @@ public class Game
 		Walls[0].SetY(525 + wallOffset);
 		Walls[1].SetY(621 + wallOffset);
 
-		keyframeEnemyTest.Position = protoAnimation.GetPosition(time / 60.0);
-		keyframeEnemyTest.Radius = Utils.Round(13 * (protoAnimation.GetScale(time / 60.0).X + 1));
+		//keyframeEnemyTest.Position = _animation.GetPosition(time / 60.0);
+		//keyframeEnemyTest.Radius = Utils.Round(13 * (_animation.GetScale(time / 60.0).X + 1));
 
 		InputEngine.CheckInputs();
 		Scene.Main?.Update();
@@ -188,7 +202,7 @@ public class Game
 			}
 		}
 
-		thiccEnemy.Radius = Utils.PingPong(time, 24) * 2 + 13;
+		//thiccEnemy.Scale = Utils.PingPong(time, 24) * Vector2.One;
 
 		Scene.Main?.Draw();
 
