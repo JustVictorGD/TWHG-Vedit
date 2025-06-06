@@ -28,6 +28,11 @@ public class Enemy : Object2D
 		Position = position;
 	}
 
+	public Enemy()
+	{
+		Position = new(0, 0);
+	}
+
 	public override void Draw()
 	{
 		VideoEngine.QueueDraw(new CircleCall(ZIndex,

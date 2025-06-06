@@ -1,0 +1,82 @@
+{
+  "objects": [
+    {
+      "type": "Wall",
+      "rect": [525, 525, 246, 54]
+    },
+    {
+      "type": "Wall",
+      "rect": [525, 621, 246, 54]
+    },
+    {
+      "type": "Wall",
+      "rect": [537, 549, 30, 102],
+      "zIndex": 12,
+      "outlineColor": [0, 102, 0],
+      "fillColor": [0, 255, 0]
+    },
+    {
+      "type": "Wall",
+      "rect": [730, 549, 30, 102],
+      "zIndex": 12,
+      "outlineColor": [0, 102, 0],
+      "fillColor": [0, 255, 0]
+    },
+    {
+      "type": "Wall",
+      "rect": [634, 645, 30, 102],
+      "zIndex": 12,
+      "outlineColor": [0, 102, 0],
+      "fillColor": [0, 255, 0]
+    },
+    {
+      "type": "Wall",
+      "rect": [189, 93, 54, 5]
+    },
+    {
+      "type": "Enemy",
+      "position": [252, 252]
+    },
+    {
+      "type": "Enemy",
+      "position": [276, 252]
+    },
+    {
+      "type": "Enemy",
+      "position": [252, 276]
+    },
+    {
+      "type": "Enemy",
+      "position": [276, 276]
+    },
+    {
+      "type": "Enemy",
+      "position": [168, 140]
+    },
+    {
+      "type": "Enemy",
+      "name": "thicc",
+      "position": [336, 336],
+      "children": [
+        {
+          "type": "AnimationPlayer",
+          "animationName": "thiccAnim"
+        }
+      ]
+    },
+    {
+      "type": "checkpoint",
+      "rect": [480, 96, 96, 96]
+    },
+    {
+      "type": "checkpoint",
+      "rect": [672, 96, 96, 96]
+    }
+  ],
+  "animations": [
+    {
+      "name": "thiccAnim",
+      "keyframes": "replace this with a [] containing keyframes :D"
+    }
+  ]
+}

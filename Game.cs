@@ -1,3 +1,5 @@
+using WhgVedit.Json;
+
 namespace WhgVedit;
 
 using Newtonsoft.Json;
@@ -16,7 +18,7 @@ using Types;
 public class Game
 {
 	int time = 0;
-
+	
 	public const int TileSize = 48;
 	public static readonly Vector2i AreaSize = new(32, 20); // WHG 4 standard: 32, 20.
 	
@@ -32,6 +34,7 @@ public class Game
 
 	readonly Player player = new() { Position = new(480, 384) };
 
+	private static List<GameObject> parsedGameObjects = [];
 	// These will be imported from a level file in the future, maybe.
 	public static readonly List<Wall> Walls = [
 		new(525, 525, 246, 54),
@@ -97,11 +100,18 @@ public class Game
 
 	public void Ready()
 	{
+		ObjectParser parser = new("Json/Scene.json");
+		parser.Parse();
+		parsedGameObjects = parser.GetObjects();
+		
 		Scene.Main = new([]);
 
+		// Add parsed objects
+		Scene.Main.AddObjectsToGroups(parsedGameObjects, "Walls");
+		
 		Scene.Main.AddObjectsToGroups([player], "Player");
 		Scene.Main.AddObjectsToGroups([.. Enemies, thiccEnemy, keyframeEnemyTest], "Enemies");
-		Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
+		//Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
 		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");
 		Scene.Main.AddObjectsToGroups([checkpoint, checkpoint2], "Checkpoints");
 		
