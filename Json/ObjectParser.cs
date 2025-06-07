@@ -1,5 +1,6 @@
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using Raylib_cs;
 using WhgVedit.Objects;
 using WhgVedit.Types;
 
@@ -23,8 +24,20 @@ public class ObjectParser
 		if (_isParsed) return _gameObjects;
 		Parse();
 		return _gameObjects;
-
 	}
+
+	public List<T> GetObjectsOfType<T>()
+	{
+		List<T> list = [];
+		foreach (var gameObject in GetObjects())
+		{
+			if (gameObject is T typedObject)
+				list.Add(typedObject);
+		}
+
+		return list;
+	}
+	
 	public void Parse()
 	{
 		if (!File.Exists(Path)) return;
@@ -88,5 +101,33 @@ public class ObjectParser
 			}
 		}
 		// TODO: Make this work for properties zIndex, outline and fillColor
+		if (properties.ContainsKey("zIndex"))
+		{
+			string value = properties["zIndex"];
+			wall.ZIndex = int.Parse(value);
+		}
+		if (properties.ContainsKey("outlineColor"))
+		{
+			string value = properties["outlineColor"]; // [0, 102, 0]
+			int[] array = ParseToIntArray(value);
+
+			if (array.Length == 3)
+			{
+				wall.OutlineColor = new Color(array[0], array[1], array[2]);
+			}
+		}
+		if (properties.ContainsKey("fillColor"))
+		{
+			string value = properties["fillColor"]; // [0, 255, 0]
+			int[] array = ParseToIntArray(value);
+
+			if (array.Length == 3)
+			{
+				wall.FillColor = new Color(array[0], array[1], array[2]);
+			}
+		}
 	}
+
+	private int[] ParseToIntArray(string text)
+		=> text.Replace("\r\n", string.Empty).Trim('[', ']').Split(", ").Select(int.Parse).ToArray();
 }

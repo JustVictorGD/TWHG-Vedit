@@ -33,17 +33,17 @@ public class Game
 	// Rendering end.
 
 	readonly Player player = new() { Position = new(480, 384) };
-
-	private static List<GameObject> parsedGameObjects = [];
+	
 	// These will be imported from a level file in the future, maybe.
-	public static readonly List<Wall> Walls = [
+	/*public static readonly List<Wall> Walls = [
 		new(525, 525, 246, 54),
 		new(525, 621, 246, 54),
 		new(537, 549, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
 		new(730, 549, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
 		new(634, 645, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
 		new(189, 93, 54, 54),
-	];
+	];*/
+	public static List<Wall> Walls = [];
 
 	public static readonly List<Enemy> Enemies =
 	[
@@ -102,12 +102,12 @@ public class Game
 	{
 		ObjectParser parser = new("Json/Scene.json");
 		parser.Parse();
-		parsedGameObjects = parser.GetObjects();
+		Walls = parser.GetObjectsOfType<Wall>();
 		
 		Scene.Main = new([]);
 
 		// Add parsed objects
-		Scene.Main.AddObjectsToGroups(parsedGameObjects, "Walls");
+		Scene.Main.AddObjectsToGroups(Walls, "Walls");
 		
 		Scene.Main.AddObjectsToGroups([player], "Player");
 		Scene.Main.AddObjectsToGroups([.. Enemies, thiccEnemy, keyframeEnemyTest], "Enemies");
