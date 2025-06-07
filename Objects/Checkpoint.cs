@@ -19,6 +19,11 @@ public class Checkpoint : Object2D
 	{
 		Position = position;
 	}
+
+	public Checkpoint()
+	{
+		Position = new Subpixel2(0, 0);
+	}
 	
 	public override void Update()
 	{
@@ -29,7 +34,6 @@ public class Checkpoint : Object2D
 
 		if (player.Body.Intersects(Body) && player.CurrentCheckpoint != this)
 		{
-			Console.WriteLine("Checkpoint activated!");
 			player.SetCheckpoint(this);
 			activateTimer.Start();
 		}

@@ -34,32 +34,14 @@ public class Game
 
 	readonly Player player = new() { Position = new(480, 384) };
 	
-	// These will be imported from a level file in the future, maybe.
-	/*public static readonly List<Wall> Walls = [
-		new(525, 525, 246, 54),
-		new(525, 621, 246, 54),
-		new(537, 549, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
-		new(730, 549, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
-		new(634, 645, 30, 102) { ZIndex = 12, OutlineColor = new(0, 102, 0), FillColor = new(0, 255, 0) },
-		new(189, 93, 54, 54),
-	];*/
+	// These will be imported from a level file.
 	public static List<Wall> Walls = [];
-
-	public static readonly List<Enemy> Enemies =
-	[
-		new(252, 252),
-		new(276, 252),
-		new(252, 276),
-		new(276, 276),
-
-		new(168, 140),
-		new(168, 196),
-	];
+	public static List<Enemy> Enemies = [];
 
 	//bool zoomedOut = false;
 	//ProtoKeyframe keyframe = new(new(72, 72), new(72 + 384, 72), 0.5f);
 
-	private static Animation thiccEnemyAnimation = new();
+	/*private static Animation thiccEnemyAnimation = new();
 	private AnimationPlayer thiccEnemyAnimationPlayer = new(thiccEnemyAnimation);
 	readonly Enemy thiccEnemy = new(336, 336);
 
@@ -73,9 +55,7 @@ public class Game
 	private Keyframe keyframe1 = new Keyframe(0) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
 	private Keyframe keyframe2 = new Keyframe(0.5f) { Position = new Vector2i(960, 336), Scale = 10 * Vector2.One, EasingFunc = Easings.SineInOut };
 	private Keyframe keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
-	
-
-	
+	*/
 	readonly List<Button> buttons = [
 		new(80, 80, 64, 64),
 		new(80, 160, 64, 64),
@@ -88,8 +68,10 @@ public class Game
 		new SceneSwitcher(64, 500, 128, 64)
 	];
 
-	private Checkpoint checkpoint = new(new Subpixel2(480, 96)) { Size = new Vector2i(96, 96) };
+	public static List<Checkpoint> Checkpoints = [];
+	/*private Checkpoint checkpoint = new(new Subpixel2(480, 96)) { Size = new Vector2i(96, 96) };
 	private Checkpoint checkpoint2 = new(new Subpixel2(672, 96)) { Size = new Vector2i(96, 96) };
+	*/
 
 
 	public static Vector2 GetMouseWorldPosition() =>
@@ -103,31 +85,33 @@ public class Game
 		ObjectParser parser = new("Json/Scene.json");
 		parser.Parse();
 		Walls = parser.GetObjectsOfType<Wall>();
+		Enemies = parser.GetObjectsOfType<Enemy>();
+		Checkpoints = parser.GetObjectsOfType<Checkpoint>();
 		
 		Scene.Main = new([]);
 
 		// Add parsed objects
 		Scene.Main.AddObjectsToGroups(Walls, "Walls");
+		Scene.Main.AddObjectsToGroups(Enemies, "Enemies");
+		Scene.Main.AddObjectsToGroups(Checkpoints, "Checkpoints");
 		
 		Scene.Main.AddObjectsToGroups([player], "Player");
-		Scene.Main.AddObjectsToGroups([.. Enemies, thiccEnemy, keyframeEnemyTest], "Enemies");
 		//Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
 		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");
-		Scene.Main.AddObjectsToGroups([checkpoint, checkpoint2], "Checkpoints");
 		
-		keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
+		/*keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
 		Scene.Main.AddObject(keyframeEnemyAnimationPlayer);
 		keyframeEnemyAnimationPlayer.Parent = keyframeEnemyTest;
 		
 		thiccEnemyAnimation.Keyframes.AddRange([keyframe4, keyframe5]);
 		Scene.Main.AddObject(thiccEnemyAnimationPlayer);
-		thiccEnemyAnimationPlayer.Parent = thiccEnemy;
+		thiccEnemyAnimationPlayer.Parent = thiccEnemy;*/
 
-		for (var index = 0; index < keyframeEnemyAnimation.Keyframes.Count; index++)
+		/*for (var index = 0; index < keyframeEnemyAnimation.Keyframes.Count; index++)
 		{
 			var keyframe = keyframeEnemyAnimation.Keyframes[index];
 			Console.WriteLine($"Keyframe {index}: Duration: {keyframe.Duration}");
-		}
+		}*/
 
 		// JSON to Runtime test.
 		string json = File.ReadAllText("Json/Rectangles.json");

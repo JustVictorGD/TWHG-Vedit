@@ -65,11 +65,11 @@
       ]
     },
     {
-      "type": "checkpoint",
+      "type": "Checkpoint",
       "rect": [480, 96, 96, 96]
     },
     {
-      "type": "checkpoint",
+      "type": "Checkpoint",
       "rect": [672, 96, 96, 96]
     }
   ],

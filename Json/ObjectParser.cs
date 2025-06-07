@@ -74,17 +74,54 @@ public class ObjectParser
 		string? typeName = properties["type"];
 		if (typeName is null) return null;
 		
-		Type? type = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(type => type.Name == typeName);
+		//Type? type = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(type => type.Name == typeName);
 		
 		//GameObject obj = (GameObject)Activator.CreateInstance(type)!;
 		GameObject? obj;
-		if (type == typeof(Wall))
+		if (typeName == "Wall")
 		{
 			obj = new Wall();
 			SetWallProperties((Wall)obj, properties);
 		}
+		else if (typeName == "Enemy")
+		{
+			obj = new Enemy();
+			SetEnemyProperties((Enemy)obj, properties);
+		}
+		else if (typeName == "Checkpoint")
+		{
+			obj = new Checkpoint();
+			SetCheckpointProperties((Checkpoint)obj, properties);
+		}
 		else obj = null;
 		return obj;
+	}
+
+	private void SetCheckpointProperties(Checkpoint checkpoint, Dictionary<string, string> properties)
+	{
+		if (properties.ContainsKey("rect"))
+		{
+			string value = properties["rect"];
+			var rectData = ParseRect(value);
+			if (rectData is not null)
+			{
+				checkpoint.Position = rectData.Value.position;
+				checkpoint.Size = rectData.Value.size;
+			}
+		}
+	}
+
+	private void SetEnemyProperties(Enemy enemy, Dictionary<string,string> properties)
+	{
+		if (properties.ContainsKey("position"))
+		{
+			string value = properties["position"];
+			int[] array = ParseToIntArray(value); // [252, 252]
+			if (array.Length == 2)
+			{
+				enemy.Position = new Subpixel2(array[0], array[1]);
+			}
+		}
 	}
 
 	private void SetWallProperties(Wall wall, Dictionary<string, string> properties)
@@ -92,15 +129,14 @@ public class ObjectParser
 		if (properties.ContainsKey("rect"))
 		{
 			string value = properties["rect"]; // [525, 525, 246, 54]
-			int[] array = value.Replace("\r\n", string.Empty).Trim('[', ']').Split(", ").Select(int.Parse).ToArray();
+			var rectData = ParseRect(value);
 
-			if (array.Length == 4)
+			if (rectData is not null)
 			{
-				wall.Position = new Subpixel2(array[0], array[1]);
-				wall.Size = new Vector2i(array[2], array[3]);
+				wall.Position = rectData.Value.position;
+				wall.Size = rectData.Value.size;
 			}
 		}
-		// TODO: Make this work for properties zIndex, outline and fillColor
 		if (properties.ContainsKey("zIndex"))
 		{
 			string value = properties["zIndex"];
@@ -128,6 +164,19 @@ public class ObjectParser
 		}
 	}
 
+	private (Subpixel2 position, Vector2i size)? ParseRect(string text)
+	{
+		int[] array = ParseToIntArray(text);
+
+		if (array.Length == 4)
+		{
+			var position = new Subpixel2(array[0], array[1]);
+			var size = new Vector2i(array[2], array[3]);
+			return (position, size);
+		}
+
+		return null;
+	}
 	private int[] ParseToIntArray(string text)
 		=> text.Replace("\r\n", string.Empty).Trim('[', ']').Split(", ").Select(int.Parse).ToArray();
 }
