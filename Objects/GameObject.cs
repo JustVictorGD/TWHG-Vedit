@@ -15,11 +15,16 @@ public class GameObject
 	public List<string> Groups { get; set; } = [];
 
 	public List<GameObject> Children { get; set; } = [];
-	public GameObject? Parent = null;
+	public GameObject? Parent { get; private set; }
 
 	public virtual void Ready() { }
 	public virtual void Update() { }
-	
+
+	public void SetParent(GameObject parentObject)
+	{
+		Parent = parentObject;
+		parentObject.Children.Add(parentObject);
+	}
 	public void AddToScene(Scene scene)
 	{
 		scene.AddObject(this);

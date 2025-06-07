@@ -95,6 +95,9 @@ public class Game
 		Scene.Main.AddObjectsToGroups(Enemies, "Enemies");
 		Scene.Main.AddObjectsToGroups(Checkpoints, "Checkpoints");
 		
+		var animationPlayers = parser.GetObjectsOfType<AnimationPlayer>();
+		Scene.Main.AddObjectsToGroups(animationPlayers, "AnimationPlayers");
+		
 		Scene.Main.AddObjectsToGroups([player], "Player");
 		//Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
 		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");

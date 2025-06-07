@@ -1,7 +1,10 @@
+using System.Numerics;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Raylib_cs;
+using WhgVedit.Common;
 using WhgVedit.Objects;
+using WhgVedit.Objects.Animation;
 using WhgVedit.Types;
 
 namespace WhgVedit.Json;
@@ -12,6 +15,7 @@ public class ObjectParser
 {
 	public string Path { get; set; }
 	private List<GameObject> _gameObjects = [];
+	private List<Animation> _animations = [];
 	private bool _isParsed = false;
 
 	public ObjectParser(string path)
@@ -49,6 +53,14 @@ public class ObjectParser
 		
 		if (jsonDictionary is null || !jsonDictionary.ContainsKey("objects")) return;
 
+		var animationsJArray = jsonDictionary["animations"];
+		foreach (var jToken in animationsJArray)
+		{
+			var jObject = (JObject)jToken;
+			Animation animation = GetAnimationFromJObject(jObject);
+			_animations.Add(animation);
+		}
+		
 		var objectsJArray = jsonDictionary["objects"];
 		foreach (var jToken in objectsJArray)
 		{
@@ -65,13 +77,13 @@ public class ObjectParser
 	}
 	private GameObject? GetObjectFromJObject(JObject jObject)
 	{
-		Dictionary<string, string> properties = new();
+		Dictionary<string, JToken> properties = new();
 		foreach (var property in jObject.Properties())
 		{
-			properties[GetJPropertyKey(property)] = property.Value.ToString();
+			properties[GetJPropertyKey(property)] = property.Value;
 		}
 		
-		string? typeName = properties["type"];
+		string? typeName = properties["type"].ToString();
 		if (typeName is null) return null;
 		
 		//Type? type = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(type => type.Name == typeName);
@@ -81,20 +93,61 @@ public class ObjectParser
 		if (typeName == "Wall")
 		{
 			obj = new Wall();
-			SetWallProperties((Wall)obj, properties);
+			SetWallProperties((Wall)obj, ToStrings(properties));
 		}
 		else if (typeName == "Enemy")
 		{
 			obj = new Enemy();
-			SetEnemyProperties((Enemy)obj, properties);
+			SetEnemyProperties((Enemy)obj, ToStrings(properties));
 		}
 		else if (typeName == "Checkpoint")
 		{
 			obj = new Checkpoint();
-			SetCheckpointProperties((Checkpoint)obj, properties);
+			SetCheckpointProperties((Checkpoint)obj, ToStrings(properties));
 		}
-		else obj = null;
+		else if (typeName == "AnimationPlayer")
+		{
+			obj = new AnimationPlayer();
+			SetAnimationPlayerProperties((AnimationPlayer)obj, ToStrings(properties));
+		}
+		else return null;
+
+		if (properties.ContainsKey("children"))
+		{
+			AddChildren(obj, properties["children"]);
+		}
+		
 		return obj;
+	}
+
+	private void AddChildren(GameObject gameObject, JToken children)
+	{
+		if (children is not JArray array) return;
+		foreach (JToken jToken in array)
+		{
+			if (jToken is not JObject jObject) continue;
+			AddChildJObject(gameObject, child: jObject);
+		}
+	}
+
+	private void AddChildJObject(GameObject gameObject, JObject child)
+	{
+		GameObject? childObject = GetObjectFromJObject(child);
+		if (childObject is null) return;
+
+		childObject.SetParent(gameObject);
+		_gameObjects.Add(childObject);
+	}
+
+	private void SetAnimationPlayerProperties(AnimationPlayer animPlayer, Dictionary<string, string> properties)
+	{
+		if (properties.ContainsKey("animationName"))
+		{
+			// Find animation with matching AnimationName in the animations array in the json.
+			string animationName = properties["animationName"];
+			Animation? animation = GetAnimationByName(animationName);
+			if (animation is not null) animPlayer.SetAnimation(animation);
+		}
 	}
 
 	private void SetCheckpointProperties(Checkpoint checkpoint, Dictionary<string, string> properties)
@@ -179,4 +232,85 @@ public class ObjectParser
 	}
 	private int[] ParseToIntArray(string text)
 		=> text.Replace("\r\n", string.Empty).Trim('[', ']').Split(", ").Select(int.Parse).ToArray();
+
+	private Dictionary<string, string> ToStrings(Dictionary<string, JToken> dictionary)
+	{
+		Dictionary<string, string> newDictionary = new();
+		foreach (var kvp in dictionary)
+		{
+			newDictionary.Add(kvp.Key, kvp.Value.ToString());
+		}
+
+		return newDictionary;
+	}
+
+	private Animation GetAnimationFromJObject(JObject jObject)
+	{
+		Animation animation = new();
+		if (jObject.ContainsKey("name"))
+		{
+			animation.Name = jObject["name"]!.ToString();
+		}
+
+		if (!jObject.ContainsKey("keyframes")) return animation;
+		
+		var keyframesJToken = jObject["keyframes"];
+		if (keyframesJToken is not JArray keyframesJArray) return animation;
+
+		List<Keyframe> keyframesList = [];
+		foreach (var keyframeToken in keyframesJArray)
+		{
+			if (keyframeToken is not JObject keyframeObject) continue;
+			
+			Keyframe keyframe = new();
+			if (keyframeObject.ContainsKey("duration"))
+			{
+				keyframe.Duration = float.Parse(keyframeObject["duration"]!.ToString());
+			}
+
+			if (keyframeObject.ContainsKey("position"))
+			{
+				string value = keyframeObject["position"]!.ToString(); // [336, 336]
+				int[] array = ParseToIntArray(value);
+				keyframe.Position = new Vector2i(array[0], array[1]);
+			}
+			else if (keyframesList.Count >= 1)
+				keyframe.Position = keyframesList.Last().Position;
+			
+			if (keyframeObject.ContainsKey("rotation"))
+			{
+				keyframe.Rotation = float.Parse(keyframeObject["rotation"]!.ToString());
+			}
+			else if (keyframesList.Count >= 1)
+				keyframe.Rotation = keyframesList.Last().Rotation;
+			
+			if (keyframeObject.ContainsKey("scale"))
+			{
+				string value = keyframeObject["scale"]!.ToString(); // [336, 336]
+				int[] array = ParseToIntArray(value);
+				keyframe.Scale = new Vector2(array[0], array[1]);
+			}
+			else if (keyframesList.Count >= 1)
+				keyframe.Scale = keyframesList.Last().Scale;
+
+			if (keyframeObject.ContainsKey("easing"))
+			{
+				// TODO: Get easing by name automatically
+				
+				string value = keyframeObject["easing"]!.ToString();
+				if (value == "sine-in-out") keyframe.EasingFunc = Easings.SineInOut;
+				else if (value == "constant") keyframe.EasingFunc = Easings.Constant;
+				else keyframe.EasingFunc = Easings.Linear;
+			}
+			else keyframe.EasingFunc = Easings.Linear;
+			keyframesList.Add(keyframe);
+		}
+
+		animation.Keyframes = keyframesList;
+		return animation;
+	}
+	private Animation? GetAnimationByName(string name)
+	{
+		return _animations.Find(anim => anim.Name == name);
+	}
 }
