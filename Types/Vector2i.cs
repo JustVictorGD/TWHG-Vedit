@@ -1,4 +1,5 @@
 using System.Numerics;
+using WhgVedit.Common;
 
 namespace WhgVedit.Types;
 
@@ -29,17 +30,21 @@ public readonly struct Vector2i
 	public readonly Vector2i Move(Vector2i amount) => Move(amount.X, amount.Y);
 
 	public readonly Vector2i Lerp(Vector2i other, float time) => new(
-
+		Utils.LerpI(X, other.X, time),
+		Utils.LerpI(Y, other.Y, time)
 	);
 
 	// Warning: Make sure to preserve the original copy. Constantly rounding
 	// floating point operations to integers will result in A LOT of distortion.
-	public readonly Vector2i ApplyBasis(Basis basis) => new(
-		(int)Math.Round(X * basis.XX + Y * basis.XY),
-		(int)Math.Round(X * basis.YX + Y * basis.YY)
-	);
+	public readonly Vector2i ApplyTransform(Transform2D transform)
+	{
+		return (Vector2i)(ApplyBasis(transform.Basis) + transform.Origin);
+	}
 
-	public override string ToString() => $"{{ X: {X}, Y: {Y} }}";
+	public readonly Vector2i ApplyBasis(Basis basis) => new(
+		Utils.Round(X * basis.XX + Y * basis.XY),
+		Utils.Round(X * basis.YX + Y * basis.YY)
+	);
 
 	// Conversion operators.
 
@@ -71,4 +76,6 @@ public readonly struct Vector2i
 
 	public static bool operator <=(Vector2i a, Vector2i b) => a.X <= b.X && a.Y <= b.Y;
 	public static bool operator >=(Vector2i a, Vector2i b) => a.X >= b.X && a.Y >= b.Y;
+	
+	public override string ToString() => $"{{ X: {X}, Y: {Y} }}";
 }

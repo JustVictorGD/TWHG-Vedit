@@ -8,8 +8,6 @@ using Types;
 
 public class SolidRect : Object2D
 {
-	public Object2D? Parent { get; set; } // For getting dragged around.
-
 	public Vector2i Size { get; set; }
 	public Color Color { get; set; }
 
@@ -42,7 +40,7 @@ public class SolidRect : Object2D
 
 	private void PrivateDraw()
 	{
-		Vector2i globalPos = (Vector2i)(Parent == null ? Position : Position + Parent.Position);
+		Vector2i globalPos = (Vector2i)GetGlobalPosition();
 
 		VideoEngine.QueueDraw(new RectCall(ZIndex, new Rect2i(globalPos, Size), Color));
 	}

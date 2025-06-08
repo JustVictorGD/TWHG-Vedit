@@ -24,16 +24,21 @@ public readonly struct Subpixel2
 	public Subpixel2(double x, double y) { X = (Subpixel)x; Y = (Subpixel)y; }
 
 	// Editing functions.
+	public readonly Subpixel2 ApplyTransform(Transform2D transform)
+	{
+		return ApplyBasis(transform.Basis) + transform.Origin;
+	}
+
+	public readonly Subpixel2 ApplyBasis(Basis basis) => new(
+		Math.Round(X * basis.XX + Y * basis.XY),
+		Math.Round(X * basis.YX + Y * basis.YY)
+	);
+
 	public readonly Subpixel2 Clamp(Rect2i area) => Clamp(this, area);
 	public static Subpixel2 Clamp(Subpixel2 original, Rect2i area) => new(
 		Subpixel.Clamp(original.X, area.Start.X, area.End.X),
 		Subpixel.Clamp(original.Y, area.Start.Y, area.End.Y)
 	);
-
-	// Looking for Move()? Just add two Subpixel2 values together.
-
-	public override readonly string ToString() => $"{{ X = {X}, Y = {Y} }}";
-
 
 	// Conversion operators.
 
@@ -70,4 +75,6 @@ public readonly struct Subpixel2
 	public static Subpixel2 operator /(Subpixel2 a, double b) => new(a.X / b, a.Y / b);
 
 	public static explicit operator Vector2(Subpixel2 value) => new((float)value.X, (float)value.Y);
+	
+	public override readonly string ToString() => $"{{ X: {X}, Y: {Y} }}";
 }

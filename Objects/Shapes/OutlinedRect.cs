@@ -4,13 +4,12 @@ namespace WhgVedit.Objects.Shapes;
 // cleaner to do it manually inside the parent objects' scripts.
 
 using Raylib_cs;
+
+using Engine.Video;
 using Types;
-using WhgVedit.Engine.Video;
 
 public class OutlinedRect : Object2D
 {
-	public Object2D? Parent { get; set; } // For getting dragged around.
-
 	public Vector2i Size { get; set; }
 	public Color OutlineColor { get; set; }
 	public Color FillColor { get; set; }
@@ -22,7 +21,7 @@ public class OutlinedRect : Object2D
 
 	public Rect2i Body => new((Vector2i)Position, Size);
 
-	public OutlinedRect(Rect2i body, Color outlineColor, Color fillColor, int zIndex = 0, Object2D? parent = null, bool isUI = false)
+	public OutlinedRect(Rect2i body, Color outlineColor, Color fillColor, int zIndex = 0, GameObject? parent = null, bool isUI = false)
 	{
 		Position = body.Position;
 		Size = body.Size;
@@ -51,7 +50,7 @@ public class OutlinedRect : Object2D
 
 	private void PrivateDraw()
 	{
-		Vector2i globalPos = (Vector2i)(Parent == null ? Position : Position + Parent.Position);
+		Vector2i globalPos = (Vector2i)GetGlobalPosition();
 
 		VideoEngine.QueueOutlinedRect(
 			ZIndex, ZIndex + FillZ,

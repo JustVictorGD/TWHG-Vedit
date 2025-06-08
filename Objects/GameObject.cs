@@ -15,7 +15,7 @@ public class GameObject
 	public List<string> Groups { get; set; } = [];
 
 	public List<GameObject> Children { get; set; } = [];
-	public GameObject? Parent { get; private set; }
+	public GameObject? Parent { get; set; }
 
 	public virtual void Ready() { }
 	public virtual void Update() { }
