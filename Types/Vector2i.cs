@@ -42,8 +42,8 @@ public readonly struct Vector2i
 	}
 
 	public readonly Vector2i ApplyBasis(Basis basis) => new(
-		Utils.Round(X * basis.XX + Y * basis.XY),
-		Utils.Round(X * basis.YX + Y * basis.YY)
+		Utils.Round(X * basis.X.X + Y * basis.X.Y),
+		Utils.Round(X * basis.Y.X + Y * basis.Y.Y)
 	);
 
 	// Conversion operators.

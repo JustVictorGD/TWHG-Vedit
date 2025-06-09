@@ -1,5 +1,3 @@
-using WhgVedit.Engine;
-
 namespace WhgVedit.Objects;
 
 // You may see that the position sometimes ends in one half.
@@ -9,6 +7,7 @@ namespace WhgVedit.Objects;
 using Raylib_cs;
 
 using Common;
+using Engine;
 using Objects.Shapes;
 using Types;
 
@@ -46,7 +45,8 @@ public class Player : Object2D
 
 	public Player()
 	{
-		Sprite = new(Body, OutlineColor, FillColor, 32, this);
+		Sprite = new(Body, OutlineColor, FillColor);
+		Sprite.SetParent(this);
 	}
 
 	public override void Update()

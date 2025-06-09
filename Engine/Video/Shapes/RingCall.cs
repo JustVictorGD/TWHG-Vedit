@@ -3,13 +3,14 @@ namespace WhgVedit.Engine.Video.Shapes;
 using Raylib_cs;
 
 using Types;
+using WhgVedit.Objects;
 
-public class CircleCall : ShapeCall
+public class RingCall : ShapeCall
 {
 	public Circle Body { get; set; }
 	public int Sides { get; set; }
 
-	public CircleCall(int zIndex, Vector2i position, double radius, Color color, int sides)
+	public RingCall(int zIndex, Color color, Vector2i position, float radius, int sides)
 	{
 		ZIndex = zIndex;
 		Color = color;
@@ -17,7 +18,7 @@ public class CircleCall : ShapeCall
 		Sides = sides;
 	}
 
-	public CircleCall(int zIndex, Circle body, Color color, int sides)
+	public RingCall(int zIndex, Circle body, Color color, int sides)
 	{
 		ZIndex = zIndex;
 		Color = color;
@@ -27,6 +28,11 @@ public class CircleCall : ShapeCall
 
 	public override void Execute()
 	{
-		Raylib.DrawPoly(Body.Position, Sides, (float)Body.Radius, 0, Color);
+		Raylib.DrawRing(
+			Body.Position,
+			(float)Body.Radius - Wall.OutlineWidth,
+			(float)Body.Radius,
+			0, 360, Sides, Color
+		);
 	}
 }

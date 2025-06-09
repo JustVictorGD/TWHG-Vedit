@@ -17,7 +17,7 @@ public class Animation : GameObject
 
 	//private int _lastKeyframe = 0;
 	//private int _lastProgress = 0;
-	public string Name { get; set; }
+	public string Name { get; set; } = "";
 	public List<Keyframe> Keyframes { get; set; } = [];
 	public double Length => Keyframes.Sum(k => k.Duration);
 

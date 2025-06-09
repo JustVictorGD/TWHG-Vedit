@@ -44,6 +44,6 @@ public class Wall : Object2D
 
 	public override void Draw()
 	{
-		VideoEngine.QueueOutlinedRect(ZIndex, ZIndex + 1, Body, OutlineColor, FillColor);
+		VideoEngine.QueueOutlinedRect(ZIndex, 1, Body, OutlineColor, FillColor);
 	}
 }

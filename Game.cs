@@ -82,6 +82,15 @@ public class Game
 
 	public void Ready()
 	{
+		Basis skewedBasis = new(1, 0, 1, 0);
+
+		foreach (double number in new List<double>([0, 1, 11, 45, 90, 135, 180, 270, 360, -360, -180, -90, -45, -1]))
+		{
+			skewedBasis.StackWith(Basis.FromDeg(number)).Split(out double angle, out Vector2 scale, out double skew);
+
+			Console.WriteLine($"Basis.FromDeg({number})   ->   {Basis.FromDeg(number)}  |  Angle: {angle:F4}, Scale: {scale:F4}, Skew: {skew:F4}");
+		}
+
 		ObjectParser parser = new("Json/Scene.json");
 		parser.Parse();
 		Walls = parser.GetObjectsOfType<Wall>();
@@ -94,7 +103,7 @@ public class Game
 		Scene.Main.AddObjectsToGroups(Walls, "Walls");
 		Scene.Main.AddObjectsToGroups(Enemies, "Enemies");
 		Scene.Main.AddObjectsToGroups(Checkpoints, "Checkpoints");
-		
+
 		var animationPlayers = parser.GetObjectsOfType<AnimationPlayer>();
 		Scene.Main.AddObjectsToGroups(animationPlayers, "AnimationPlayers");
 		
@@ -115,25 +124,6 @@ public class Game
 			var keyframe = keyframeEnemyAnimation.Keyframes[index];
 			Console.WriteLine($"Keyframe {index}: Duration: {keyframe.Duration}");
 		}*/
-
-		// JSON to Runtime test.
-		string json = File.ReadAllText("Json/Rectangles.json");
-
-		List<ColorRect>? rects = JsonConvert.DeserializeObject<List<ColorRect>>(json);
-		List<SolidRect> rectangles = [];
-
-		// Showcasing the "Parent" property and position stacking on UI elements.
-		Object2D randomOffset = new() {Position = new(128, 16)};
-
-		if (rects != null)
-			foreach (ColorRect rect in rects)
-			{
-				rectangles.Add(new(rect.GetRect(), rect.GetColor(), 0, randomOffset, true));
-			}
-
-		// The red, green, blue and white rectangles
-		// in the corner of the screen are from this.
-		Scene.Main.AddObjectsToGroups([.. rectangles], "Rectangles");
 
 		InputAction leftAction = new("Left", [KeyboardKey.A, KeyboardKey.Left]);
 		InputAction rightAction = new("Right", [KeyboardKey.D, KeyboardKey.Right]);
@@ -164,7 +154,7 @@ public class Game
 		if (Scene.Main == null) return;
 
 		foreach (GameObject @object in Scene.Main.GetObjectsInGroup("Enemies"))
-			if (@object is Enemy enemy && player.Body.Intersects(enemy.Body))
+			if (@object is Enemy enemy && player.Body.Intersects(enemy.Hitbox))
 				player.Die();
 	}
 

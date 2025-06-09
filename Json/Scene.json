@@ -51,7 +51,14 @@
     },
     {
       "type": "Enemy",
-      "position": [168, 140]
+      "position": [168, 140],
+      "children": [
+        {
+          "type": "Enemy",
+          "name": "embedded",
+          "position": [0, 56]
+        }
+      ]
     },
     {
       "type": "Enemy",

@@ -30,8 +30,8 @@ public readonly struct Subpixel2
 	}
 
 	public readonly Subpixel2 ApplyBasis(Basis basis) => new(
-		Math.Round(X * basis.XX + Y * basis.XY),
-		Math.Round(X * basis.YX + Y * basis.YY)
+		Math.Round(X * basis.X.X + Y * basis.X.Y),
+		Math.Round(X * basis.Y.X + Y * basis.Y.Y)
 	);
 
 	public readonly Subpixel2 Clamp(Rect2i area) => Clamp(this, area);

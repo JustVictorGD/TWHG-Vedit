@@ -27,6 +27,8 @@ public static class VideoEngine
 
 	public static int QueueOutlinedRect(int outlineZ, int fillZ, Rect2i outer, Color outlineColor, Color fillColor)
 	{
+		fillZ += outlineZ;
+
 		Rect2i inner = GetInner(outer);
 
 		if (fillColor.A >= 255 && fillZ >= outlineZ)
@@ -47,6 +49,34 @@ public static class VideoEngine
 		{
 			QueueDraw(new OutlineCall(outlineZ, outer, outlineColor, inner));
 			QueueDraw(new RectCall(fillZ, inner, fillColor));
+
+			return 2;
+		}
+	}
+
+	public static int QueueOutlinedCircle(int outlineZ, int fillZ, Circle shape, Color outlineColor, Color fillColor)
+	{
+		fillZ += outlineZ;
+
+		int sides = (int)Math.Log2(shape.Radius + 1) * Game.CircleQuality;
+
+		if (fillColor.A >= 255 && fillZ >= outlineZ)
+		{
+			QueueDraw(new CircleCall(fillZ, shape.Position, shape.Radius - Wall.OutlineWidth, fillColor, sides));
+			QueueDraw(new CircleCall(outlineZ, shape, outlineColor, sides));
+
+			return 0;
+		}
+		else if (shape.Radius <= Wall.OutlineWidth)
+		{
+			QueueDraw(new CircleCall(outlineZ, shape.Position, shape.Radius, outlineColor, sides));
+
+			return 1;
+		}
+		else
+		{
+			QueueDraw(new RingCall(outlineZ, shape, outlineColor, sides));
+			QueueDraw(new CircleCall(fillZ, shape.Position, shape.Radius - Wall.OutlineWidth, fillColor, sides));
 
 			return 2;
 		}

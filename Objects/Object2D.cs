@@ -7,6 +7,9 @@ using WhgVedit.Types;
 public class Object2D : GameObject
 {
 	public int ZIndex { get; set; } = 0;
+	public bool IsVisible { get; set; } = true;
+	public bool IsUI { get; set; }
+
 	public Subpixel2 Position { get; set; } = new();
 	public float Rotation { get; set; } = 0;
 	public Vector2 Scale { get; set; } = Vector2.One;
@@ -30,6 +33,23 @@ public class Object2D : GameObject
 
 		Position = new(Position.X, value);
 	}
+
+	public int GetGlobalZ()
+	{
+		int z = ZIndex;
+		GameObject? parent = Parent;
+
+		while (parent != null)
+		{
+			if (parent == this) throw new InvalidOperationException("An Object2D is its own ancestor. This will cause an infinite loop.");
+
+			if (parent is Object2D object2D)
+				z += object2D.ZIndex;
+			parent = parent.Parent;
+		}
+
+		return z;
+	}
 	
 	// Not fully finished! This doesn't take rotation, scale and skew into account.
 	public Subpixel2 GetGlobalPosition()
@@ -39,6 +59,8 @@ public class Object2D : GameObject
 
 		while (parent != null)
 		{
+			if (parent == this) throw new InvalidOperationException("An Object2D is its own ancestor. This will cause an infinite loop.");
+
 			if (parent is Object2D object2D)
 				position += object2D.Position;
 			parent = parent.Parent;

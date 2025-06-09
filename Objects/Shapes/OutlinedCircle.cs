@@ -8,20 +8,19 @@ using Raylib_cs;
 using Engine.Video;
 using Types;
 
-public class OutlinedRect : Object2D
+public class OutlinedCircle : Object2D
 {
-	public Vector2i Size { get; set; }
-	public Rect2i Body => new((Vector2i)Position, Size);
+	public double Radius { get; set; }
+	public Circle Body => new((Vector2i)GetGlobalPosition(), Radius);
 
 	public Color OutlineColor { get; set; }
 	public Color FillColor { get; set; }
 
 	public int FillZ { get; set; } = 1;
 
-	public OutlinedRect(Rect2i body, Color outlineColor, Color fillColor, int outlineZ = 0, int fillZ = 1, bool isUI = false)
+	public OutlinedCircle(double radius, Color outlineColor, Color fillColor, int outlineZ = 0, int fillZ = 1, bool isUI = false)
 	{
-		Position = body.Position;
-		Size = body.Size;
+		Radius = radius;
 
 		OutlineColor = outlineColor;
 		FillColor = fillColor;
@@ -46,11 +45,9 @@ public class OutlinedRect : Object2D
 
 	private void PrivateDraw()
 	{
-		Vector2i globalPos = (Vector2i)GetGlobalPosition();
-
-		VideoEngine.QueueOutlinedRect(
+		VideoEngine.QueueOutlinedCircle(
 			GetGlobalZ(), FillZ,
-			new Rect2i(globalPos, Size),
+			Body,
 			OutlineColor, FillColor
 		);
 	}

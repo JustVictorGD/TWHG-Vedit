@@ -66,9 +66,9 @@ public static class Utils
 		return Round(Lerp(start, end, ratio));
 	}
 
-	public static float LerpF(float start, float end, float ratio)
+	public static float LerpF(float start, float end, double ratio)
 	{
-		return start * (1 - ratio) + end * ratio;
+		return (float)(start * (1 - ratio) + end * ratio);
 	}
 
 	public static double Lerp(double start, double end, double ratio)
@@ -88,11 +88,11 @@ public static class Utils
 		LerpI(start.A, end.A, ratio)
 	);
 
-	public static Basis LerpBasis(Basis start, Basis end, float ratio) => new(
-		LerpF(start.XX, end.XX, ratio),
-		LerpF(start.XY, end.XY, ratio),
-		LerpF(start.YX, end.YX, ratio),
-		LerpF(start.YY, end.YY, ratio)
+	public static Basis LerpBasis(Basis start, Basis end, double ratio) => new(
+		LerpF(start.X.X, end.X.X, ratio),
+		LerpF(start.X.Y, end.X.Y, ratio),
+		LerpF(start.Y.X, end.Y.X, ratio),
+		LerpF(start.Y.Y, end.Y.Y, ratio)
 	);
 
 	// To save resources (or out of my laziness), you're responsible for keeping lengths not negative.
@@ -107,4 +107,7 @@ public static class Utils
 
 		return -1; // When greater (or equal to) all ranges combined.
 	}
+
+	public static double RadToDeg(double rad) => rad / Math.Tau * 360;
+	public static double DegToRad(double deg) => deg * Math.Tau / 360;
 }

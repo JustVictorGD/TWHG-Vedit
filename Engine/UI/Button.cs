@@ -8,8 +8,6 @@ using WhgVedit.Engine.Video;
 
 public class Button : Object2D
 {
-	public bool IsUI { get; set; }
-
 	// Currently unused.
 	public event Action? Pressed;
 	public event Action? Released;

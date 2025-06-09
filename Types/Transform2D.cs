@@ -1,11 +1,15 @@
-namespace WhgVedit.Types;
+using System.Numerics;
 
-// TODO: Stacking math.
+// Check Basis.cs for some explanation on the math involved.
+
+namespace WhgVedit.Types;
 
 public readonly struct Transform2D
 {
 	public readonly Subpixel2 Origin;
 	public readonly Basis Basis;
+	public readonly Vector2 X => Basis.X;
+	public readonly Vector2 Y => Basis.Y;
 
 	public static Transform2D Identity => new(0, 0, 1, 0, 0, 1);
 
@@ -15,13 +19,13 @@ public readonly struct Transform2D
 		Basis = basis;
 	}
 
-	public Transform2D(int posX, int posY, Basis basis)
+	public Transform2D(double posX, double posY, Basis basis)
 	{
 		Origin = new(posX, posY);
 		Basis = basis;
 	}
 
-	public Transform2D(int posX, int posY, float xx, float xy, float yx, float yy)
+	public Transform2D(double posX, double posY, float xx, float xy, float yx, float yy)
 	{
 		Origin = new(posX, posY);
 		Basis = new(xx, xy, yx, yy);
@@ -32,8 +36,8 @@ public readonly struct Transform2D
 		Basis combinedBasis = Basis.Stack(first.Basis, second.Basis);
 
 		Subpixel2 transformedOrigin = new(
-			first.Basis.XX * second.Origin.X + first.Basis.XY * second.Origin.Y + first.Origin.X,
-			first.Basis.YX * second.Origin.X + first.Basis.YY * second.Origin.Y + first.Origin.Y
+			first.X.X * second.Origin.X + first.X.Y * second.Origin.Y + first.Origin.X,
+			first.Y.X * second.Origin.X + first.Y.Y * second.Origin.Y + first.Origin.Y
 		);
 
 		return new Transform2D(transformedOrigin, combinedBasis);
@@ -43,6 +47,6 @@ public readonly struct Transform2D
 
 	public override string ToString()
 	{
-		return $"{{ Origin: {Origin}, Basis: {Basis} }}";
+		return $"{{ Origin: {Origin}, X: {X}, Y: {Y} }}";
 	}
 }
