@@ -72,9 +72,6 @@ public class Player : Object2D
 
 		Position = Position.Clamp(new(HalfSize, Game.AreaSize * 48 - Size));
 
-		// Un-comment to see subpixels change between 0, -128 and 127.
-		//Console.WriteLine(Position.Fraction);
-
 		if (IsDead)
 		{
 			FillOpacity = (float)fadeOutTimer.TimeLeft / FadeOutTicks;
@@ -86,8 +83,6 @@ public class Player : Object2D
 			FillOpacity = (float)fadeInTimer.Time / FadeInTicks;
 			OutlineOpacity = (float)fadeInTimer.Time / FadeInTicks;
 		}
-
-		Console.WriteLine(Position);
 	}
 
 

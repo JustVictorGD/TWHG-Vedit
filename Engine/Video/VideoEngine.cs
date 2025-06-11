@@ -33,8 +33,8 @@ public static class VideoEngine
 
 		if (fillColor.A >= 255 && fillZ >= outlineZ)
 		{
-			QueueDraw(new RectCall(fillZ, inner, fillColor));
 			QueueDraw(new RectCall(outlineZ, outer, outlineColor));
+			QueueDraw(new RectCall(fillZ, inner, fillColor));
 
 			// You can print the return values to debug which case gets chosen.
 			return 0;

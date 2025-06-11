@@ -1,8 +1,5 @@
-using WhgVedit.Json;
-
 namespace WhgVedit;
 
-using Newtonsoft.Json;
 using Raylib_cs;
 using System.Numerics;
 
@@ -10,9 +7,9 @@ using Common;
 using Engine;
 using Engine.UI;
 using Engine.Video;
+using Json;
 using Objects;
 using Objects.Animation;
-using Objects.Shapes;
 using Types;
 
 public class Game
@@ -57,15 +54,10 @@ public class Game
 	private Keyframe keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
 	*/
 	readonly List<Button> buttons = [
-		new(80, 80, 128, 64),
-		new(80, 160, 128, 128),
-		new(160, 120, 64, 64),
-		new(160, 160, 64, 64, false),
-		new(240, 80, 64, 64, false),
-		new(320, 80, 64, 64, false),
-
-		new Slider(500, 500, 96, 96, false),
-		new SceneSwitcher(64, 500, 128, 64)
+		new Slider(128, 128, 48, 48),
+		new Slider(256, 128, 48, 48) { ZIndex = -16 },
+		new Slider(256, 256, 48, 48, false),
+		new Slider(384, 256, 48, 48, false) { ZIndex = -16 }
 	];
 
 	public static List<Checkpoint> Checkpoints = [];
@@ -74,12 +66,12 @@ public class Game
 	*/
 
 
-	public static Vector2 GetMouseWorldPosition() =>
-		Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), WorldCamera);
-
-	public static Vector2 GetMouseUIPosition() =>
-		Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), UICamera);
-
+	public static Vector2 GetMousePosition(bool isUI)
+	{
+		Camera2D camera = isUI ? UICamera : WorldCamera;
+		return Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera);
+	}
+	
 	public void Ready()
 	{
 		ObjectParser parser = new("Json/Scene.json");
@@ -87,7 +79,7 @@ public class Game
 		Walls = parser.GetObjectsOfType<Wall>();
 		Enemies = parser.GetObjectsOfType<Enemy>();
 		Checkpoints = parser.GetObjectsOfType<Checkpoint>();
-		
+
 		Scene.Main = new([]);
 
 		// Add parsed objects
@@ -97,15 +89,15 @@ public class Game
 
 		var animationPlayers = parser.GetObjectsOfType<AnimationPlayer>();
 		Scene.Main.AddObjectsToGroups(animationPlayers, "AnimationPlayers");
-		
+
 		Scene.Main.AddObjectsToGroups([player], "Player");
 		//Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
 		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");
-		
+
 		/*keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
 		Scene.Main.AddObject(keyframeEnemyAnimationPlayer);
 		keyframeEnemyAnimationPlayer.Parent = keyframeEnemyTest;
-		
+
 		thiccEnemyAnimation.Keyframes.AddRange([keyframe4, keyframe5]);
 		Scene.Main.AddObject(thiccEnemyAnimationPlayer);
 		thiccEnemyAnimationPlayer.Parent = thiccEnemy;*/
@@ -124,7 +116,7 @@ public class Game
 		// Not sure about the naming of these 2 actions yet. Also escape still closes the game.
 		InputAction returnAction = new("Return", [KeyboardKey.Escape, KeyboardKey.Backspace]);
 		InputAction continueAction = new("Continue", [KeyboardKey.Space, KeyboardKey.Enter]);
-		
+
 
 		InputEngine.AddActions([leftAction, rightAction, upAction, downAction, returnAction, continueAction]);
 
@@ -145,6 +137,9 @@ public class Game
 		//keyframeEnemyTest.Radius = Utils.Round(13 * (_animation.GetScale(time / 60.0).X + 1));
 
 		InputEngine.CheckInputs();
+
+		HandleButtons();
+
 		Scene.Main?.Update();
 
 		if (Scene.Main == null) return;
@@ -198,6 +193,28 @@ public class Game
 		Scene.Main?.DrawUI();
 
 		VideoEngine.Render();
+	}
+
+	private void HandleButtons()
+	{
+		List<Button> focusedButtons = [];
+
+		foreach (Button button in buttons)
+		{
+			button.IsFocused = false;
+
+			if (button.IsUnderCursor())
+				focusedButtons.Add(button);
+		}
+
+		focusedButtons = [.. focusedButtons
+			.OrderBy(x => x.IsUI)
+			.ThenBy(x => x.ZIndex)
+		];
+
+		if (focusedButtons.Count > 0)
+			// Objects later in the array have higher Z order.
+			focusedButtons[^1].IsFocused = true;
 	}
 
 	public void HandleWindowSize(Vector2 screenSize, float goalRatio)
