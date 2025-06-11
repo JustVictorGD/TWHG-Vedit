@@ -24,14 +24,19 @@ public static class InputEngine
 		}
 		InputActions.AddRange(actions);
 	}
-	
+
+	public static bool IsActionPressed(string actionName)
+	{
+		List<InputAction> successes = [.. InputActions.Where(x => x.Name == actionName)];
+
+		if (successes.Count == 0)
+			throw new InvalidOperationException("No InputAction with the name '" + actionName + "' has been found.");
+
+		return successes[0].IsActive;
+	}
+
 	public static int GetInputAxis(string negativeActionName, string positiveActionName)
 	{
-		InputAction? negative = GetAction(negativeActionName);
-		InputAction? positive = GetAction(positiveActionName);
-		
-		if (negative is null || positive is null) return 0;
-		
-		return (positive.IsActive ? 1 : 0) - (negative.IsActive ? 1 : 0);
+		return (IsActionPressed(positiveActionName) ? 1 : 0) - (IsActionPressed(negativeActionName) ? 1 : 0);
 	}
 }

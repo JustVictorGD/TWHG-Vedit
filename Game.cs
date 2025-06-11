@@ -121,7 +121,12 @@ public class Game
 		InputAction upAction = new("Up", [KeyboardKey.W, KeyboardKey.Up]);
 		InputAction downAction = new("Down", [KeyboardKey.S, KeyboardKey.Down]);
 
-		InputEngine.AddActions([leftAction, rightAction, upAction, downAction]);
+		// Not sure about the naming of these 2 actions yet. Also escape still closes the game.
+		InputAction returnAction = new("Return", [KeyboardKey.Escape, KeyboardKey.Backspace]);
+		InputAction continueAction = new("Continue", [KeyboardKey.Space, KeyboardKey.Enter]);
+		
+
+		InputEngine.AddActions([leftAction, rightAction, upAction, downAction, returnAction, continueAction]);
 
 		Scene.Main.Ready();
 	}
