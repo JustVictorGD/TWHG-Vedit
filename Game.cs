@@ -82,15 +82,6 @@ public class Game
 
 	public void Ready()
 	{
-		Basis skewedBasis = new(1, 0, 1, 0);
-
-		foreach (double number in new List<double>([0, 1, 11, 45, 90, 135, 180, 270, 360, -360, -180, -90, -45, -1]))
-		{
-			skewedBasis.StackWith(Basis.FromDeg(number)).Split(out double angle, out Vector2 scale, out double skew);
-
-			Console.WriteLine($"Basis.FromDeg({number})   ->   {Basis.FromDeg(number)}  |  Angle: {angle:F4}, Scale: {scale:F4}, Skew: {skew:F4}");
-		}
-
 		ObjectParser parser = new("Json/Scene.json");
 		parser.Parse();
 		Walls = parser.GetObjectsOfType<Wall>();
