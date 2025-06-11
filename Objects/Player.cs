@@ -6,7 +6,6 @@ namespace WhgVedit.Objects;
 
 using Raylib_cs;
 
-using Common;
 using Engine;
 using Objects.Shapes;
 using Types;
@@ -15,6 +14,7 @@ public class Player : Object2D
 {
 	// Components. Set in Ready().
 	public OutlinedRect? Sprite { get; set; }
+	public PushableBox PushableBox { get; set; }
 
 	// Spacial properties.
 	public int Speed { get; set; } = 4;
@@ -45,8 +45,14 @@ public class Player : Object2D
 
 	public Player()
 	{
+		// At the time of this constructor, Position is (0, 0)
+		// and Body is (-21, -21, 42, 42).
+
 		Sprite = new(Body, OutlineColor, FillColor);
 		Sprite.SetParent(this);
+
+		PushableBox = new(Body);
+		PushableBox.SetParent(this);
 	}
 
 	public override void Update()
@@ -62,7 +68,7 @@ public class Player : Object2D
 			);
 
 		// TODO: Make walls set subpixels to min and max values just like the world border.
-		Position += Collision.SuggestWallPushes(Body, Game.Walls);
+		Position += PushableBox.SuggestWallPushes(Game.Walls);
 
 		Position = Position.Clamp(new(HalfSize, Game.AreaSize * 48 - Size));
 
@@ -80,6 +86,8 @@ public class Player : Object2D
 			FillOpacity = (float)fadeInTimer.Time / FadeInTicks;
 			OutlineOpacity = (float)fadeInTimer.Time / FadeInTicks;
 		}
+
+		Console.WriteLine(Position);
 	}
 
 

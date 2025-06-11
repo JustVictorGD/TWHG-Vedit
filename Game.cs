@@ -57,9 +57,9 @@ public class Game
 	private Keyframe keyframe3 = new Keyframe(1) { Position = new Vector2i(480, 336), Scale = Vector2.One, EasingFunc = Easings.SineInOut };
 	*/
 	readonly List<Button> buttons = [
-		new(80, 80, 64, 64),
-		new(80, 160, 64, 64),
-		new(160, 80, 64, 64),
+		new(80, 80, 128, 64),
+		new(80, 160, 128, 128),
+		new(160, 120, 64, 64),
 		new(160, 160, 64, 64, false),
 		new(240, 80, 64, 64, false),
 		new(320, 80, 64, 64, false),

@@ -1,10 +1,10 @@
 namespace WhgVedit.Engine.UI;
 
-using Objects;
 using Raylib_cs;
+
+using Engine.Video;
+using Objects;
 using Types;
-using WhgVedit.Common;
-using WhgVedit.Engine.Video;
 
 public class Button : Object2D
 {
@@ -24,10 +24,7 @@ public class Button : Object2D
 	public Rect2i Body => new((Vector2i)Position, Size);
 
 	public bool IsDown = false;
-	public bool Focused => IsUI ?
-		Collision.PointInRect(Game.GetMouseUIPosition(), Body) :
-		Collision.PointInRect(Game.GetMouseWorldPosition(), Body);
-
+	public bool Focused => IsCursorInRect(Body, IsUI);
 
 	public Button(int x, int y, int width, int height, bool isUI = true)
 	{
@@ -103,6 +100,19 @@ public class Button : Object2D
 				VideoEngine.DrawOutlinedRect(Body, new(192, 0, 192), new(255, 0, 255));
 				break;
 		}
+	}
+
+	// Important: This uses asymmetrical edge handling.
+	// The case "point = rect.Position" returns true.
+	// The case "point = rect.End" returns false.
+	// rect.Size.X * rect.Size.Y equals the amount of valid spots.
+	public static bool IsCursorInRect(Rect2i rect, bool isUI)
+	{
+		Vector2i point = (Vector2i)(isUI ?
+			Game.GetMouseUIPosition() :
+			Game.GetMouseWorldPosition());
+
+		return point >= rect.Start && point < rect.End;
 	}
 
 	public virtual void Press() { }
