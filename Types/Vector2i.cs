@@ -14,6 +14,7 @@ public readonly struct Vector2i
 	// Constructors.
 	public Vector2i() { X = 0; Y = 0; }
 	public Vector2i(int x, int y) { X = x; Y = y; }
+	public Vector2i(double x, double y) { X = Utils.Round(x); Y = Utils.Round(y); }
 
 
 	// Editing functions. These don't edit this instance, only create new structs.
@@ -63,6 +64,11 @@ public readonly struct Vector2i
 	public static Vector2i operator -(Vector2i a, int b) => new(a.X - b, a.Y - b);
 	public static Vector2i operator *(Vector2i a, int b) => new(a.X * b, a.Y * b);
 	public static Vector2i operator /(Vector2i a, int b) => new(a.X / b, a.Y / b);
+
+	public static Subpixel2 operator +(Vector2i a, double b) => new(a.X + b, a.Y + b);
+	public static Subpixel2 operator -(Vector2i a, double b) => new(a.X - b, a.Y - b);
+	public static Subpixel2 operator *(Vector2i a, double b) => new(a.X * b, a.Y * b);
+	public static Subpixel2 operator /(Vector2i a, double b) => new(a.X / b, a.Y / b);
 
 	public static Vector2i operator +(Vector2i a, Vector2i b) => new(a.X + b.X, a.Y + b.Y);
 	public static Vector2i operator -(Vector2i a, Vector2i b) => new(a.X - b.X, a.Y - b.Y);

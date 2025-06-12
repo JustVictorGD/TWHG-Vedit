@@ -40,7 +40,7 @@ public class GameObject
 	
 	public void AddToGroup(string groupName)
 	{
-		Groups.Add(groupName);
+		if (!Groups.Contains(groupName)) Groups.Add(groupName);
 	}
 
 	public void RemoveFromGroup(string groupName)

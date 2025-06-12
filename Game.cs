@@ -125,6 +125,21 @@ public class Game
 
 	public void Update()
 	{
+		List<Enemy> enemies = Scene.Main != null ? [.. Scene.Main.GetObjectsInGroup("Enemies").Cast<Enemy>()] : [];
+
+		Subpixel2 pos1 = GetMousePosition(false) / 12;
+		Vector2i pos2 = (Vector2i)pos1 * 12;
+
+		if (Raylib.IsMouseButtonPressed(MouseButton.Left) && Scene.Main != null)
+		{
+			Enemy newEnemy = new() { Position = pos2, Groups = ["Enemies"] };
+			Scene.Main.AddObjectsToGroups([newEnemy], "Enemies");
+		}
+		
+		if (Raylib.IsMouseButtonDown(MouseButton.Right) && Scene.Main != null)
+			foreach (Enemy enemy in enemies)
+				if (enemy.Position == pos2) Scene.Main.RemoveObject(enemy);
+		
 		time++;
 
 		// Moving this from Game.cs to Wall.cs involves programming keyframes.
@@ -185,6 +200,11 @@ public class Game
 		Scene.Main?.Draw();
 
 		VideoEngine.Render();
+
+		Subpixel2 pos1 = GetMousePosition(false) / 12;
+		Vector2i pos2 = (Vector2i)pos1 * 12;
+
+		Raylib.DrawCircle(pos2.X, pos2.Y, 13, new(255, 192, 96, 128));
 	}
 
 	// Draw calls in this function ignore the camera.

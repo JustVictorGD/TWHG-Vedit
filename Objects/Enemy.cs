@@ -16,10 +16,10 @@ public class Enemy : Object2D
 	public Circle Body => new((Vector2i)GetGlobalPosition(), Radius);
 	public Circle Hitbox => new((Vector2i)GetGlobalPosition(), Radius - Wall.OutlineWidth);
 
-	public override void Ready()
+	public Enemy()
 	{
 		// Outline and fill colors: Dark blue and transparent blue.
-		Sprite = new(Radius, new(0, 0, 66), new(0, 0, 255, 128));
+		Sprite = new(Radius, new(0, 0, 66), new(0, 0, 255));
 		Sprite.SetParent(this);
 	}
 

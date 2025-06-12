@@ -45,6 +45,9 @@ public readonly struct Subpixel2
 	public static explicit operator Vector2i(Subpixel2 a) => a.Rounded;
 	public static implicit operator Subpixel2(Vector2i a) => new(a.X, a.Y);
 
+	public static explicit operator Vector2(Subpixel2 value) => new((float)value.X, (float)value.Y);
+	public static implicit operator Subpixel2(Vector2 value) => new(value.X, value.Y);
+
 	// Other operators.
 
 	public static Subpixel2 operator -(Subpixel2 a) => new(-a.X, -a.Y);
@@ -74,7 +77,22 @@ public readonly struct Subpixel2
 	public static Subpixel2 operator *(Subpixel2 a, double b) => new(a.X * b, a.Y * b);
 	public static Subpixel2 operator /(Subpixel2 a, double b) => new(a.X / b, a.Y / b);
 
-	public static explicit operator Vector2(Subpixel2 value) => new((float)value.X, (float)value.Y);
-	
+	public static bool operator ==(Subpixel2 a, Subpixel2 b) => a.X == b.X && a.Y == b.Y;
+	public static bool operator !=(Subpixel2 a, Subpixel2 b) => !(a == b);
+
 	public override readonly string ToString() => $"{{ X: {X}, Y: {Y} }}";
+
+	public override bool Equals(object? obj)
+	{
+		if (obj is Subpixel2 other1) return this == other1;
+		else if (obj is Vector2 other2) return this == other2;
+		else if (obj is Vector2i other3) return this == other3;
+
+		return false;
+	}
+
+	public override int GetHashCode()
+	{
+		throw new NotImplementedException();
+	}
 }

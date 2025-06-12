@@ -36,11 +36,9 @@ public class Scene(List<GameObject> objects)
 	public void RemoveObject(GameObject @object)
 	{
 		gameObjects.Remove(@object);
-		@object.Groups = [];
+
 		foreach (string item in @object.Groups)
-		{
 			groups[item].Remove(@object);
-		}
 	}
 
 	public List<GameObject> GetObjectsInGroup(string groupName)
@@ -64,6 +62,9 @@ public class Scene(List<GameObject> objects)
 
 				if (!list.Contains(@object))
 					list.Add(@object);
+
+				if (!@object.Groups.Contains(groupName))
+					@object.Groups.Add(groupName);
 			}
 		}
 	}
