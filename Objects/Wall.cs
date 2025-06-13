@@ -1,3 +1,6 @@
+using Newtonsoft.Json.Linq;
+using WhgVedit.Common;
+
 namespace WhgVedit.Objects;
 
 using Raylib_cs;
@@ -45,5 +48,28 @@ public class Wall : Object2D
 	public override void Draw()
 	{
 		VideoEngine.QueueOutlinedRect(ZIndex, 1, Body, OutlineColor, FillColor);
+	}
+	
+	public override JObject ToJson()
+	{
+		JObject jObject = base.ToJson();
+		jObject.Add("rect", new JArray(Position.X.Rounded, Position.Y.Rounded, Size.X, Size.Y));
+		if (ZIndex != 16)
+		{
+			jObject.Add("zIndex", ZIndex);
+		}
+
+		if (Utils.AreColorsEqual(OutlineColor, new(72, 72, 102)))
+		{
+			jObject.Add("outlineColor",
+				new JArray { OutlineColor.R, OutlineColor.G, OutlineColor.B });
+		}
+
+		if (Utils.AreColorsEqual(FillColor, new(179, 179, 255)))
+		{
+			jObject.Add("fillColor", 
+				new JArray { FillColor.R, FillColor.G, FillColor.B });
+		}
+		return jObject;
 	}
 }

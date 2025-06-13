@@ -110,4 +110,8 @@ public static class Utils
 
 	public static double RadToDeg(double rad) => rad / Math.Tau * 360;
 	public static double DegToRad(double deg) => deg * Math.Tau / 360;
+	public static bool AreColorsEqual(Color color1, Color color2)
+	{
+		return color1.R == color2.R && color1.G == color2.G && color1.B == color2.B && color1.A == color2.A;
+	}
 }

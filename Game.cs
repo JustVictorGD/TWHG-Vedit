@@ -32,6 +32,9 @@ public class Game
 	readonly Player player = new() { Position = new(480, 384) };
 
 	public List<GameObject> NewObjects { get; set; } = [];
+
+	public List<GameObject> ObjectsToRemove { get; set; } = [];
+	
 	// These will be imported from a level file.
 	public List<GameObject> GameObjects { get; set; }
 
@@ -151,6 +154,7 @@ public class Game
 			foreach (Enemy enemy in enemies)
 				if (enemy.Position == pos2)
 				{
+					ObjectsToRemove.Add(enemy);
 					Scene.Main.RemoveObject(enemy);
 					NewObjects.Remove(enemy);
 				}
@@ -183,8 +187,14 @@ public class Game
 		if (InputEngine.GetAction("Save").IsActive)
 		{
 			ObjectSaver saver = new("Json/Scene.json", Scene.Main.GameObjects, []);
-			saver.Save(saver.AddNewObjectsToJson(NewObjects));
+
+			saver.AddNewObjectsToJson(NewObjects);
+			saver.DeleteObjectsFromJson(ObjectsToRemove);
+			saver.Save();
+			
 			NewObjects = [];
+			ObjectsToRemove = [];
+			
 			Console.WriteLine("SAVED!");
 		}
 			

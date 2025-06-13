@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using WhgVedit.Engine;
 
 namespace WhgVedit.Objects;
@@ -46,5 +47,13 @@ public class GameObject
 	public void RemoveFromGroup(string groupName)
 	{
 		Groups.Remove(groupName);
+	}
+	
+	public virtual JObject ToJson()
+	{
+		return new JObject
+		{
+			["type"] = GetType().Name
+		};
 	}
 }

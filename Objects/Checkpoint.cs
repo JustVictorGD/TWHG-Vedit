@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Raylib_cs;
 using WhgVedit.Engine.Video;
 using WhgVedit.Objects.Shapes;
@@ -48,5 +49,12 @@ public class Checkpoint : Object2D
 	public override void Draw()
 	{
 		VideoEngine.DrawRect2i(Body, new Color(Color.R * Brightness / 255f, Color.G * Brightness / 255f, Color.R * Brightness / 255f));
+	}
+	
+	public override JObject ToJson()
+	{
+		JObject jObject = base.ToJson();
+		jObject.Add("rect", new JArray(Position.X.Rounded, Position.Y.Rounded, Size.X, Size.Y));
+		return jObject;
 	}
 }

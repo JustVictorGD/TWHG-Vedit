@@ -1,3 +1,5 @@
+using Newtonsoft.Json.Linq;
+
 namespace WhgVedit.Objects;
 
 using Common;
@@ -28,5 +30,12 @@ public class Enemy : Object2D
 		if (Sprite != null) Sprite.Radius = Radius;
 
 		Sprite?.Draw();
+	}
+
+	public override JObject ToJson()
+	{
+		JObject jObject = base.ToJson();
+		jObject.Add("position", new JArray(Position.X.Rounded, Position.Y.Rounded));
+		return jObject;
 	}
 }
