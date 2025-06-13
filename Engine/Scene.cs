@@ -4,7 +4,7 @@ using Objects;
 
 public class Scene(List<GameObject> objects)
 {
-	private readonly List<GameObject> gameObjects = objects;
+	public readonly List<GameObject> GameObjects = objects;
 	private readonly Dictionary<string, List<GameObject>> groups = [];
 
 	public static Scene? Main { get; set; }
@@ -15,7 +15,7 @@ public class Scene(List<GameObject> objects)
 
 	public void AddObject(GameObject @object)
 	{
-		gameObjects.Add(@object);
+		GameObjects.Add(@object);
 		@object.Scene = this;
 
 		foreach (string groupName in @object.Groups)
@@ -35,7 +35,7 @@ public class Scene(List<GameObject> objects)
 
 	public void RemoveObject(GameObject @object)
 	{
-		gameObjects.Remove(@object);
+		GameObjects.Remove(@object);
 
 		foreach (string item in @object.Groups)
 			groups[item].Remove(@object);
@@ -79,7 +79,7 @@ public class Scene(List<GameObject> objects)
 
 	public void Ready()
 	{
-		foreach (GameObject gameObject in gameObjects)
+		foreach (GameObject gameObject in GameObjects)
 			gameObject.Ready();
 	}
 
@@ -87,7 +87,7 @@ public class Scene(List<GameObject> objects)
 	{
 		if (Frozen) return;
 
-		foreach (GameObject gameObject in gameObjects)
+		foreach (GameObject gameObject in GameObjects)
 			gameObject.Update();
 	}
 
@@ -95,7 +95,7 @@ public class Scene(List<GameObject> objects)
 	{
 		if (!Visible) return;
 
-		foreach (GameObject gameObject in gameObjects)
+		foreach (GameObject gameObject in GameObjects)
 			if (gameObject is Object2D object2D) object2D.Draw();
 	}
 	
@@ -103,7 +103,7 @@ public class Scene(List<GameObject> objects)
 	{
 		if (!Visible) return;
 
-		foreach (GameObject gameObject in gameObjects)
+		foreach (GameObject gameObject in GameObjects)
 			if (gameObject is Object2D object2D) object2D.DrawUI();
 	}
 }

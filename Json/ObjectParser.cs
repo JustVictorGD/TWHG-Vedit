@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Raylib_cs;
 using WhgVedit.Common;
@@ -13,14 +12,14 @@ using Newtonsoft.Json;
 
 public class ObjectParser
 {
-	public string Path { get; set; }
-	private List<GameObject> _gameObjects = [];
-	private List<Animation> _animations = [];
-	private bool _isParsed = false;
+	private readonly string _path;
+	private readonly List<GameObject> _gameObjects = [];
+	private readonly List<Animation> _animations = [];
+	private bool _isParsed;
 
 	public ObjectParser(string path)
 	{
-		Path = path;
+		_path = path;
 	}
 
 	public List<GameObject> GetObjects()
@@ -44,10 +43,10 @@ public class ObjectParser
 	
 	public void Parse()
 	{
-		if (!File.Exists(Path)) return;
+		if (!File.Exists(_path)) return;
 		_isParsed = true;
 
-		string data = File.ReadAllText(Path);
+		string data = File.ReadAllText(_path);
 
 		var jsonDictionary = JsonConvert.DeserializeObject<Dictionary<string, JArray>>(data);
 		
@@ -75,7 +74,7 @@ public class ObjectParser
 	{
 		return property.Path.Split('.').Last();
 	}
-	private GameObject? GetObjectFromJObject(JObject jObject)
+	public GameObject? GetObjectFromJObject(JObject jObject)
 	{
 		Dictionary<string, JToken> properties = new();
 		foreach (var property in jObject.Properties())

@@ -30,8 +30,11 @@ public class Game
 	// Rendering end.
 
 	readonly Player player = new() { Position = new(480, 384) };
-	
+
+	public List<GameObject> NewObjects { get; set; } = [];
 	// These will be imported from a level file.
+	public List<GameObject> GameObjects { get; set; }
+
 	public static List<Wall> Walls = [];
 	public static List<Enemy> Enemies = [];
 
@@ -74,12 +77,15 @@ public class Game
 	
 	public void Ready()
 	{
+		
 		ObjectParser parser = new("Json/Scene.json");
 		parser.Parse();
+		GameObjects = parser.GetObjects();
 		Walls = parser.GetObjectsOfType<Wall>();
 		Enemies = parser.GetObjectsOfType<Enemy>();
 		Checkpoints = parser.GetObjectsOfType<Checkpoint>();
-
+		
+		
 		Scene.Main = new([]);
 
 		// Add parsed objects
@@ -117,11 +123,14 @@ public class Game
 		InputAction returnAction = new("Return", [KeyboardKey.Escape, KeyboardKey.Backspace]);
 		InputAction continueAction = new("Continue", [KeyboardKey.Space, KeyboardKey.Enter]);
 
+		InputAction saveAction = new("Save", [KeyboardKey.E]);
 
-		InputEngine.AddActions([leftAction, rightAction, upAction, downAction, returnAction, continueAction]);
+
+		InputEngine.AddActions([leftAction, rightAction, upAction, downAction, returnAction, continueAction, saveAction]);
 
 		Scene.Main.Ready();
 	}
+
 
 	public void Update()
 	{
@@ -134,11 +143,19 @@ public class Game
 		{
 			Enemy newEnemy = new() { Position = pos2, Groups = ["Enemies"] };
 			Scene.Main.AddObjectsToGroups([newEnemy], "Enemies");
+			NewObjects.Add(newEnemy);
 		}
-		
+
 		if (Raylib.IsMouseButtonDown(MouseButton.Right) && Scene.Main != null)
+		{
 			foreach (Enemy enemy in enemies)
-				if (enemy.Position == pos2) Scene.Main.RemoveObject(enemy);
+				if (enemy.Position == pos2)
+				{
+					Scene.Main.RemoveObject(enemy);
+					NewObjects.Remove(enemy);
+				}
+			
+		}
 		
 		time++;
 
@@ -162,6 +179,16 @@ public class Game
 		foreach (GameObject @object in Scene.Main.GetObjectsInGroup("Enemies"))
 			if (@object is Enemy enemy && player.Body.Intersects(enemy.Hitbox))
 				player.Die();
+
+		if (InputEngine.GetAction("Save").IsActive)
+		{
+			ObjectSaver saver = new("Json/Scene.json", Scene.Main.GameObjects, []);
+			saver.Save(saver.AddNewObjectsToJson(NewObjects));
+			NewObjects = [];
+			Console.WriteLine("SAVED!");
+		}
+			
+			
 	}
 
 	// Draw calls in this function comply with the camera.
