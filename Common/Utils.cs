@@ -1,5 +1,6 @@
 namespace WhgVedit.Common;
 
+using System.Numerics;
 using Raylib_cs;
 using WhgVedit.Types;
 
@@ -7,6 +8,7 @@ public static class Utils
 {
 	// Rounding function that favors positive infinity when met with a perfect tie.
 	public static int Round(double value) => (int)Math.Floor(value + 0.5);
+	public static Vector2i Round(Vector2 value) => new(Round(value.X), Round(value.Y));
 	public static int Square(int value) => value * value;
 	public static double Square(double value) => value * value;
 
@@ -113,5 +115,10 @@ public static class Utils
 	public static bool AreColorsEqual(Color color1, Color color2)
 	{
 		return color1.R == color2.R && color1.G == color2.G && color1.B == color2.B && color1.A == color2.A;
+	}
+
+	public static int SnapToGrid(int value, int step, int offset = 0)
+	{
+		return Round((value - offset) / (double)step) * step + offset;
 	}
 }

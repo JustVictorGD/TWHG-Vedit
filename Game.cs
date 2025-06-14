@@ -15,7 +15,8 @@ using Types;
 public class Game
 {
 	int time = 0;
-	
+
+	private const int cursorGridSize = 12;
 	public const int TileSize = 48;
 	public static readonly Vector2i AreaSize = new(32, 20); // WHG 4 standard: 32, 20.
 	
@@ -139,12 +140,11 @@ public class Game
 	{
 		List<Enemy> enemies = Scene.Main != null ? [.. Scene.Main.GetObjectsInGroup("Enemies").Cast<Enemy>()] : [];
 
-		Subpixel2 pos1 = GetMousePosition(false) / 12;
-		Vector2i pos2 = (Vector2i)pos1 * 12;
+		Vector2i mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
 
 		if (Raylib.IsMouseButtonPressed(MouseButton.Left) && Scene.Main != null)
 		{
-			Enemy newEnemy = new() { Position = pos2, Groups = ["Enemies"] };
+			Enemy newEnemy = new() { Position = mousePos, Groups = ["Enemies"] };
 			Scene.Main.AddObjectsToGroups([newEnemy], "Enemies");
 			NewObjects.Add(newEnemy);
 		}
@@ -152,7 +152,7 @@ public class Game
 		if (Raylib.IsMouseButtonDown(MouseButton.Right) && Scene.Main != null)
 		{
 			foreach (Enemy enemy in enemies)
-				if (enemy.Position == pos2)
+				if (enemy.Position == mousePos)
 				{
 					ObjectsToRemove.Add(enemy);
 					Scene.Main.RemoveObject(enemy);
@@ -235,13 +235,10 @@ public class Game
 		//thiccEnemy.Scale = Utils.PingPong(time, 24) * Vector2.One;
 
 		Scene.Main?.Draw();
-
 		VideoEngine.Render();
 
-		Subpixel2 pos1 = GetMousePosition(false) / 12;
-		Vector2i pos2 = (Vector2i)pos1 * 12;
-
-		Raylib.DrawCircle(pos2.X, pos2.Y, 13, new(255, 192, 96, 128));
+		Vector2i mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
+		Raylib.DrawCircle(mousePos.X, mousePos.Y, 13, new(255, 192, 96, 128));
 	}
 
 	// Draw calls in this function ignore the camera.

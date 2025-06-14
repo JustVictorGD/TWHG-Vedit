@@ -13,6 +13,10 @@ public readonly struct Vector2i
 
 	// Constructors.
 	public Vector2i() { X = 0; Y = 0; }
+
+	public Vector2i(int v) { X = v; Y = v; }
+	public Vector2i(double v) { X = Utils.Round(v); Y = Utils.Round(v); }
+
 	public Vector2i(int x, int y) { X = x; Y = y; }
 	public Vector2i(double x, double y) { X = Utils.Round(x); Y = Utils.Round(y); }
 
@@ -34,6 +38,18 @@ public readonly struct Vector2i
 		Utils.LerpI(X, other.X, time),
 		Utils.LerpI(Y, other.Y, time)
 	);
+
+	public readonly Vector2i SnapToGrid(Vector2i size, Vector2i offset)
+	{
+		return new(
+			Utils.SnapToGrid(X, size.X, offset.X),
+			Utils.SnapToGrid(Y, size.Y, offset.Y)
+		);
+	}
+
+	public readonly Vector2i SnapToGrid(Vector2i size) => SnapToGrid(size, new());
+	public readonly Vector2i SnapToGrid(int size, int offset = 0) => SnapToGrid(new(size));
+
 
 	// Warning: Make sure to preserve the original copy. Constantly rounding
 	// floating point operations to integers will result in A LOT of distortion.
