@@ -101,18 +101,7 @@ public class Button : Object2D
 		}
 	}
 
-	// Important: This uses asymmetrical edge handling.
-	// The case "point = rect.Position" returns true.
-	// The case "point = rect.End" returns false.
-	// rect.Size.X * rect.Size.Y equals the amount of valid spots.
-	public static bool IsCursorInRect(Rect2i rect, bool isUI)
-	{
-		Vector2i point = (Vector2i)Game.GetMousePosition(isUI);
-
-		return point >= rect.Start && point < rect.End;
-	}
-
-	public bool IsUnderCursor() => IsCursorInRect(Body, IsUI);
+	public bool IsUnderCursor() => CursorArea.IsCursorInRect(Body, IsUI);
 
 	public virtual void Press() { }
 	public virtual void Release() { }

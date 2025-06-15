@@ -78,18 +78,22 @@ public class Game
 		Camera2D camera = isUI ? UICamera : WorldCamera;
 		return Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera);
 	}
+
+	private readonly List<CursorArea> cursorAreas = [
+		new(new(0, 0, 1536, 960), false, "Floor"),
+		new(new(480, 96, 96, 96), false, "Checkpoint 1"),
+		new(new(672, 96, 96, 96), false, "Checkpoint 2"),
+	];
 	
 	public void Ready()
 	{
-		
 		ObjectParser parser = new("Json/Scene.json");
 		parser.Parse();
 		GameObjects = parser.GetObjects();
 		Walls = parser.GetObjectsOfType<Wall>();
 		Enemies = parser.GetObjectsOfType<Enemy>();
 		Checkpoints = parser.GetObjectsOfType<Checkpoint>();
-		
-		
+
 		Scene.Main = new([]);
 
 		// Add parsed objects
@@ -103,6 +107,8 @@ public class Game
 		Scene.Main.AddObjectsToGroups([player], "Player");
 		//Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
 		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");
+
+		Scene.Main.AddObjectsToGroups([.. cursorAreas], "CursorAreas"); // Beta.
 
 		/*keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
 		Scene.Main.AddObject(keyframeEnemyAnimationPlayer);
@@ -174,6 +180,7 @@ public class Game
 
 		InputEngine.CheckInputs();
 
+		HandleCursorAreas();
 		HandleButtons();
 
 		Scene.Main?.Update();
@@ -247,6 +254,17 @@ public class Game
 		Scene.Main?.DrawUI();
 
 		VideoEngine.Render();
+	}
+
+	// Beta.
+	private void HandleCursorAreas()
+	{
+		foreach (CursorArea catcher in cursorAreas.OrderBy(x => x.ZIndex).Reverse())
+			if (catcher.IsUnderCursor())
+			{
+				catcher.IsFocused = true;
+				break;
+			}
 	}
 
 	private void HandleButtons()
