@@ -22,7 +22,6 @@ public class Game
 	
 	// Rendering.
 	public static int CircleQuality { get; set; } = 5;
-	Vector2 windowMargins = new();
 	Vector2 camera_pos = new();
 	public static Camera2D WorldCamera { get; set; } = new() { Zoom = 1 };
 	public static Camera2D UICamera { get; set; } = new() { Zoom = 1, Target = new(640, 360) };
@@ -287,70 +286,5 @@ public class Game
 		if (focusedButtons.Count > 0)
 			// Objects later in the array have higher Z order.
 			focusedButtons[^1].IsFocused = true;
-	}
-
-	public void HandleWindowSize(Vector2 screenSize, float goalRatio)
-	{
-		double screenRatio = screenSize.X / screenSize.Y / goalRatio;
-
-		windowMargins = new Vector2(
-			screenSize.X - screenSize.Y * goalRatio,
-			screenSize.Y - screenSize.X / goalRatio
-		) / 2;
-
-		float zoom;
-		Vector2 largerMargin = new();
-		Vector2 goalScreenSize = new(1280, 720);
-
-		if (screenRatio > 1) // More horizontal than usual
-		{
-			zoom = screenSize.Y / goalScreenSize.Y;
-			largerMargin.X = windowMargins.X;
-		}
-		else // More vertical than usual
-		{
-			zoom = screenSize.X / goalScreenSize.X;
-			largerMargin.Y = windowMargins.Y;
-		}
-
-		WorldCamera = new()
-		{
-			Offset = WorldCamera.Offset,
-			Zoom = zoom
-		};
-
-		UICamera = new()
-		{
-			Zoom = zoom,
-			Offset = largerMargin
-		};
-	}
-
-	public void DrawScreenMargins(Vector2 screenSize, float goalRatio)
-	{
-		if (screenSize.X > screenSize.Y * goalRatio) // Case: The window is too wide.
-		{
-			Raylib.DrawRectangle(
-				0, 0,
-				(int)windowMargins.X, (int)screenSize.Y,
-			Color.Black);
-
-			Raylib.DrawRectangle(
-				(int)(screenSize.X - windowMargins.X), 0,
-				(int)windowMargins.X + 1, (int)screenSize.Y + 1,
-			Color.Black);
-		}
-		else // Case: The window is too tall.
-		{
-			Raylib.DrawRectangle(
-				0, 0,
-				(int)screenSize.X, (int)windowMargins.Y,
-			Color.Black);
-
-			Raylib.DrawRectangle(
-				0, (int)(screenSize.Y - windowMargins.Y),
-				(int)screenSize.X + 1, (int)windowMargins.Y + 1,
-			Color.Black);
-		}
 	}
 }

@@ -1,6 +1,6 @@
-﻿using System.Numerics;
-using Raylib_cs;
+﻿using Raylib_cs;
 using WhgVedit;
+using WhgVedit.Engine.Video;
 
 Game game = new();
 
@@ -10,16 +10,12 @@ Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
 Raylib.InitWindow(1280, 720, "TWHG: Vedit");
 Raylib.SetTargetFPS(60);
 
-
 game.Ready();
 
 while (!Raylib.WindowShouldClose())
 {
-	const float GoalRatio = 16 / 9f;
+	RatioEnforcer.CheckNewScreenSize(new(Raylib.GetScreenWidth(), Raylib.GetScreenHeight()));
 
-	Vector2 screenSize = new(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
-
-	game.HandleWindowSize(screenSize, GoalRatio);
 	game.Update();
 
 	Raylib.BeginDrawing();
@@ -34,7 +30,8 @@ while (!Raylib.WindowShouldClose())
 	game.DrawUI();
 
 	Raylib.EndMode2D();
-	game.DrawScreenMargins(screenSize, GoalRatio);
+	RatioEnforcer.DrawScreenMargins();
+
 	Raylib.EndDrawing();
 }
 
