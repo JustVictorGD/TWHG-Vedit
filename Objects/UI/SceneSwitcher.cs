@@ -1,8 +1,9 @@
-namespace WhgVedit.Engine.UI;
+namespace WhgVedit.Objects.UI;
 
 // Primitive instance of the Button class being extended to add functionality.
 // Doesn't contain any text, but it looks red and it voids the scene when pressed.
 
+using Engine;
 using Engine.Video;
 
 public class SceneSwitcher(int x, int y, int width, int height, bool isUI = true) : Button(x, y, width, height, isUI)

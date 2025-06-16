@@ -1,4 +1,4 @@
-namespace WhgVedit.Engine.UI;
+namespace WhgVedit.Objects.UI;
 
 using System.Numerics;
 

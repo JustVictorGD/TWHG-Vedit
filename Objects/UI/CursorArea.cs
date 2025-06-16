@@ -1,11 +1,12 @@
-namespace WhgVedit.Engine.UI;
-
-using Objects;
-using Raylib_cs;
-using Types;
+namespace WhgVedit.Objects.UI;
 
 // This is a component used to detect if the mouse clicks an area or hovers
 // over it. Only one area can be hovered or clicked at once.
+
+using Raylib_cs;
+
+using Objects;
+using Types;
 
 public class CursorArea : RectObject
 {
