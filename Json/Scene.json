@@ -2,36 +2,36 @@
   "objects": [
     {
       "type": "Wall",
-      "rect": [525, 525, 246, 54]
+      "rect": [648, 552, 246, 54]
     },
     {
       "type": "Wall",
-      "rect": [525, 621, 246, 54]
+      "rect": [648, 648, 246, 54]
     },
     {
       "type": "Wall",
-      "rect": [537, 549, 30, 102],
+      "rect": [552, 552, 30, 102],
       "zIndex": 12,
       "outlineColor": [0, 102, 0],
       "fillColor": [0, 255, 0]
     },
     {
       "type": "Wall",
-      "rect": [730, 549, 30, 102],
+      "rect": [744, 552, 30, 102],
       "zIndex": 12,
       "outlineColor": [0, 102, 0],
       "fillColor": [0, 255, 0]
     },
     {
       "type": "Wall",
-      "rect": [634, 645, 30, 102],
+      "rect": [648, 456, 30, 102],
       "zIndex": 12,
       "outlineColor": [0, 102, 0],
       "fillColor": [0, 255, 0]
     },
     {
       "type": "Wall",
-      "rect": [189, 93, 54, 54]
+      "rect": [216, 120, 54, 54]
     },
     {
       "type": "Enemy",

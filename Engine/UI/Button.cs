@@ -4,9 +4,8 @@ using Raylib_cs;
 
 using Engine.Video;
 using Objects;
-using Types;
 
-public class Button : SpacialObject
+public class Button : RectObject
 {
 	// Currently unused.
 	public event Action? Pressed;
@@ -18,10 +17,6 @@ public class Button : SpacialObject
 	// I can't name this property "State" because of a name clash with the enum.
 	private State state;
 	public virtual State GetState() => state;
-
-	public Vector2i Size { get; set; }
-
-	public Rect2i Body => new((Vector2i)Position, Size);
 
 	public bool IsDown { get; set; } = false;
 	public bool IsFocused { get; set; } = false;

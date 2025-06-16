@@ -171,8 +171,8 @@ public class Game
 		// Moving this from Game.cs to Wall.cs involves programming keyframes.
 		int wallOffset = Utils.PingPong(time * 7, 96);
 
-		Walls[0].SetY(525 + wallOffset);
-		Walls[1].SetY(621 + wallOffset);
+		Walls[0].SetY(408 + wallOffset);
+		Walls[1].SetY(504 + wallOffset);
 
 		//keyframeEnemyTest.Position = _animation.GetPosition(time / 60.0);
 		//keyframeEnemyTest.Radius = Utils.Round(13 * (_animation.GetScale(time / 60.0).X + 1));

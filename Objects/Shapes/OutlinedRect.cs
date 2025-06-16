@@ -8,20 +8,16 @@ using Raylib_cs;
 using Engine.Video;
 using Types;
 
-public class OutlinedRect : SpacialObject
+public class OutlinedRect : RectObject
 {
-	public Vector2i Size { get; set; }
-	public Rect2i Body => new((Vector2i)Position, Size);
-
 	public Color OutlineColor { get; set; }
 	public Color FillColor { get; set; }
 
 	public int FillZ { get; set; } = 1;
 
-	public OutlinedRect(Rect2i body, Color outlineColor, Color fillColor, int outlineZ = 0, int fillZ = 1, bool isUI = false)
+	public OutlinedRect(Vector2i size, Color outlineColor, Color fillColor, int outlineZ = 0, int fillZ = 1, bool isUI = false)
 	{
-		Position = body.Position;
-		Size = body.Size;
+		Size = size;
 
 		OutlineColor = outlineColor;
 		FillColor = fillColor;
@@ -46,12 +42,6 @@ public class OutlinedRect : SpacialObject
 
 	private void PrivateDraw()
 	{
-		Vector2i globalPos = (Vector2i)GetGlobalPosition();
-
-		VideoEngine.QueueOutlinedRect(
-			GetGlobalZ(), FillZ,
-			new Rect2i(globalPos, Size),
-			OutlineColor, FillColor
-		);
+		VideoEngine.QueueOutlinedRect(GetGlobalZ(), FillZ, Body, OutlineColor, FillColor);
 	}
 }

@@ -6,15 +6,12 @@ using WhgVedit.Types;
 
 namespace WhgVedit.Objects;
 
-public class Checkpoint : SpacialObject
+public class Checkpoint : RectObject
 {
-	
-	public Vector2i Size = new();
 	public Color Color = new(168, 252, 164);
 	public float Brightness = 1;
-	public Rect2i Body => new Rect2i((Vector2i)Position, Size);
 	public Subpixel2 Center => Position + Size / 2;
-	private Timer activateTimer = new(20);
+	private readonly Timer activateTimer = new(20);
 	
 	public Checkpoint(Subpixel2 position)
 	{

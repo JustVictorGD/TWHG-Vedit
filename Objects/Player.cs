@@ -10,17 +10,15 @@ using Engine;
 using Objects.Shapes;
 using Types;
 
-public class Player : SpacialObject
+public class Player : RectObject
 {
 	// Components. Set in Ready().
 	public OutlinedRect? Sprite { get; set; }
 	public PushableBox PushableBox { get; set; }
 
 	// Spacial properties.
+	public override Vector2i Size { get; set; } = new(42, 42);
 	public int Speed { get; set; } = 4;
-	public Vector2i Size { get; set; } = new(42, 42);
-	public Vector2i HalfSize => Size / 2;
-	public Rect2i Body => new((Vector2i)Position - Size / 2, Size);
 	
 	// Color.
 	public Color OutlineColor { get; set; } = new(102, 0, 0);
@@ -45,13 +43,10 @@ public class Player : SpacialObject
 
 	public Player()
 	{
-		// At the time of this constructor, Position is (0, 0)
-		// and Body is (-21, -21, 42, 42).
-
-		Sprite = new(Body, OutlineColor, FillColor);
+		Sprite = new(Size, OutlineColor, FillColor);
 		Sprite.SetParent(this);
 
-		PushableBox = new(Body);
+		PushableBox = new(Size);
 		PushableBox.SetParent(this);
 	}
 

@@ -8,10 +8,8 @@ using Raylib_cs;
 using Engine.Video;
 using Types;
 
-public class Wall : SpacialObject
+public class Wall : RectObject
 {
-	public new int ZIndex { get; set; } = 16;
-
 	public const int OutlineWidth = 6;
 	public const int HalfWidth = OutlineWidth / 2;
 
@@ -20,16 +18,8 @@ public class Wall : SpacialObject
 	// should only be recomputed when resizing the wall, not moving it.
 	private readonly List<Rect2i> outlineRects = [];
 
-
 	public Color OutlineColor { get; set; } = new(72, 72, 102);
 	public Color FillColor { get; set; } = new(179, 179, 255);
-
-	public Vector2i Size { get; set; }
-
-	// QoL getters.
-	public Vector2i Start => (Vector2i)Position;
-	public Vector2i End => Start + Size;
-	public Rect2i Body => new(Start, Size);
 
 	public Wall() { }
 
