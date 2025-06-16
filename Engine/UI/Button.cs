@@ -6,7 +6,7 @@ using Engine.Video;
 using Objects;
 using Types;
 
-public class Button : Object2D
+public class Button : SpacialObject
 {
 	// Currently unused.
 	public event Action? Pressed;

@@ -8,7 +8,7 @@ using Raylib_cs;
 using Engine.Video;
 using Types;
 
-public class OutlinedRect : Object2D
+public class OutlinedRect : SpacialObject
 {
 	public Vector2i Size { get; set; }
 	public Rect2i Body => new((Vector2i)Position, Size);

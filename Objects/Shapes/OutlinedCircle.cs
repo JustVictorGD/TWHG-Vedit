@@ -8,7 +8,7 @@ using Raylib_cs;
 using Engine.Video;
 using Types;
 
-public class OutlinedCircle : Object2D
+public class OutlinedCircle : SpacialObject
 {
 	public double Radius { get; set; }
 	public Circle Body => new((Vector2i)GetGlobalPosition(), Radius);

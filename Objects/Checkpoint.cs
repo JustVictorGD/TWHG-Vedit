@@ -6,7 +6,7 @@ using WhgVedit.Types;
 
 namespace WhgVedit.Objects;
 
-public class Checkpoint : Object2D
+public class Checkpoint : SpacialObject
 {
 	
 	public Vector2i Size = new();

@@ -10,7 +10,7 @@ using Engine;
 using Objects.Shapes;
 using Types;
 
-public class Player : Object2D
+public class Player : SpacialObject
 {
 	// Components. Set in Ready().
 	public OutlinedRect? Sprite { get; set; }

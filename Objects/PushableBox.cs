@@ -3,7 +3,7 @@ namespace WhgVedit.Objects;
 using Common;
 using Types;
 
-public class PushableBox : Object2D
+public class PushableBox : SpacialObject
 {
 	public bool IsActive { get; set; } = true;
 	public Vector2i LastMovement { get; set; } = new();

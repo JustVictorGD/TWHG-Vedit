@@ -6,7 +6,7 @@ using Engine.Video;
 using Engine.Video.Shapes;
 using Types;
 
-public class SolidRect : Object2D
+public class SolidRect : SpacialObject
 {
 	public Vector2i Size { get; set; }
 	public Color Color { get; set; }

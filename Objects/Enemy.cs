@@ -6,7 +6,7 @@ using Common;
 using Objects.Shapes;
 using Types;
 
-public class Enemy : Object2D
+public class Enemy : SpacialObject
 {
 	public const int DefaultRadius = 13;
 

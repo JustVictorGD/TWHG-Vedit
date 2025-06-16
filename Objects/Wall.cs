@@ -8,7 +8,7 @@ using Raylib_cs;
 using Engine.Video;
 using Types;
 
-public class Wall : Object2D
+public class Wall : SpacialObject
 {
 	public new int ZIndex { get; set; } = 16;
 

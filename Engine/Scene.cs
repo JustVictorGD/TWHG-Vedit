@@ -96,7 +96,7 @@ public class Scene(List<GameObject> objects)
 		if (!Visible) return;
 
 		foreach (GameObject gameObject in GameObjects)
-			if (gameObject is Object2D object2D) object2D.Draw();
+			if (gameObject is SpacialObject spacial) spacial.Draw();
 	}
 	
 	public void DrawUI()
@@ -104,6 +104,6 @@ public class Scene(List<GameObject> objects)
 		if (!Visible) return;
 
 		foreach (GameObject gameObject in GameObjects)
-			if (gameObject is Object2D object2D) object2D.DrawUI();
+			if (gameObject is SpacialObject spacial) spacial.DrawUI();
 	}
 }

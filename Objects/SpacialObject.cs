@@ -4,7 +4,7 @@ namespace WhgVedit.Objects;
 
 using WhgVedit.Types;
 
-public class Object2D : GameObject
+public class SpacialObject : GameObject
 {
 	public int ZIndex { get; set; } = 0;
 	public bool IsVisible { get; set; } = true;
@@ -15,8 +15,8 @@ public class Object2D : GameObject
 	public Vector2 Scale { get; set; } = Vector2.One;
 
 	public Transform2D Transform => new(Position, Basis.FromRotationAndScale(Rotation, Scale));
-	
-	
+
+
 	// There are dedicated functions for X and Y elements of
 	// Position because editing them individually can otherwise
 	// get annoyingly long due to structs being immutable.
@@ -43,14 +43,14 @@ public class Object2D : GameObject
 		{
 			if (parent == this) throw new InvalidOperationException("An Object2D is its own ancestor. This will cause an infinite loop.");
 
-			if (parent is Object2D object2D)
-				z += object2D.ZIndex;
+			if (parent is SpacialObject spacial)
+				z += spacial.ZIndex;
 			parent = parent.Parent;
 		}
 
 		return z;
 	}
-	
+
 	// Not fully finished! This doesn't take rotation, scale and skew into account.
 	public Subpixel2 GetGlobalPosition()
 	{
@@ -61,8 +61,8 @@ public class Object2D : GameObject
 		{
 			if (parent == this) throw new InvalidOperationException("An Object2D is its own ancestor. This will cause an infinite loop.");
 
-			if (parent is Object2D object2D)
-				position += object2D.Position;
+			if (parent is SpacialObject spacial)
+				position += spacial.Position;
 			parent = parent.Parent;
 		}
 

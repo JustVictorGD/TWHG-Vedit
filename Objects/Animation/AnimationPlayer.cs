@@ -26,7 +26,7 @@ public class AnimationPlayer : GameObject
 		if (Animation is null) return;
 		
 		GameObject? parent = Parent;
-		if (parent is Object2D obj)
+		if (parent is SpacialObject obj)
 		{
 			obj.Position = Animation.GetPosition(Time);
 			obj.Rotation = Animation.GetRotation(Time);

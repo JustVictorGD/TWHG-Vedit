@@ -7,7 +7,7 @@ using Types;
 // This is a component used to detect if the mouse clicks an area or hovers
 // over it. Only one area can be hovered or clicked at once.
 
-public class CursorArea : Object2D
+public class CursorArea : SpacialObject
 {
 	// The C# equivalent of a signal from Godot.
 	public event Action? Pressed;
