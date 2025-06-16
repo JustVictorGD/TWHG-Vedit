@@ -6,7 +6,7 @@ using WhgVedit.Types;
 
 public class SpacialObject : GameObject
 {
-	public int ZIndex { get; set; } = 0;
+	public virtual ZIndex ZIndex { get; set; } = new();
 	public bool IsVisible { get; set; } = true;
 	public bool IsUI { get; set; }
 
@@ -34,9 +34,9 @@ public class SpacialObject : GameObject
 		Position = new(Position.X, value);
 	}
 
-	public int GetGlobalZ()
+	public ZIndex GetGlobalZ()
 	{
-		int z = ZIndex;
+		ZIndex z = ZIndex;
 		GameObject? parent = Parent;
 
 		while (parent != null)

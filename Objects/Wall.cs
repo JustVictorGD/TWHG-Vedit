@@ -10,6 +10,9 @@ using Types;
 
 public class Wall : RectObject
 {
+	public static readonly ZIndex DefaultZ = new(1000);
+	public override ZIndex ZIndex { get; set; } = new(1000);
+
 	public const int OutlineWidth = 6;
 	public const int HalfWidth = OutlineWidth / 2;
 
@@ -37,16 +40,16 @@ public class Wall : RectObject
 
 	public override void Draw()
 	{
-		VideoEngine.QueueOutlinedRect(ZIndex, 1, Body, OutlineColor, FillColor);
+		VideoEngine.QueueOutlinedRect(ZIndex, new(1), Body, OutlineColor, FillColor);
 	}
 	
 	public override JObject ToJson()
 	{
 		JObject jObject = base.ToJson();
 		jObject.Add("rect", new JArray(Position.X.Rounded, Position.Y.Rounded, Size.X, Size.Y));
-		if (ZIndex != 16)
+		if (ZIndex != DefaultZ)
 		{
-			jObject.Add("zIndex", ZIndex);
+			jObject.Add("zIndex", ZIndex.Value);
 		}
 
 		if (Utils.AreColorsEqual(OutlineColor, new(72, 72, 102)))

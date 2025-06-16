@@ -192,7 +192,7 @@ public class ObjectParser
 		if (properties.ContainsKey("zIndex"))
 		{
 			string value = properties["zIndex"];
-			wall.ZIndex = int.Parse(value);
+			wall.ZIndex = (ZIndex)int.Parse(value);
 		}
 		if (properties.ContainsKey("outlineColor"))
 		{

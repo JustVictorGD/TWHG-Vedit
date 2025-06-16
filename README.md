@@ -29,3 +29,33 @@ Project design guide:
 - If a feature is unstable or unfinished, make it clear by adding a descriptive description.
 
 - Shorten all instances of "Rectangle" to "Rect" in properties and methods.
+
+
+
+Default ZIndex categories:
+
+- Floor: -1000
+
+- Checkpoint: -800
+
+- Conveyor: -600
+
+- Ice: -400
+
+- Water: -200
+
+- Coin: 200
+
+- Key: 250
+
+- Paint: 300
+
+- Enemy: 400
+
+- Player: 600
+
+- Door: 800
+
+- Golden Door: 900
+
+- Wall: 1000

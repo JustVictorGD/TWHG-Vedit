@@ -12,6 +12,8 @@ using Types;
 
 public class Player : RectObject
 {
+	public override ZIndex ZIndex { get; set; } = new(600);
+
 	// Components. Set in Ready().
 	public OutlinedRect? Sprite { get; set; }
 	public PushableBox PushableBox { get; set; }

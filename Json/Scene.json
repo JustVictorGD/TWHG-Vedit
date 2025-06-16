@@ -11,21 +11,21 @@
     {
       "type": "Wall",
       "rect": [552, 552, 30, 102],
-      "zIndex": 12,
+      "zIndex": 50000000,
       "outlineColor": [0, 102, 0],
       "fillColor": [0, 255, 0]
     },
     {
       "type": "Wall",
       "rect": [744, 552, 30, 102],
-      "zIndex": 12,
+      "zIndex": 50000000,
       "outlineColor": [0, 102, 0],
       "fillColor": [0, 255, 0]
     },
     {
       "type": "Wall",
       "rect": [648, 456, 30, 102],
-      "zIndex": 12,
+      "zIndex": 50000000,
       "outlineColor": [0, 102, 0],
       "fillColor": [0, 255, 0]
     },

@@ -10,7 +10,7 @@ public class SolidRect : RectObject
 {
 	public Color Color { get; set; }
 
-	public SolidRect(Vector2i size, Color color, int zIndex, bool isUI = false)
+	public SolidRect(Vector2i size, Color color, ZIndex zIndex = new(), bool isUI = false)
 	{
 		Size = size;
 		Color = color;

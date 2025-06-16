@@ -78,19 +78,19 @@ public class Button : RectObject
 		switch (GetState())
 		{
 			case State.Up:
-				VideoEngine.QueueOutlinedRect(ZIndex, 0, Body, new(128, 128, 128), new(224, 224, 224));
+				VideoEngine.QueueOutlinedRect(ZIndex, new(), Body, new(128, 128, 128), new(224, 224, 224));
 				break;
 
 			case State.Focused:
-				VideoEngine.QueueOutlinedRect(ZIndex, 0, Body, new(96, 192, 255), new(192, 255, 255));
+				VideoEngine.QueueOutlinedRect(ZIndex, new(), Body, new(96, 192, 255), new(192, 255, 255));
 				break;
 
 			case State.Aborted:
-				VideoEngine.QueueOutlinedRect(ZIndex, 0, Body, new(255, 128, 128), new(255, 204, 204));
+				VideoEngine.QueueOutlinedRect(ZIndex, new(), Body, new(255, 128, 128), new(255, 204, 204));
 				break;
 
 			case State.Down:
-				VideoEngine.QueueOutlinedRect(ZIndex, 0, Body, new(0, 64, 192), new(160, 192, 255));
+				VideoEngine.QueueOutlinedRect(ZIndex, new(), Body, new(0, 64, 192), new(160, 192, 255));
 				
 				break;
 		}

@@ -8,6 +8,8 @@ namespace WhgVedit.Objects;
 
 public class Checkpoint : RectObject
 {
+	public override ZIndex ZIndex { get; set; } = new(-800);
+
 	public Color Color = new(168, 252, 164);
 	public float Brightness = 1;
 	public Subpixel2 Center => Position + Size / 2;

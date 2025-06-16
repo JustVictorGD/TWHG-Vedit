@@ -8,7 +8,7 @@ public class RectCall : ShapeCall
 {
 	public Rect2i Body { get; set; }
 
-	public RectCall(int zIndex, Rect2i body, Color color)
+	public RectCall(ZIndex zIndex, Rect2i body, Color color)
 	{
 		ZIndex = zIndex;
 		Body = body;

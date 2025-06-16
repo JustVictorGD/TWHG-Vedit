@@ -8,6 +8,8 @@ using Types;
 
 public class Enemy : SpacialObject
 {
+	public override ZIndex ZIndex { get; set; } = new(400);
+
 	public const int DefaultRadius = 13;
 
 	// Component. Set in Ready().

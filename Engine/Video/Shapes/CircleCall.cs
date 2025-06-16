@@ -9,7 +9,7 @@ public class CircleCall : ShapeCall
 	public Circle Body { get; set; }
 	public int Sides { get; set; }
 
-	public CircleCall(int zIndex, Vector2i position, double radius, Color color, int sides)
+	public CircleCall(ZIndex zIndex, Vector2i position, double radius, Color color, int sides)
 	{
 		ZIndex = zIndex;
 		Color = color;
@@ -17,7 +17,7 @@ public class CircleCall : ShapeCall
 		Sides = sides;
 	}
 
-	public CircleCall(int zIndex, Circle body, Color color, int sides)
+	public CircleCall(ZIndex zIndex, Circle body, Color color, int sides)
 	{
 		ZIndex = zIndex;
 		Color = color;

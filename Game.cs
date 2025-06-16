@@ -61,9 +61,9 @@ public class Game
 	*/
 	readonly List<Button> buttons = [
 		new Slider(128, 128, 48, 48),
-		new Slider(256, 128, 48, 48) { ZIndex = -16 },
+		new Slider(256, 128, 48, 48) { ZIndex = new(-16) },
 		new Slider(256, 256, 48, 48, false),
-		new Slider(384, 256, 48, 48, false) { ZIndex = -16 }
+		new Slider(384, 256, 48, 48, false) { ZIndex = new(-16) }
 	];
 
 	public static List<Checkpoint> Checkpoints = [];

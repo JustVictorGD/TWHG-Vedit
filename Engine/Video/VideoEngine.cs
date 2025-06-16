@@ -25,7 +25,7 @@ public static class VideoEngine
 		drawCalls.Add(drawCall);
 	}
 
-	public static int QueueOutlinedRect(int outlineZ, int fillZ, Rect2i outer, Color outlineColor, Color fillColor)
+	public static int QueueOutlinedRect(ZIndex outlineZ, ZIndex fillZ, Rect2i outer, Color outlineColor, Color fillColor)
 	{
 		fillZ += outlineZ;
 
@@ -54,7 +54,7 @@ public static class VideoEngine
 		}
 	}
 
-	public static int QueueOutlinedCircle(int outlineZ, int fillZ, Circle shape, Color outlineColor, Color fillColor)
+	public static int QueueOutlinedCircle(ZIndex outlineZ, ZIndex fillZ, Circle shape, Color outlineColor, Color fillColor)
 	{
 		fillZ += outlineZ;
 
