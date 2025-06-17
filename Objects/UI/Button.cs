@@ -2,6 +2,7 @@ namespace WhgVedit.Objects.UI;
 
 using Engine.Video;
 using Objects;
+using Raylib_cs;
 
 public class Button : RectObject
 {
@@ -93,7 +94,7 @@ public class Button : RectObject
 
 	public bool IsUnderCursor() => CursorListener.IsCursorInRect(Body, IsUI);
 
-	public virtual void Press() { }
-	public virtual void Release() { }
-	public virtual void Confirm() { }
+	public virtual void Press(MouseButton mouseButton) { }
+	public virtual void Release(MouseButton mouseButton) { }
+	public virtual void Confirm(MouseButton mouseButton) { }
 }

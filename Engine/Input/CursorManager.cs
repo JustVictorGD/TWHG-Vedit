@@ -1,7 +1,6 @@
-using Raylib_cs;
-using WhgVedit.Objects.UI;
-
 namespace WhgVedit.Engine.Input;
+
+using Objects.UI;
 
 public static class CursorManager
 {
@@ -16,12 +15,8 @@ public static class CursorManager
 		{
 			listener.IsFocused = false;
 
-			if (Raylib.IsMouseButtonReleased(MouseButton.Left) && listener.IsHeld)
-			{
-				listener.IsHeld = false;
-				listener.Release();
-				if (listener.IsUnderCursor()) listener.Confirm();
-			}
+			// Decreases 'TimesHeld' and sends 'Released' and 'Confirmed' signals.
+			listener.ProcessButtonsReleasing();
 
 			if (listener.IsUnderCursor())
 				focusedListeners.Add(listener);
@@ -39,10 +34,7 @@ public static class CursorManager
 
 		highestlistener.IsFocused = true;
 
-		if (Raylib.IsMouseButtonPressed(MouseButton.Left))
-		{
-			highestlistener.IsHeld = true;
-			highestlistener.Press();
-		}
+		// Increases 'TimesHeld' and sends 'Pressed' signals.
+		highestlistener.ProcessButtonsPressing();
 	}
 }

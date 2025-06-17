@@ -20,7 +20,7 @@ public class Game
 	private const int cursorGridSize = 12;
 	public const int TileSize = 48;
 	public static readonly Vector2I AreaSize = new(32, 20); // WHG 4 standard: 32, 20.
-	
+
 	// Rendering.
 	public static int CircleQuality { get; set; } = 5;
 	Vector2 camera_pos = new();
@@ -35,7 +35,7 @@ public class Game
 	public List<GameObject> NewObjects { get; set; } = [];
 
 	public List<GameObject> ObjectsToRemove { get; set; } = [];
-	
+
 	// These will be imported from a level file.
 	public List<GameObject> GameObjects { get; set; }
 
@@ -79,14 +79,12 @@ public class Game
 		return Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera);
 	}
 
-	private readonly List<CursorListener> cursorListeners = [
-		new(new(1536, 960), false, "Floor") { Position = new(768, 480) },
-		new(new(96, 96), false, "Checkpoint 1") { Position = new(480, 96) },
-		new(new(96, 96), false, "Checkpoint 2") { Position = new(672, 96) }
-	];
-	
+	private readonly CursorListener worldListener = new(new(1536, 960), false) { Position = new(768, 480) };
+
 	public void Ready()
 	{
+		worldListener.Pressed += ClickWorld;
+
 		ObjectParser parser = new("Json/Scene.json");
 		parser.Parse();
 		GameObjects = parser.GetObjects();
@@ -107,7 +105,7 @@ public class Game
 		Scene.Main.AddObjectsToGroups([player], "Player");
 		Scene.Main.AddObjectsToGroups(buttons, "Buttons");
 
-		Scene.Main.AddObjectsToGroups(cursorListeners, CursorListener.GroupName); // Beta.
+		Scene.Main.AddObjectsToGroups([worldListener], CursorListener.GroupName); // Beta.
 
 		/*keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
 		Scene.Main.AddObject(keyframeEnemyAnimationPlayer);
@@ -143,29 +141,6 @@ public class Game
 
 	public void Update()
 	{
-		List<Enemy> enemies = Scene.Main != null ? [.. Scene.Main.GetObjectsInGroup("Enemies").Cast<Enemy>()] : [];
-
-		Vector2I mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
-
-		if (Raylib.IsMouseButtonPressed(MouseButton.Left) && Scene.Main != null)
-		{
-			Enemy newEnemy = new() { Position = mousePos, Groups = ["Enemies"] };
-			Scene.Main.AddObjectsToGroups([newEnemy], "Enemies");
-			NewObjects.Add(newEnemy);
-		}
-
-		if (Raylib.IsMouseButtonDown(MouseButton.Right) && Scene.Main != null)
-		{
-			foreach (Enemy enemy in enemies)
-				if (enemy.Position == mousePos)
-				{
-					ObjectsToRemove.Add(enemy);
-					Scene.Main.RemoveObject(enemy);
-					NewObjects.Remove(enemy);
-				}
-			
-		}
-		
 		time++;
 
 		// Moving this from Game.cs to Wall.cs involves programming keyframes.
@@ -196,14 +171,14 @@ public class Game
 			saver.AddNewObjectsToJson(NewObjects);
 			saver.DeleteObjectsFromJson(ObjectsToRemove);
 			saver.Save();
-			
+
 			NewObjects = [];
 			ObjectsToRemove = [];
-			
+
 			Console.WriteLine("SAVED!");
 		}
-			
-			
+
+
 	}
 
 	// Draw calls in this function comply with the camera.
@@ -242,8 +217,11 @@ public class Game
 		Scene.Main?.Draw();
 		VideoEngine.Render();
 
-		Vector2I mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
-		Raylib.DrawCircle(mousePos.X, mousePos.Y, 13, new(255, 192, 96, 128));
+		if (worldListener.IsFocused)
+		{
+			Vector2I mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
+			Raylib.DrawCircle(mousePos.X, mousePos.Y, 13, new(255, 192, 96, 128));
+		}
 	}
 
 	// Draw calls in this function ignore the camera.
@@ -252,5 +230,41 @@ public class Game
 		Scene.Main?.DrawUI();
 
 		VideoEngine.Render();
+	}
+
+	private void ClickWorld(MouseButton mouseButton)
+	{
+		Vector2I mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
+
+		if (mouseButton == MouseButton.Left) PlaceObject(mousePos);
+		else if (mouseButton == MouseButton.Right) RemoveObject(mousePos);
+	}
+
+	private void PlaceObject(Vector2I mousePos)
+	{
+		if (Scene.Main == null) return;
+
+		Enemy newEnemy = new() { Position = mousePos, Groups = ["Enemies"] };
+		Scene.Main.AddObjectsToGroups([newEnemy], "Enemies");
+		NewObjects.Add(newEnemy);
+
+		Console.WriteLine("PlaceObject()");
+	}
+
+	private void RemoveObject(Vector2I mousePos)
+	{
+		if (Scene.Main == null || !worldListener.IsFocused) return;
+
+		List<Enemy> enemies = Scene.Main != null ? [.. Scene.Main.GetObjectsInGroup("Enemies").Cast<Enemy>()] : [];
+
+		foreach (Enemy enemy in enemies)
+			if (enemy.Position == mousePos)
+			{
+				ObjectsToRemove.Add(enemy);
+				Scene.Main?.RemoveObject(enemy);
+				NewObjects.Remove(enemy);
+			}
+		
+		Console.WriteLine("RemoveObject()");
 	}
 }

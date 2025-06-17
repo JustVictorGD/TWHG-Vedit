@@ -1,5 +1,6 @@
 namespace WhgVedit.Objects.UI;
 
+using Raylib_cs;
 using System.Numerics;
 
 using Types;
@@ -10,7 +11,7 @@ public class Slider(int x, int y, int width, int height, bool isUI = true) : But
 	public bool CanMoveX { get; set; } = true;
 	public bool CanMoveY { get; set; } = true;
 
-	public override void Press()
+	public override void Press(MouseButton mouseButton)
 	{
 		mousePosOffset = (Vector2I)Position - (Vector2I)Game.GetMousePosition(IsUI);
 	}
