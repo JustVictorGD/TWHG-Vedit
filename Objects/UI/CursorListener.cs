@@ -90,4 +90,16 @@ public class CursorListener : RectObject
 			Press(mouseButton);
 		}
 	}
+
+	public override void SetParent(GameObject parent)
+	{
+		base.SetParent(parent);
+
+		if (parent is IPressable pressable)
+		{
+			Pressed += pressable.Press;
+			Released += pressable.Release;
+			Confirmed += pressable.Confirm;
+		}
+	}
 }

@@ -4,7 +4,7 @@ using Engine.Video;
 using Objects;
 using Raylib_cs;
 
-public class Button : RectObject
+public class Button : RectObject, IPressable
 {
 	// The component responsible for detecting the cursor.
 	public CursorListener Listener { get; set; }
@@ -28,10 +28,6 @@ public class Button : RectObject
 	public override async void Ready()
 	{
 		Listener.SetParent(this);
-
-		Listener.Pressed += Press;
-		Listener.Released += Release;
-		Listener.Confirmed += Confirm;
 
 		if (Scene == null) return;
 

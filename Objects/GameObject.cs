@@ -21,7 +21,7 @@ public class GameObject
 	public virtual void Ready() { }
 	public virtual void Update() { }
 
-	public void SetParent(GameObject parentObject)
+	public virtual void SetParent(GameObject parentObject)
 	{
 		Parent = parentObject;
 		parentObject.Children.Add(parentObject);
