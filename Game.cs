@@ -1,3 +1,5 @@
+using WhgVedit.Engine.Video.Shapes;
+
 namespace WhgVedit;
 
 using Raylib_cs;
@@ -42,6 +44,8 @@ public class Game
 	public static List<Wall> Walls = [];
 	public static List<Enemy> Enemies = [];
 
+	public TextLabel StateLabel;
+
 	//bool zoomedOut = false;
 	//ProtoKeyframe keyframe = new(new(72, 72), new(72 + 384, 72), 0.5f);
 
@@ -71,6 +75,7 @@ public class Game
 	/*private Checkpoint checkpoint = new(new Subpixel2(480, 96)) { Size = new Vector2i(96, 96) };
 	private Checkpoint checkpoint2 = new(new Subpixel2(672, 96)) { Size = new Vector2i(96, 96) };
 	*/
+	public bool IsEditModeOn { get; set; }
 
 
 	public static Vector2 GetMousePosition(bool isUI)
@@ -83,6 +88,8 @@ public class Game
 
 	public void Ready()
 	{
+		StateLabel = new(Vector2.Zero, "Play mode (Press Q to change modes)", fontSize: 48);
+		
 		worldListener.Pressed += ClickWorld;
 
 		ObjectParser parser = new("Json/Scene.json");
@@ -106,6 +113,8 @@ public class Game
 		Scene.Main.AddObjectsToGroups(buttons, "Buttons");
 
 		Scene.Main.AddObjectsToGroups([worldListener], CursorListener.GroupName); // Beta.
+		
+		Scene.Main.AddObject(StateLabel);
 
 		/*keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
 		Scene.Main.AddObject(keyframeEnemyAnimationPlayer);
@@ -130,10 +139,11 @@ public class Game
 		InputAction returnAction = new("Return", [KeyboardKey.Escape, KeyboardKey.Backspace]);
 		InputAction continueAction = new("Continue", [KeyboardKey.Space, KeyboardKey.Enter]);
 
+		InputAction changeMode = new("ChangeMode", [KeyboardKey.Q]);
 		InputAction saveAction = new("Save", [KeyboardKey.E]);
 
 
-		InputEngine.AddActions([leftAction, rightAction, upAction, downAction, returnAction, continueAction, saveAction]);
+		InputEngine.AddActions([leftAction, rightAction, upAction, downAction, returnAction, continueAction, changeMode, saveAction]);
 
 		Scene.Main.Ready();
 	}
@@ -142,7 +152,7 @@ public class Game
 	public void Update()
 	{
 		time++;
-
+		
 		// Moving this from Game.cs to Wall.cs involves programming keyframes.
 		int wallOffset = Utils.PingPong(time * 7, 96);
 
@@ -164,7 +174,13 @@ public class Game
 			if (@object is Enemy enemy && player.Body.Intersects(enemy.Hitbox))
 				player.Die();
 
-		if (InputEngine.GetAction("Save").IsActive)
+		if (InputEngine.IsActionPressed("ChangeMode"))
+		{
+			IsEditModeOn = !IsEditModeOn;
+			StateLabel.Text = IsEditModeOn ? "Edit mode" : "Play mode";
+		}
+		
+		if (InputEngine.IsActionPressed("Save"))
 		{
 			ObjectSaver saver = new("Json/Scene.json", Scene.Main.GameObjects, []);
 
@@ -177,8 +193,6 @@ public class Game
 
 			Console.WriteLine("SAVED!");
 		}
-
-
 	}
 
 	// Draw calls in this function comply with the camera.
@@ -217,7 +231,7 @@ public class Game
 		Scene.Main?.Draw();
 		VideoEngine.Render();
 
-		if (worldListener.IsFocused)
+		if (worldListener.IsFocused && IsEditModeOn)
 		{
 			Vector2I mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
 			Raylib.DrawCircle(mousePos.X, mousePos.Y, 13, new(255, 192, 96, 128));
@@ -228,12 +242,13 @@ public class Game
 	public void DrawUI()
 	{
 		Scene.Main?.DrawUI();
-
 		VideoEngine.Render();
 	}
 
 	private void ClickWorld(MouseButton mouseButton)
 	{
+		if (!IsEditModeOn) return;
+		
 		Vector2I mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
 
 		if (mouseButton == MouseButton.Left) PlaceObject(mousePos);
