@@ -21,7 +21,7 @@ public class Slider(int x, int y, int width, int height, bool isUI = true) : But
 
 		base.Update();
 
-		if (IsDown)
+		if (Listener.IsHeld)
 		{
 			if (CanMoveX) SetX(mousePosition.X + mousePosOffset.X);
 			if (CanMoveY) SetY(mousePosition.Y + mousePosOffset.Y);

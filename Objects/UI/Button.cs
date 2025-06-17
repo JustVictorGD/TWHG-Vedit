@@ -1,16 +1,12 @@
 namespace WhgVedit.Objects.UI;
 
-using Raylib_cs;
-
 using Engine.Video;
 using Objects;
 
 public class Button : RectObject
 {
-	// Currently unused.
-	public event Action? Pressed;
-	public event Action? Released;
-	public event Action? Confirmed; // When releasing on top of the button.
+	// The component responsible for detecting the cursor.
+	public CursorListener Listener { get; set; }
 
 	public enum State { Up, Focused, Aborted, Down }
 
@@ -18,38 +14,37 @@ public class Button : RectObject
 	private State state;
 	public virtual State GetState() => state;
 
-	public bool IsDown { get; set; } = false;
-	public bool IsFocused { get; set; } = false;
 
 	public Button(int x, int y, int width, int height, bool isUI = true)
 	{
 		Position = new(x, y);
 		Size = new(width, height);
 		IsUI = isUI;
+
+		Listener = new(new(width, height), isUI);
+	}
+
+	public override async void Ready()
+	{
+		Listener.SetParent(this);
+
+		Listener.Pressed += Press;
+		Listener.Released += Release;
+		Listener.Confirmed += Confirm;
+
+		if (Scene == null) return;
+
+		await Scene.TurnIdle;
+
+		Scene.AddObjectsToGroups([Listener], "CursorListeners");
 	}
 
 	public override void Update()
 	{
-		if (Raylib.IsMouseButtonPressed(MouseButton.Left) && IsFocused)
-		{
-			IsDown = true;
-			Pressed?.Invoke();
-			Press();
-		}
-
-		else if (IsDown && Raylib.IsMouseButtonReleased(MouseButton.Left))
-		{
-			IsDown = false;
-			Released?.Invoke();
-			Release();
-
-			if (IsFocused) { Confirmed?.Invoke(); Confirm(); }
-		}
-
 		int score = 0;
 
-		if (IsFocused) score++;
-		if (IsDown) score += 2;
+		if (Listener.IsFocused) score++;
+		if (Listener.IsHeld) score += 2;
 
 		state = score switch
 		{
@@ -96,7 +91,7 @@ public class Button : RectObject
 		}
 	}
 
-	public bool IsUnderCursor() => CursorCatcher.IsCursorInRect(Body, IsUI);
+	public bool IsUnderCursor() => CursorListener.IsCursorInRect(Body, IsUI);
 
 	public virtual void Press() { }
 	public virtual void Release() { }

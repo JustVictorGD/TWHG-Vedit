@@ -1,17 +1,19 @@
 namespace WhgVedit.Objects.UI;
 
 // This is a component used to detect if the mouse clicks an area or hovers
-// over it. Only one area can be hovered or clicked at once.
-
-using Raylib_cs;
+// over it. It ensures only one area can be hovered or clicked at a time.
 
 using Objects;
 using Types;
 
-public class CursorCatcher : RectObject
+public class CursorListener : RectObject
 {
+	public const string GroupName = "CursorListeners";
+
 	// The C# equivalent of a signal from Godot.
 	public event Action? Pressed;
+	public event Action? Released;
+	public event Action? Confirmed;
 
 	public string DebugName { get; set; } = "Unnamed";
 
@@ -19,33 +21,25 @@ public class CursorCatcher : RectObject
 	// Setting them is a job for a manager script.
 	public bool IsFocused { get; set; }
 	public bool IsHeld { get; set; }
+
+	// Not currently used.
 	public bool IsSelected { get; set; }
 
-	public CursorCatcher(Vector2I size, bool isUI, string name = "")
+	public CursorListener(Vector2I size, bool isUI, string name = "")
 	{
 		Size = size;
 		IsUI = isUI;
 		DebugName = name;
-
-		// How you connect methods and events.
-		Pressed += ReactToPress;
 	}
 
-	public override void Update()
+	public override void Ready()
 	{
-		// Currently, IsFocused is being set to true inside Game.cs.
-		
-		if (IsFocused && Raylib.IsMouseButtonPressed(MouseButton.Left))
-			Pressed?.Invoke();
-
-		// This part is important, it makes sure only one area is focused at a time.
-		IsFocused = false;
+		base.Ready();
 	}
 
-	private void ReactToPress()
-	{
-		Console.WriteLine($"Omg I have been pressed, my name is {DebugName}");
-	}
+	public void Press() => Pressed?.Invoke();
+	public void Release() => Released?.Invoke();
+	public void Confirm() => Confirmed?.Invoke();
 
 	// Important: This uses asymmetrical edge handling.
 	// The case "point = rect.Position" returns true.

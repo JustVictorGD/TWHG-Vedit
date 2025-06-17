@@ -11,6 +11,7 @@ using Objects;
 using Objects.Animation;
 using Objects.UI;
 using Types;
+using WhgVedit.Engine.Input;
 
 public class Game
 {
@@ -78,10 +79,10 @@ public class Game
 		return Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera);
 	}
 
-	private readonly List<CursorCatcher> cursorAreas = [
-		new(new(1536, 960), false, "Floor"),
-		new(new(96, 96), false, "Checkpoint 1"),
-		new(new(96, 96), false, "Checkpoint 2"),
+	private readonly List<CursorListener> cursorListeners = [
+		new(new(1536, 960), false, "Floor") { Position = new(768, 480) },
+		new(new(96, 96), false, "Checkpoint 1") { Position = new(480, 96) },
+		new(new(96, 96), false, "Checkpoint 2") { Position = new(672, 96) }
 	];
 	
 	public void Ready()
@@ -104,10 +105,9 @@ public class Game
 		Scene.Main.AddObjectsToGroups(animationPlayers, "AnimationPlayers");
 
 		Scene.Main.AddObjectsToGroups([player], "Player");
-		//Scene.Main.AddObjectsToGroups([.. Walls], "Walls");
-		Scene.Main.AddObjectsToGroups([.. buttons], "Buttons");
+		Scene.Main.AddObjectsToGroups(buttons, "Buttons");
 
-		Scene.Main.AddObjectsToGroups([.. cursorAreas], "CursorAreas"); // Beta.
+		Scene.Main.AddObjectsToGroups(cursorListeners, CursorListener.GroupName); // Beta.
 
 		/*keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
 		Scene.Main.AddObject(keyframeEnemyAnimationPlayer);
@@ -179,8 +179,7 @@ public class Game
 
 		InputEngine.CheckInputs();
 
-		HandleCursorAreas();
-		HandleButtons();
+		CursorManager.Update();
 
 		Scene.Main?.Update();
 
@@ -253,38 +252,5 @@ public class Game
 		Scene.Main?.DrawUI();
 
 		VideoEngine.Render();
-	}
-
-	// Beta.
-	private void HandleCursorAreas()
-	{
-		foreach (CursorCatcher catcher in cursorAreas.OrderBy(x => x.ZIndex).Reverse())
-			if (catcher.IsUnderCursor())
-			{
-				catcher.IsFocused = true;
-				break;
-			}
-	}
-
-	private void HandleButtons()
-	{
-		List<Button> focusedButtons = [];
-
-		foreach (Button button in buttons)
-		{
-			button.IsFocused = false;
-
-			if (button.IsUnderCursor())
-				focusedButtons.Add(button);
-		}
-
-		focusedButtons = [.. focusedButtons
-			.OrderBy(x => x.IsUI)
-			.ThenBy(x => x.ZIndex)
-		];
-
-		if (focusedButtons.Count > 0)
-			// Objects later in the array have higher Z order.
-			focusedButtons[^1].IsFocused = true;
 	}
 }

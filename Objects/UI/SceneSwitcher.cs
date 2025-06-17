@@ -17,7 +17,7 @@ public class SceneSwitcher(int x, int y, int width, int height, bool isUI = true
 
 	public override void PrivateDraw()
 	{
-		if (!IsDown)
+		if (!Listener.IsHeld)
 			VideoEngine.DrawOutlinedRect(Body, new(102, 0, 0), new(102, 0, 0, 128));
 		else
 			VideoEngine.DrawOutlinedRect(Body, new(255, 0, 0), new(255, 0, 0, 128));
