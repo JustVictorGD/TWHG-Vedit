@@ -26,20 +26,20 @@ public class Animation : GameObject
 
 	}
 
-	public Vector2i GetPosition(double time)
+	public Vector2I GetPosition(double time)
 	{
 		if (time > Length)
 			time %= Length;
 		
 		int[] indicesInBetween = GetKeyframeIndicesInBetween(time);
-		if (indicesInBetween.Length == 0) return new Vector2i(0, 0);
+		if (indicesInBetween.Length == 0) return new Vector2I(0, 0);
 
 		Keyframe previous = Keyframes[indicesInBetween[0]];
 		if (indicesInBetween.Length == 1) return previous.Position;
 
 		Keyframe next = Keyframes[indicesInBetween[1]];
 		
-		return Utils.Lerp2i(previous.Position, next.Position, 
+		return Utils.Lerp2I(previous.Position, next.Position, 
 			next.EasingFunc((time - GetLengthTo(indicesInBetween[0])) / next.Duration));
 	}
 	

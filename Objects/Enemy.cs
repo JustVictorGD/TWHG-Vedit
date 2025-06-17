@@ -17,8 +17,8 @@ public class Enemy : SpacialObject
 
 	public int Radius => Utils.Round(13 * Scale.X);
 
-	public Circle Body => new((Vector2i)GetGlobalPosition(), Radius);
-	public Circle Hitbox => new((Vector2i)GetGlobalPosition(), Radius - Wall.OutlineWidth);
+	public Circle Body => new((Vector2I)GetGlobalPosition(), Radius);
+	public Circle Hitbox => new((Vector2I)GetGlobalPosition(), Radius - Wall.OutlineWidth);
 
 	public Enemy()
 	{

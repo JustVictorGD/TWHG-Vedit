@@ -6,9 +6,9 @@ using Types;
 
 public class RectCall : ShapeCall
 {
-	public Rect2i Body { get; set; }
+	public Rect2I Body { get; set; }
 
-	public RectCall(ZIndex zIndex, Rect2i body, Color color)
+	public RectCall(ZIndex zIndex, Rect2I body, Color color)
 	{
 		ZIndex = zIndex;
 		Body = body;
@@ -17,6 +17,6 @@ public class RectCall : ShapeCall
 
 	public override void Execute()
 	{
-		VideoEngine.DrawRect2i(Body, Color);
+		VideoEngine.DrawRect2I(Body, Color);
 	}
 }

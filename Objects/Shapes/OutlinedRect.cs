@@ -15,7 +15,7 @@ public class OutlinedRect : RectObject
 
 	public ZIndex FillZ { get; set; } = new(1);
 
-	public OutlinedRect(Vector2i size, Color outlineColor, Color fillColor, ZIndex outlineZ = new(), ZIndex fillZ = new(), bool isUI = false)
+	public OutlinedRect(Vector2I size, Color outlineColor, Color fillColor, ZIndex outlineZ = new(), ZIndex fillZ = new(), bool isUI = false)
 	{
 		Size = size;
 

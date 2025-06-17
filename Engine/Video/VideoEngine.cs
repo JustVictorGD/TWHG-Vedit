@@ -25,11 +25,11 @@ public static class VideoEngine
 		drawCalls.Add(drawCall);
 	}
 
-	public static int QueueOutlinedRect(ZIndex outlineZ, ZIndex fillZ, Rect2i outer, Color outlineColor, Color fillColor)
+	public static int QueueOutlinedRect(ZIndex outlineZ, ZIndex fillZ, Rect2I outer, Color outlineColor, Color fillColor)
 	{
 		fillZ += outlineZ;
 
-		Rect2i inner = GetInner(outer);
+		Rect2I inner = GetInner(outer);
 
 		if (fillColor.A >= 255 && fillZ >= outlineZ)
 		{
@@ -84,43 +84,43 @@ public static class VideoEngine
 
 	// Utility function for a frequent action throughout drawing.
 	// Negative size may occur, but in drawing it's not a problem.
-	public static Rect2i GetInner(Rect2i outer) => new(
+	public static Rect2I GetInner(Rect2I outer) => new(
 		outer.Position + Wall.OutlineWidth,
 		outer.Size - Wall.OutlineWidth * 2
 	);
 
 	// Utility draw functions.
-	public static void DrawOutlinedRect(Rect2i dimensions, Color outlineColor, Color fillColor)
+	public static void DrawOutlinedRect(Rect2I dimensions, Color outlineColor, Color fillColor)
 	{
-		Rect2i inner = GetInner(dimensions);
+		Rect2I inner = GetInner(dimensions);
 
 		// If the fill color takes up zero area, just draw the outline.
 		if (inner.Size.X <= 0 || inner.Size.Y <= 0)
-			DrawRect2i(dimensions, outlineColor);
+			DrawRect2I(dimensions, outlineColor);
 
 		// If fill color is completely opaque, there's no point in drawing a ring-like outline.
 		else if (fillColor.A == 255)
 		{
-			DrawRect2i(dimensions, outlineColor);
-			DrawRect2i(inner, fillColor);
+			DrawRect2I(dimensions, outlineColor);
+			DrawRect2I(inner, fillColor);
 		}
 		else // This case is where things get fancy.
 		{
 			DrawOutline(dimensions, outlineColor, inner);
-			DrawRect2i(inner, fillColor);
+			DrawRect2I(inner, fillColor);
 		}
 	}
 
-	public static void DrawOutline(Rect2i outer, Color color)
+	public static void DrawOutline(Rect2I outer, Color color)
 	{
-		Rect2i inner = new(
+		Rect2I inner = new(
 			outer.Position + Wall.OutlineWidth,
 			outer.Size - Wall.OutlineWidth * 2
 		);
 
 		DrawOutline(outer, color, inner);
 	}
-	public static void DrawOutline(Rect2i outer, Color color, Rect2i inner)
+	public static void DrawOutline(Rect2I outer, Color color, Rect2I inner)
 	{
 		DrawRectFromCorners(outer.Start, inner.TopRight, color);
 		DrawRectFromCorners(inner.Start, outer.BottomLeft, color);
@@ -128,13 +128,13 @@ public static class VideoEngine
 		DrawRectFromCorners(inner.End, outer.TopRight, color);
 	}
 
-	public static void DrawRectFromCorners(Vector2i pos1, Vector2i pos2, Color color)
+	public static void DrawRectFromCorners(Vector2I pos1, Vector2I pos2, Color color)
 	{
-		Vector2i start = new(
+		Vector2I start = new(
 			Math.Min(pos1.X, pos2.X),
 			Math.Min(pos1.Y, pos2.Y)
 		);
-		Vector2i size = new(
+		Vector2I size = new(
 			Math.Abs(pos1.X - pos2.X),
 			Math.Abs(pos1.Y - pos2.Y)
 		);
@@ -143,7 +143,7 @@ public static class VideoEngine
 			Raylib.DrawRectangle(start.X, start.Y, size.X, size.Y, color);
 	}
 
-	public static void DrawRect2i(Rect2i rect, Color color)
+	public static void DrawRect2I(Rect2I rect, Color color)
 	{
 		Raylib.DrawRectangle(
 			rect.Position.X,

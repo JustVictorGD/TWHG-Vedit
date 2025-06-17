@@ -10,7 +10,7 @@ public class RingCall : ShapeCall
 	public Circle Body { get; set; }
 	public int Sides { get; set; }
 
-	public RingCall(ZIndex zIndex, Color color, Vector2i position, float radius, int sides)
+	public RingCall(ZIndex zIndex, Color color, Vector2I position, float radius, int sides)
 	{
 		ZIndex = zIndex;
 		Color = color;

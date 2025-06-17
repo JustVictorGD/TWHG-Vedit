@@ -8,7 +8,7 @@ using Raylib_cs;
 using Objects;
 using Types;
 
-public class CursorArea : RectObject
+public class CursorCatcher : RectObject
 {
 	// The C# equivalent of a signal from Godot.
 	public event Action? Pressed;
@@ -21,10 +21,9 @@ public class CursorArea : RectObject
 	public bool IsHeld { get; set; }
 	public bool IsSelected { get; set; }
 
-	public CursorArea(Rect2i localBody, bool isUI, string name = "")
+	public CursorCatcher(Vector2I size, bool isUI, string name = "")
 	{
-		Position = localBody.Position;
-		Size = localBody.Size;
+		Size = size;
 		IsUI = isUI;
 		DebugName = name;
 
@@ -52,9 +51,9 @@ public class CursorArea : RectObject
 	// The case "point = rect.Position" returns true.
 	// The case "point = rect.End" returns false.
 	// rect.Size.X * rect.Size.Y equals the amount of valid spots.
-	public static bool IsCursorInRect(Rect2i rect, bool isUI)
+	public static bool IsCursorInRect(Rect2I rect, bool isUI)
 	{
-		Vector2i point = (Vector2i)Game.GetMousePosition(isUI);
+		Vector2I point = (Vector2I)Game.GetMousePosition(isUI);
 
 		return point >= rect.Start && point < rect.End;
 	}

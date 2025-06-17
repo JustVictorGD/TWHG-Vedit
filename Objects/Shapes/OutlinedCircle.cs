@@ -11,7 +11,7 @@ using Types;
 public class OutlinedCircle : SpacialObject
 {
 	public double Radius { get; set; }
-	public Circle Body => new((Vector2i)GetGlobalPosition(), Radius);
+	public Circle Body => new((Vector2I)GetGlobalPosition(), Radius);
 
 	public Color OutlineColor { get; set; }
 	public Color FillColor { get; set; }

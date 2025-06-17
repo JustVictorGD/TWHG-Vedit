@@ -4,7 +4,7 @@ namespace WhgVedit.Types;
 
 public readonly struct Circle
 {
-	public readonly Vector2i Position;
+	public readonly Vector2I Position;
 	public readonly double Radius;
 
 	public Circle(int x, int y, double radius)
@@ -13,7 +13,7 @@ public readonly struct Circle
 		Radius = radius;
 	}
 
-	public Circle(Vector2i position, double radius)
+	public Circle(Vector2I position, double radius)
 	{
 		Position = position;
 		Radius = radius;
@@ -27,7 +27,7 @@ public readonly struct Circle
 		return squaredDistance < Utils.Square(Radius + other.Radius);
 	}
 
-	public bool Intersects(Rect2i rect)
+	public bool Intersects(Rect2I rect)
 	{
 		return rect.Intersects(this);
 	}

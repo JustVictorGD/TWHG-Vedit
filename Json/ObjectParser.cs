@@ -216,14 +216,14 @@ public class ObjectParser
 		}
 	}
 
-	private (Subpixel2 position, Vector2i size)? ParseRect(string text)
+	private (Subpixel2 position, Vector2I size)? ParseRect(string text)
 	{
 		int[] array = ParseToIntArray(text);
 
 		if (array.Length == 4)
 		{
 			var position = new Subpixel2(array[0], array[1]);
-			var size = new Vector2i(array[2], array[3]);
+			var size = new Vector2I(array[2], array[3]);
 			return (position, size);
 		}
 
@@ -271,7 +271,7 @@ public class ObjectParser
 			{
 				string value = keyframeObject["position"]!.ToString(); // [336, 336]
 				int[] array = ParseToIntArray(value);
-				keyframe.Position = new Vector2i(array[0], array[1]);
+				keyframe.Position = new Vector2I(array[0], array[1]);
 			}
 			else if (keyframesList.Count >= 1)
 				keyframe.Position = keyframesList.Last().Position;

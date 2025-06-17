@@ -8,7 +8,7 @@ public static class Utils
 {
 	// Rounding function that favors positive infinity when met with a perfect tie.
 	public static int Round(double value) => (int)Math.Floor(value + 0.5);
-	public static Vector2i Round(Vector2 value) => new(Round(value.X), Round(value.Y));
+	public static Vector2I Round(Vector2 value) => new(Round(value.X), Round(value.Y));
 	public static int Square(int value) => value * value;
 	public static double Square(double value) => value * value;
 
@@ -78,7 +78,7 @@ public static class Utils
 		return start * (1 - ratio) + end * ratio;
 	}
 
-	public static Vector2i Lerp2i(Vector2i start, Vector2i end, double ratio) => new(
+	public static Vector2I Lerp2I(Vector2I start, Vector2I end, double ratio) => new(
 		Round(Lerp(start.X, end.X, ratio)),
 		Round(Lerp(start.Y, end.Y, ratio))
 	);

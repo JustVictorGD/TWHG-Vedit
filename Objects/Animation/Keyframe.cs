@@ -14,7 +14,7 @@ using Types;
 public struct Keyframe
 {
 	public float Duration = 1; // Time after the previous keyframe, in seconds.
-	public Vector2i Position = new();
+	public Vector2I Position = new();
 	public float Rotation = 0;
 	public Vector2 Scale = new();
 	public Func<double, double> EasingFunc = Easings.Linear; // Easing between the previous keyframe's and this one's value, ranging from 0 to 1.
@@ -29,7 +29,7 @@ public struct Keyframe
 		Duration = duration;
 	}
 	
-	/*public Keyframe(float duration, Vector2i position, float rotation, Vector2 scale)
+	/*public Keyframe(float duration, Vector2I position, float rotation, Vector2 scale)
 	{
 		Duration = duration;
 		Position = position;
@@ -37,9 +37,9 @@ public struct Keyframe
 		Scale = scale;
 	}
 	
-	public Keyframe(float duration, Vector2i position, float rotation = 0)
+	public Keyframe(float duration, Vector2I position, float rotation = 0)
 		: this(duration, position, rotation, Vector2.One) {}
 	
 	public Keyframe(float duration = 1)
-		: this(duration, Vector2i.Zero) {}*/
+		: this(duration, Vector2I.Zero) {}*/
 }

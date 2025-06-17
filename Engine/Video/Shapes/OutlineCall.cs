@@ -6,12 +6,12 @@ using Types;
 
 public class OutlineCall : ShapeCall
 {
-	public Rect2i Body { get; set; }
+	public Rect2I Body { get; set; }
 
 	// Manual inner used to prevent just a bit of repeated logic.
-	public Rect2i? Inner { get; set; }
+	public Rect2I? Inner { get; set; }
 
-	public OutlineCall(ZIndex zIndex, Rect2i body, Color color, Rect2i? inner = null)
+	public OutlineCall(ZIndex zIndex, Rect2I body, Color color, Rect2I? inner = null)
 	{
 		ZIndex = zIndex;
 		Body = body;
@@ -24,6 +24,6 @@ public class OutlineCall : ShapeCall
 		if (Inner == null)
 			VideoEngine.DrawOutline(Body, Color);
 		else
-			VideoEngine.DrawOutline(Body, Color, (Rect2i)Inner);
+			VideoEngine.DrawOutline(Body, Color, (Rect2I)Inner);
 	}
 }

@@ -18,7 +18,7 @@ public class Game
 
 	private const int cursorGridSize = 12;
 	public const int TileSize = 48;
-	public static readonly Vector2i AreaSize = new(32, 20); // WHG 4 standard: 32, 20.
+	public static readonly Vector2I AreaSize = new(32, 20); // WHG 4 standard: 32, 20.
 	
 	// Rendering.
 	public static int CircleQuality { get; set; } = 5;
@@ -78,10 +78,10 @@ public class Game
 		return Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera);
 	}
 
-	private readonly List<CursorArea> cursorAreas = [
-		new(new(0, 0, 1536, 960), false, "Floor"),
-		new(new(480, 96, 96, 96), false, "Checkpoint 1"),
-		new(new(672, 96, 96, 96), false, "Checkpoint 2"),
+	private readonly List<CursorCatcher> cursorAreas = [
+		new(new(1536, 960), false, "Floor"),
+		new(new(96, 96), false, "Checkpoint 1"),
+		new(new(96, 96), false, "Checkpoint 2"),
 	];
 	
 	public void Ready()
@@ -145,7 +145,7 @@ public class Game
 	{
 		List<Enemy> enemies = Scene.Main != null ? [.. Scene.Main.GetObjectsInGroup("Enemies").Cast<Enemy>()] : [];
 
-		Vector2i mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
+		Vector2I mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
 
 		if (Raylib.IsMouseButtonPressed(MouseButton.Left) && Scene.Main != null)
 		{
@@ -243,7 +243,7 @@ public class Game
 		Scene.Main?.Draw();
 		VideoEngine.Render();
 
-		Vector2i mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
+		Vector2I mousePos = Utils.Round(GetMousePosition(false)).SnapToGrid(cursorGridSize);
 		Raylib.DrawCircle(mousePos.X, mousePos.Y, 13, new(255, 192, 96, 128));
 	}
 
@@ -258,7 +258,7 @@ public class Game
 	// Beta.
 	private void HandleCursorAreas()
 	{
-		foreach (CursorArea catcher in cursorAreas.OrderBy(x => x.ZIndex).Reverse())
+		foreach (CursorCatcher catcher in cursorAreas.OrderBy(x => x.ZIndex).Reverse())
 			if (catcher.IsUnderCursor())
 			{
 				catcher.IsFocused = true;

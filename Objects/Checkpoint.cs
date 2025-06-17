@@ -47,7 +47,7 @@ public class Checkpoint : RectObject
 
 	public override void Draw()
 	{
-		VideoEngine.DrawRect2i(Body, new Color(Color.R * Brightness / 255f, Color.G * Brightness / 255f, Color.R * Brightness / 255f));
+		VideoEngine.DrawRect2I(Body, new Color(Color.R * Brightness / 255f, Color.G * Brightness / 255f, Color.R * Brightness / 255f));
 	}
 	
 	public override JObject ToJson()

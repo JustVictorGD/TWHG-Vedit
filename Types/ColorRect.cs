@@ -20,6 +20,6 @@ public class ColorRect
 		return $"{{ Body: [{Body[0]}, {Body[1]}, {Body[2]}, {Body[3]}], Color: [{Color[0]}, {Color[1]}, {Color[2]}, {Color[3]}] }}";
 	}
 
-	public Rect2i GetRect() => new(Body[0], Body[1], Body[2], Body[3]);
+	public Rect2I GetRect() => new(Body[0], Body[1], Body[2], Body[3]);
 	public Color GetColor() => new(Color[0], Color[1], Color[2], Color[3]);
 }

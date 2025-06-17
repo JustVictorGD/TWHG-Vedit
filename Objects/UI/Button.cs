@@ -96,7 +96,7 @@ public class Button : RectObject
 		}
 	}
 
-	public bool IsUnderCursor() => CursorArea.IsCursorInRect(Body, IsUI);
+	public bool IsUnderCursor() => CursorCatcher.IsCursorInRect(Body, IsUI);
 
 	public virtual void Press() { }
 	public virtual void Release() { }

@@ -19,7 +19,7 @@ public class Player : RectObject
 	public PushableBox PushableBox { get; set; }
 
 	// Spacial properties.
-	public override Vector2i Size { get; set; } = new(42, 42);
+	public override Vector2I Size { get; set; } = new(42, 42);
 	public int Speed { get; set; } = 4;
 	
 	// Color.
@@ -59,7 +59,7 @@ public class Player : RectObject
 		fadeInTimer.Update();
 
 		if (CanMove && !IsDead)
-			Position += new Vector2i(
+			Position += new Vector2I(
 				Speed * InputEngine.GetInputAxis("Left", "Right"),
 				Speed * InputEngine.GetInputAxis("Up", "Down")
 			);
@@ -99,7 +99,7 @@ public class Player : RectObject
 	{
 		Circle circle = enemy.Body;
 
-		Vector2i nearestPoint = circle.Position.Clamp(Body);
+		Vector2I nearestPoint = circle.Position.Clamp(Body);
 
 		int squaredDictance = (int)(
 			Math.Pow(nearestPoint.X - circle.Position.X, 2) +

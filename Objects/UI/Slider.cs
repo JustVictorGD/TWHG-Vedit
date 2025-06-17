@@ -6,13 +6,13 @@ using Types;
 
 public class Slider(int x, int y, int width, int height, bool isUI = true) : Button(x, y, width, height, isUI)
 {
-	private Vector2i mousePosOffset = new();
+	private Vector2I mousePosOffset = new();
 	public bool CanMoveX { get; set; } = true;
 	public bool CanMoveY { get; set; } = true;
 
 	public override void Press()
 	{
-		mousePosOffset = (Vector2i)Position - (Vector2i)Game.GetMousePosition(IsUI);
+		mousePosOffset = (Vector2I)Position - (Vector2I)Game.GetMousePosition(IsUI);
 	}
 
 	public override void Update()

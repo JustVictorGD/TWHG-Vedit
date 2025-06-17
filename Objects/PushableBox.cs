@@ -6,21 +6,21 @@ using Types;
 public class PushableBox : RectObject
 {
 	public bool IsActive { get; set; } = true;
-	public Vector2i LastMovement { get; set; } = new();
+	public Vector2I LastMovement { get; set; } = new();
 
 	public PushableBox(int width, int height)
 	{
 		Size = new(width, height);
 	}
 
-	public PushableBox(Vector2i size)
+	public PushableBox(Vector2I size)
 	{
 		Size = size;
 	}
 
-	public Vector2i SuggestSinglePush(Wall wall)
+	public Vector2I SuggestSinglePush(Wall wall)
 	{
-		if (!IsActive) return Vector2i.Zero;
+		if (!IsActive) return Vector2I.Zero;
 
 		int top_overlap = wall.Body.Start.Y - Body.End.Y;
 		int left_overlap = wall.Body.Start.X - Body.End.X;
@@ -30,7 +30,7 @@ public class PushableBox : RectObject
 		if (left_overlap > 0 || right_overlap < 0 || top_overlap > 0 || bottom_overlap < 0)
 			return new();
 
-		Vector2i push = new(
+		Vector2I push = new(
 			(int)Utils.GetClosest(0, left_overlap, right_overlap),
 			(int)Utils.GetClosest(0, top_overlap, bottom_overlap)
 		);
@@ -43,12 +43,12 @@ public class PushableBox : RectObject
 		return push;
 	}
 
-	public Vector2i SuggestWallPushes(List<Wall> walls)
+	public Vector2I SuggestWallPushes(List<Wall> walls)
 	{
-		if (!IsActive) return Vector2i.Zero;
+		if (!IsActive) return Vector2I.Zero;
 
-		Vector2i original_position = Body.Position;
-		Rect2i tempBody = Body;
+		Vector2I original_position = Body.Position;
+		Rect2I tempBody = Body;
 
 		foreach (Wall wall in walls)
 			tempBody = new(
