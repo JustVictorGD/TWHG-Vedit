@@ -2,7 +2,7 @@ namespace WhgVedit.Engine;
 
 using Objects;
 
-public class Scene(List<GameObject> objects)
+public class Scene : GameObject
 {
 	// The TurnIdle signal is used for preventing crashes by queueing additions or
 	// deletions of objects made inside Ready() or Update() functions of other objects.
@@ -10,61 +10,57 @@ public class Scene(List<GameObject> objects)
 	private readonly TaskCompletionSource _idleTCS = new();
 	public Task TurnIdle => _idleTCS.Task;
 
-	public readonly List<GameObject> GameObjects = objects;
-	private readonly Dictionary<string, List<GameObject>> groups = [];
+	private readonly Dictionary<string, List<GameObject>> groupLists = [];
 
 	public static Scene? Main { get; set; }
 
-	// Per instance
-	public bool Frozen { get; set; } = false;
-	public bool Visible { get; set; } = true;
-
-	public void AddObject(GameObject @object)
+	public override void AddChild(GameObject child)
 	{
-		GameObjects.Add(@object);
-		@object.Scene = this;
+		base.AddChild(child);
+		child.Scene = this;
 
-		foreach (string groupName in @object.Groups)
+		foreach (string groupName in @child.Groups)
 		{
-			groups[groupName].Add(@object);
-			@object.AddToGroup(groupName);
+			groupLists[groupName].Add(@child);
+			@child.AddToGroup(groupName);
 		}
 	}
 
-	public void AddObjects(List<GameObject> objects)
+	public void AddChildren(IEnumerable<GameObject> children, string groupName)
 	{
-		foreach (GameObject gameObject in objects)
+		groupLists.Add(groupName, []);
+
+		foreach (GameObject child in children)
 		{
-			AddObject(gameObject);
+			child.AddToGroup(groupName);
+			AddChild(child);
 		}
 	}
 
-	public void RemoveObject(GameObject @object)
+	public override void RemoveChild(GameObject child)
 	{
-		GameObjects.Remove(@object);
+		base.RemoveChild(child);
+		child.Scene = null;
 
-		foreach (string item in @object.Groups)
-			groups[item].Remove(@object);
+		foreach (string groupName in @child.Groups)
+			groupLists[groupName].Remove(@child);
 	}
 
 	public List<GameObject> GetObjectsInGroup(string groupName)
 	{
-		return groups.TryGetValue(groupName, out List<GameObject>? list) ? list : [];
+		return groupLists.TryGetValue(groupName, out List<GameObject>? list) ? list : [];
 	}
 
 	public void AddObjectsToGroups(IEnumerable<GameObject> objects, params string[] groupNames)
 	{
 		foreach (GameObject @object in objects)
 		{
-			if (@object.Scene != this)
-				AddObject(@object);
-
 			foreach (string groupName in groupNames)
 			{
-				if (!groups.ContainsKey(groupName))
-					groups.Add(groupName, []);
+				if (!groupLists.ContainsKey(groupName))
+					groupLists.Add(groupName, []);
 
-				List<GameObject> list = groups[groupName];
+				List<GameObject> list = groupLists[groupName];
 
 				if (!list.Contains(@object))
 					list.Add(@object);
@@ -77,50 +73,30 @@ public class Scene(List<GameObject> objects)
 
 	public void RemoveObjectFromGroup(GameObject @object, string groupName)
 	{
-		if (!groups.TryGetValue(groupName, out List<GameObject>? list))
-			return;
-
-		list.Remove(@object);
+		if (groupLists.TryGetValue(groupName, out List<GameObject>? list))
+			list.Remove(@object);
 	}
 
-	public void Ready()
+	public override void RecursiveReady()
 	{
-		foreach (GameObject gameObject in GameObjects)
-			gameObject.Ready();
-
+		base.RecursiveReady();
 		TriggerIdle();
 	}
-
-	public void Update()
+	public override void RecursiveUpdate()
 	{
-		if (Frozen) return;
-
-		foreach (GameObject gameObject in GameObjects)
-			gameObject.Update();
-
+		base.RecursiveUpdate();
 		TriggerIdle();
 	}
-
-	public void Draw()
+	public override void RecursiveDraw()
 	{
-		if (!Visible) return;
-
-		foreach (GameObject gameObject in GameObjects)
-			if (gameObject is SpacialObject spacial) spacial.Draw();
-
+		base.RecursiveDraw();
 		TriggerIdle();
 	}
-
-	public void DrawUI()
+	public override void RecursiveDrawUI()
 	{
-		if (!Visible) return;
-
-		foreach (GameObject gameObject in GameObjects)
-			if (gameObject is SpacialObject spacial) spacial.DrawUI();
-
+		base.RecursiveDrawUI();
 		TriggerIdle();
 	}
-
 	private void TriggerIdle()
 	{
 		if (!_idleTCS.Task.IsCompleted)

@@ -89,7 +89,7 @@ public class Game
 	public void Ready()
 	{
 		StateLabel = new(Vector2.Zero, "Play mode (Press Q to change modes)", fontSize: 48);
-		
+
 		worldListener.Pressed += ClickWorld;
 
 		ObjectParser parser = new("Json/Scene.json");
@@ -99,22 +99,24 @@ public class Game
 		Enemies = parser.GetObjectsOfType<Enemy>();
 		Checkpoints = parser.GetObjectsOfType<Checkpoint>();
 
-		Scene.Main = new([]);
+		Scene.Main = new();
 
 		// Add parsed objects
-		Scene.Main.AddObjectsToGroups(Walls, "Walls");
-		Scene.Main.AddObjectsToGroups(Enemies, "Enemies");
-		Scene.Main.AddObjectsToGroups(Checkpoints, "Checkpoints");
+		Scene.Main.AddChildren(Walls, "Walls");
+		Scene.Main.AddChildren(Enemies, "Enemies");
+		Scene.Main.AddChildren(Checkpoints, "Checkpoints");
 
 		var animationPlayers = parser.GetObjectsOfType<AnimationPlayer>();
 		Scene.Main.AddObjectsToGroups(animationPlayers, "AnimationPlayers");
 
-		Scene.Main.AddObjectsToGroups([player], "Player");
-		Scene.Main.AddObjectsToGroups(buttons, "Buttons");
+		Scene.Main.AddChildren([player], "Player");
+		Scene.Main.AddChildren(buttons, "Buttons");
 
-		Scene.Main.AddObjectsToGroups([worldListener], CursorListener.GroupName); // Beta.
+		Scene.Main.AddChildren([worldListener], CursorListener.GroupName); // Beta.
+
+		Scene.Main.AddChild(StateLabel);
+
 		
-		Scene.Main.AddObject(StateLabel);
 
 		/*keyframeEnemyAnimation.Keyframes.AddRange([keyframe1, keyframe2, keyframe3]);
 		Scene.Main.AddObject(keyframeEnemyAnimationPlayer);
@@ -145,7 +147,7 @@ public class Game
 
 		InputEngine.AddActions([leftAction, rightAction, upAction, downAction, returnAction, continueAction, changeMode, saveAction]);
 
-		Scene.Main.Ready();
+		Scene.Main.RecursiveReady();
 	}
 
 
@@ -166,7 +168,7 @@ public class Game
 
 		CursorManager.Update();
 
-		Scene.Main?.Update();
+		Scene.Main?.RecursiveUpdate();
 
 		if (Scene.Main == null) return;
 
@@ -182,7 +184,7 @@ public class Game
 		
 		if (InputEngine.IsActionPressed("Save"))
 		{
-			ObjectSaver saver = new("Json/Scene.json", Scene.Main.GameObjects, []);
+			ObjectSaver saver = new("Json/Scene.json", Scene.Main.Children, []);
 
 			saver.AddNewObjectsToJson(NewObjects);
 			saver.DeleteObjectsFromJson(ObjectsToRemove);
@@ -228,7 +230,7 @@ public class Game
 
 		//thiccEnemy.Scale = Utils.PingPong(time, 24) * Vector2.One;
 
-		Scene.Main?.Draw();
+		Scene.Main?.RecursiveDraw();
 		VideoEngine.Render();
 
 		if (worldListener.IsFocused && IsEditModeOn)
@@ -241,7 +243,7 @@ public class Game
 	// Draw calls in this function ignore the camera.
 	public void DrawUI()
 	{
-		Scene.Main?.DrawUI();
+		Scene.Main?.RecursiveDrawUI();
 		VideoEngine.Render();
 	}
 
@@ -260,10 +262,8 @@ public class Game
 		if (Scene.Main == null) return;
 
 		Enemy newEnemy = new() { Position = mousePos, Groups = ["Enemies"] };
-		Scene.Main.AddObjectsToGroups([newEnemy], "Enemies");
+		Scene.Main.AddChild(newEnemy);
 		NewObjects.Add(newEnemy);
-
-		Console.WriteLine("PlaceObject()");
 	}
 
 	private void RemoveObject(Vector2I mousePos)
@@ -276,10 +276,8 @@ public class Game
 			if (enemy.Position == mousePos)
 			{
 				ObjectsToRemove.Add(enemy);
-				Scene.Main?.RemoveObject(enemy);
+				Scene.Main?.RemoveChild(enemy);
 				NewObjects.Remove(enemy);
 			}
-		
-		Console.WriteLine("RemoveObject()");
 	}
 }

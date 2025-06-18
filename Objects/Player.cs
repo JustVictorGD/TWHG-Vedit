@@ -46,10 +46,10 @@ public class Player : RectObject
 	public Player()
 	{
 		Sprite = new(Size, OutlineColor, FillColor);
-		Sprite.SetParent(this);
+		AddChild(Sprite);
 
 		PushableBox = new(Size);
-		PushableBox.SetParent(this);
+		AddChild(PushableBox);
 	}
 
 	public override void Update()

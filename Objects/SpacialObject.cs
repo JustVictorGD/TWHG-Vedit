@@ -81,4 +81,16 @@ public class SpacialObject : GameObject
 
 	public virtual void Draw() { }
 	public virtual void DrawUI() { }
+
+	public override void RecursiveDraw()
+	{
+		Draw();
+		base.RecursiveDraw();
+	}
+
+	public override void RecursiveDrawUI()
+	{
+		DrawUI();
+		base.RecursiveDrawUI();
+	}
 }

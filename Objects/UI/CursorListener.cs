@@ -91,11 +91,9 @@ public class CursorListener : RectObject
 		}
 	}
 
-	public override void SetParent(GameObject parent)
+	public override void GetAdded()
 	{
-		base.SetParent(parent);
-
-		if (parent is IPressable pressable)
+		if (Parent is IPressable pressable)
 		{
 			Pressed += pressable.Press;
 			Released += pressable.Release;

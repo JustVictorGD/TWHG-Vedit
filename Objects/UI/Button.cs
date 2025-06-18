@@ -22,18 +22,18 @@ public class Button : RectObject, IPressable
 		Size = new(width, height);
 		IsUI = isUI;
 
-		Listener = new(new(width, height), isUI);
+		Listener = new(new(width, height), isUI) { Groups = [CursorListener.GroupName] };
 	}
 
-	public override async void Ready()
+	public override void Ready()
 	{
-		Listener.SetParent(this);
+		AddChild(Listener);
 
-		if (Scene == null) return;
+		/*if (Scene == null) return;
 
 		await Scene.TurnIdle;
 
-		Scene.AddObjectsToGroups([Listener], "CursorListeners");
+		Scene.AddObjectsToGroups([Listener], "CursorListeners");*/
 	}
 
 	public override void Update()

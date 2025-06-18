@@ -134,7 +134,7 @@ public class ObjectParser
 		GameObject? childObject = GetObjectFromJObject(child);
 		if (childObject is null) return;
 
-		childObject.SetParent(gameObject);
+		gameObject.AddChild(childObject);
 		_gameObjects.Add(childObject);
 	}
 

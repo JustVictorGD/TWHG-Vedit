@@ -24,7 +24,7 @@ public class Enemy : SpacialObject
 	{
 		// Outline and fill colors: Dark blue and transparent blue.
 		Sprite = new(Radius, new(0, 0, 66), new(0, 0, 255));
-		Sprite.SetParent(this);
+		AddChild(Sprite);
 	}
 
 	public override void Draw()
