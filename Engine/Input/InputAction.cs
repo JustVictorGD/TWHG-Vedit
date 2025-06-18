@@ -8,7 +8,9 @@ public class InputAction
 	
 	public string Name { get; set; }
 	public List<KeyboardKey> Keys { get; set; }
-	public bool IsActive { get; private set; }
+	//public bool IsActive { get; private set; }
+
+	private bool _wasActive = false;
 
 	public InputAction(string name, List<KeyboardKey> keys)
 	{
@@ -16,14 +18,18 @@ public class InputAction
 		Keys = keys;
 	}
 	
-	public void CheckInputs()
+	public bool IsActive()
 	{
-		if (Keys.Any(key => Raylib.IsKeyDown(key)))
-		{
-			IsActive = true;
-			return;
-		}
+		return Keys.Any(key => Raylib.IsKeyDown(key));
+	}
 
-		IsActive = false;
+	public bool IsJustActivated()
+	{
+		return IsActive() && !_wasActive;
+	}
+
+	public void Update()
+	{
+		_wasActive = IsActive();
 	}
 }

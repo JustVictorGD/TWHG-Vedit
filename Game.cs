@@ -153,6 +153,8 @@ public class Game
 
 	public void Update()
 	{
+		if (Scene.Main == null) return;
+		
 		time++;
 		
 		// Moving this from Game.cs to Wall.cs involves programming keyframes.
@@ -161,28 +163,19 @@ public class Game
 		Walls[0].SetY(408 + wallOffset);
 		Walls[1].SetY(504 + wallOffset);
 
-		//keyframeEnemyTest.Position = _animation.GetPosition(time / 60.0);
-		//keyframeEnemyTest.Radius = Utils.Round(13 * (_animation.GetScale(time / 60.0).X + 1));
-
-		InputEngine.CheckInputs();
-
-		CursorManager.Update();
-
-		Scene.Main?.RecursiveUpdate();
-
-		if (Scene.Main == null) return;
 
 		foreach (GameObject @object in Scene.Main.GetObjectsInGroup("Enemies"))
 			if (@object is Enemy enemy && player.Body.Intersects(enemy.Hitbox))
 				player.Die();
+		
 
-		if (InputEngine.IsActionPressed("ChangeMode"))
+		if (InputEngine.IsActionJustPressed("ChangeMode"))
 		{
 			IsEditModeOn = !IsEditModeOn;
 			StateLabel.Text = IsEditModeOn ? "Edit mode" : "Play mode";
 		}
 		
-		if (InputEngine.IsActionPressed("Save"))
+		if (InputEngine.IsActionJustPressed("Save"))
 		{
 			ObjectSaver saver = new("Json/Scene.json", Scene.Main.Children, []);
 
@@ -195,6 +188,12 @@ public class Game
 
 			Console.WriteLine("SAVED!");
 		}
+		
+		InputEngine.UpdateInputs();
+		
+		CursorManager.Update();
+
+		Scene.Main?.RecursiveUpdate();
 	}
 
 	// Draw calls in this function comply with the camera.
