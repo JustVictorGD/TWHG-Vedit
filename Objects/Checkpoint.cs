@@ -12,17 +12,17 @@ public class Checkpoint : RectObject
 
 	public Color Color = new(168, 252, 164);
 	public float Brightness = 1;
-	public Subpixel2 Center => Position + Size / 2;
+	public Vector2X Center => Position + Size / 2;
 	private readonly Timer activateTimer = new(20);
 	
-	public Checkpoint(Subpixel2 position)
+	public Checkpoint(Vector2X position)
 	{
 		Position = position;
 	}
 
 	public Checkpoint()
 	{
-		Position = new Subpixel2(0, 0);
+		Position = new Vector2X(0, 0);
 	}
 	
 	public override void Update()

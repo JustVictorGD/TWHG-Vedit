@@ -6,14 +6,14 @@ namespace WhgVedit.Types;
 
 public readonly struct Transform2D
 {
-	public readonly Subpixel2 Origin;
+	public readonly Vector2X Origin;
 	public readonly Basis Basis;
 	public readonly Vector2 X => Basis.X;
 	public readonly Vector2 Y => Basis.Y;
 
 	public static Transform2D Identity => new(0, 0, 1, 0, 0, 1);
 
-	public Transform2D(Subpixel2 origin, Basis basis)
+	public Transform2D(Vector2X origin, Basis basis)
 	{
 		Origin = origin;
 		Basis = basis;
@@ -35,7 +35,7 @@ public readonly struct Transform2D
 	{
 		Basis combinedBasis = Basis.Stack(first.Basis, second.Basis);
 
-		Subpixel2 transformedOrigin = new(
+		Vector2X transformedOrigin = new(
 			first.X.X * second.Origin.X + first.X.Y * second.Origin.Y + first.Origin.X,
 			first.Y.X * second.Origin.X + first.Y.Y * second.Origin.Y + first.Origin.Y
 		);

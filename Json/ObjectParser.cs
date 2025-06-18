@@ -171,7 +171,7 @@ public class ObjectParser
 			int[] array = ParseToIntArray(value); // [252, 252]
 			if (array.Length == 2)
 			{
-				enemy.Position = new Subpixel2(array[0], array[1]);
+				enemy.Position = new Vector2X(array[0], array[1]);
 			}
 		}
 	}
@@ -216,13 +216,13 @@ public class ObjectParser
 		}
 	}
 
-	private (Subpixel2 position, Vector2I size)? ParseRect(string text)
+	private (Vector2X position, Vector2I size)? ParseRect(string text)
 	{
 		int[] array = ParseToIntArray(text);
 
 		if (array.Length == 4)
 		{
-			var position = new Subpixel2(array[0], array[1]);
+			var position = new Vector2X(array[0], array[1]);
 			var size = new Vector2I(array[2], array[3]);
 			return (position, size);
 		}

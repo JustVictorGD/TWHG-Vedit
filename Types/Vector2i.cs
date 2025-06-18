@@ -81,10 +81,10 @@ public readonly struct Vector2I
 	public static Vector2I operator *(Vector2I a, int b) => new(a.X * b, a.Y * b);
 	public static Vector2I operator /(Vector2I a, int b) => new(a.X / b, a.Y / b);
 
-	public static Subpixel2 operator +(Vector2I a, double b) => new(a.X + b, a.Y + b);
-	public static Subpixel2 operator -(Vector2I a, double b) => new(a.X - b, a.Y - b);
-	public static Subpixel2 operator *(Vector2I a, double b) => new(a.X * b, a.Y * b);
-	public static Subpixel2 operator /(Vector2I a, double b) => new(a.X / b, a.Y / b);
+	public static Vector2X operator +(Vector2I a, double b) => new(a.X + b, a.Y + b);
+	public static Vector2X operator -(Vector2I a, double b) => new(a.X - b, a.Y - b);
+	public static Vector2X operator *(Vector2I a, double b) => new(a.X * b, a.Y * b);
+	public static Vector2X operator /(Vector2I a, double b) => new(a.X / b, a.Y / b);
 
 	public static Vector2I operator +(Vector2I a, Vector2I b) => new(a.X + b.X, a.Y + b.Y);
 	public static Vector2I operator -(Vector2I a, Vector2I b) => new(a.X - b.X, a.Y - b.Y);

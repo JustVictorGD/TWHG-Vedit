@@ -10,7 +10,7 @@ public class SpacialObject : GameObject
 	public bool IsVisible { get; set; } = true;
 	public bool IsUI { get; set; }
 
-	public Subpixel2 Position { get; set; } = new();
+	public Vector2X Position { get; set; } = new();
 	public float Rotation { get; set; } = 0;
 	public Vector2 Scale { get; set; } = Vector2.One;
 
@@ -22,14 +22,14 @@ public class SpacialObject : GameObject
 	// get annoyingly long due to structs being immutable.
 	public void SetX(double value, bool fromSteps = false)
 	{
-		if (fromSteps) value *= Subpixel.StepSize;
+		if (fromSteps) value *= Fixed.StepSize;
 
 		Position = new(value, Position.Y);
 	}
 
 	public void SetY(double value, bool fromSteps = false)
 	{
-		if (fromSteps) value *= Subpixel.StepSize;
+		if (fromSteps) value *= Fixed.StepSize;
 
 		Position = new(Position.X, value);
 	}
@@ -52,9 +52,9 @@ public class SpacialObject : GameObject
 	}
 
 	// Not fully finished! This doesn't take rotation, scale and skew into account.
-	public Subpixel2 GetGlobalPosition()
+	public Vector2X GetGlobalPosition()
 	{
-		Subpixel2 position = Position;
+		Vector2X position = Position;
 		GameObject? parent = Parent;
 
 		while (parent != null)
