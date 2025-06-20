@@ -67,6 +67,8 @@ public readonly struct Vector2I
 
 	public static implicit operator Vector2(Vector2I a) => new(a.X, a.Y);
 
+	public static implicit operator Vector2I((int, int) tuple) => new(tuple.Item1, tuple.Item2);
+
 	public static explicit operator Vector2I(Vector2 a) => new(
 		(int)Math.Round(a.X, MidpointRounding.ToPositiveInfinity),
 		(int)Math.Round(a.Y, MidpointRounding.ToPositiveInfinity)
@@ -91,6 +93,11 @@ public readonly struct Vector2I
 	public static Vector2I operator *(Vector2I a, Vector2I b) => new(a.X * b.X, a.Y * b.Y);
 	public static Vector2I operator /(Vector2I a, Vector2I b) => new(a.X / b.X, a.Y / b.Y);
 
+	public static Vector2I operator +(Vector2I a, (int, int) tuple) => new(a.X + tuple.Item1, a.Y + tuple.Item2);
+	public static Vector2I operator -(Vector2I a, (int, int) tuple) => new(a.X - tuple.Item1, a.Y - tuple.Item2);
+	public static Vector2I operator *(Vector2I a, (int, int) tuple) => new(a.X * tuple.Item1, a.Y * tuple.Item2);
+	public static Vector2I operator /(Vector2I a, (int, int) tuple) => new(a.X / tuple.Item1, a.Y / tuple.Item2);
+
 	// Comparison operators.
 
 	public static bool operator <(Vector2I a, Vector2I b) => a.X < b.X && a.Y < b.Y;
@@ -98,6 +105,12 @@ public readonly struct Vector2I
 
 	public static bool operator <=(Vector2I a, Vector2I b) => a.X <= b.X && a.Y <= b.Y;
 	public static bool operator >=(Vector2I a, Vector2I b) => a.X >= b.X && a.Y >= b.Y;
-	
+
 	public override string ToString() => $"{{ X: {X}, Y: {Y} }}";
+
+	public void Deconstruct(out int x, out int y)
+	{
+		x = X;
+		y = Y;
+	}
 }
